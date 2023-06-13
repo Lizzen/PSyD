@@ -1,0 +1,173 @@
+Archive member included because of file (symbol)
+
+../../BSP/Debug\libBSP.a(leds.o)
+                              ./lab3.o (leds_init)
+../../BSP/Debug\libBSP.a(segs.o)
+                              ./lab3.o (segs_init)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD ./lab3.o
+LOAD ./systemLab3.o
+LOAD ../../BSP/Debug\libBSP.a
+START GROUP
+LOAD c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a
+LOAD c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib\libc.a
+END GROUP
+                0x0c100000                . = 0xc100000
+
+.text           0x0c100000      0x5a8
+ *(.text)
+ .text          0x0c100000      0x138 ./lab3.o
+                0x0c100000                main
+                0x0c1000f4                one_second_loop
+ .text          0x0c100138      0x1a8 ./systemLab3.o
+                0x0c1002c4                sys_init
+ .text          0x0c1002e0      0x1f4 ../../BSP/Debug\libBSP.a(leds.o)
+                0x0c1002e0                leds_init
+                0x0c100310                led_on
+                0x0c10037c                led_off
+                0x0c1003e8                led_toggle
+                0x0c100454                led_status
+ .text          0x0c1004d4       0xd4 ../../BSP/Debug\libBSP.a(segs.o)
+                0x0c1004d4                segs_init
+                0x0c1004f0                segs_off
+                0x0c100528                segs_putchar
+                0x0c100580                segs_status
+
+.glue_7         0x0c1005a8        0x0
+ .glue_7        0x00000000        0x0 linker stubs
+
+.glue_7t        0x0c1005a8        0x0
+ .glue_7t       0x00000000        0x0 linker stubs
+
+.vfp11_veneer   0x0c1005a8        0x0
+ .vfp11_veneer  0x00000000        0x0 linker stubs
+
+.v4_bx          0x0c1005a8        0x0
+ .v4_bx         0x00000000        0x0 linker stubs
+
+.rodata         0x0c1005a8       0x10
+ *(.rodata)
+ .rodata        0x0c1005a8       0x10 ../../BSP/Debug\libBSP.a(segs.o)
+
+.data           0x0c1005b8        0x0
+ *(.data)
+ .data          0x0c1005b8        0x0 ./lab3.o
+ .data          0x0c1005b8        0x0 ./systemLab3.o
+ .data          0x0c1005b8        0x0 ../../BSP/Debug\libBSP.a(leds.o)
+ .data          0x0c1005b8        0x0 ../../BSP/Debug\libBSP.a(segs.o)
+
+.bss            0x0c1005b8        0x1
+ *(.bss)
+ .bss           0x0c1005b8        0x0 ./lab3.o
+ .bss           0x0c1005b8        0x0 ./systemLab3.o
+ .bss           0x0c1005b8        0x0 ../../BSP/Debug\libBSP.a(leds.o)
+ .bss           0x0c1005b8        0x1 ../../BSP/Debug\libBSP.a(segs.o)
+                0x0c1005b9                end = .
+OUTPUT(lab3.elf elf32-littlearm)
+
+.debug_abbrev   0x00000000      0x213
+ .debug_abbrev  0x00000000       0x74 ./lab3.o
+ .debug_abbrev  0x00000074       0x61 ./systemLab3.o
+ .debug_abbrev  0x000000d5       0x8b ../../BSP/Debug\libBSP.a(leds.o)
+ .debug_abbrev  0x00000160       0xb3 ../../BSP/Debug\libBSP.a(segs.o)
+
+.debug_info     0x00000000      0x390
+ .debug_info    0x00000000       0xc0 ./lab3.o
+ .debug_info    0x000000c0       0x96 ./systemLab3.o
+ .debug_info    0x00000156      0x12d ../../BSP/Debug\libBSP.a(leds.o)
+ .debug_info    0x00000283      0x10d ../../BSP/Debug\libBSP.a(segs.o)
+
+.debug_line     0x00000000      0x2ba
+ .debug_line    0x00000000       0xc6 ./lab3.o
+ .debug_line    0x000000c6       0x9d ./systemLab3.o
+ .debug_line    0x00000163       0xc4 ../../BSP/Debug\libBSP.a(leds.o)
+ .debug_line    0x00000227       0x93 ../../BSP/Debug\libBSP.a(segs.o)
+
+.debug_macinfo  0x00000000     0xf6de
+ .debug_macinfo
+                0x00000000     0x23a2 ./lab3.o
+ .debug_macinfo
+                0x000023a2     0x430f ./systemLab3.o
+ .debug_macinfo
+                0x000066b1     0x432c ../../BSP/Debug\libBSP.a(leds.o)
+ .debug_macinfo
+                0x0000a9dd     0x4d01 ../../BSP/Debug\libBSP.a(segs.o)
+
+.debug_loc      0x00000000      0x23c
+ .debug_loc     0x00000000       0x58 ./lab3.o
+ .debug_loc     0x00000058       0x58 ./systemLab3.o
+ .debug_loc     0x000000b0       0xdc ../../BSP/Debug\libBSP.a(leds.o)
+ .debug_loc     0x0000018c       0xb0 ../../BSP/Debug\libBSP.a(segs.o)
+
+.debug_pubnames
+                0x00000000       0xf1
+ .debug_pubnames
+                0x00000000       0x2f ./lab3.o
+ .debug_pubnames
+                0x0000002f       0x1f ./systemLab3.o
+ .debug_pubnames
+                0x0000004e       0x55 ../../BSP/Debug\libBSP.a(leds.o)
+ .debug_pubnames
+                0x000000a3       0x4e ../../BSP/Debug\libBSP.a(segs.o)
+
+.debug_pubtypes
+                0x00000000       0x87
+ .debug_pubtypes
+                0x00000000       0x27 ./lab3.o
+ .debug_pubtypes
+                0x00000027       0x1d ./systemLab3.o
+ .debug_pubtypes
+                0x00000044       0x27 ../../BSP/Debug\libBSP.a(leds.o)
+ .debug_pubtypes
+                0x0000006b       0x1c ../../BSP/Debug\libBSP.a(segs.o)
+
+.debug_aranges  0x00000000       0x80
+ .debug_aranges
+                0x00000000       0x20 ./lab3.o
+ .debug_aranges
+                0x00000020       0x20 ./systemLab3.o
+ .debug_aranges
+                0x00000040       0x20 ../../BSP/Debug\libBSP.a(leds.o)
+ .debug_aranges
+                0x00000060       0x20 ../../BSP/Debug\libBSP.a(segs.o)
+
+.debug_str      0x00000000      0x192
+ .debug_str     0x00000000       0xb9 ./lab3.o
+                                 0xd2 (size before relaxing)
+ .debug_str     0x000000b9       0x23 ./systemLab3.o
+                                 0xd0 (size before relaxing)
+ .debug_str     0x000000dc       0x6d ../../BSP/Debug\libBSP.a(leds.o)
+                                 0xef (size before relaxing)
+ .debug_str     0x00000149       0x49 ../../BSP/Debug\libBSP.a(segs.o)
+                                 0xf4 (size before relaxing)
+
+.comment        0x00000000       0x2a
+ .comment       0x00000000       0x2a ./lab3.o
+                                 0x2b (size before relaxing)
+ .comment       0x00000000       0x2b ./systemLab3.o
+ .comment       0x00000000       0x2b ../../BSP/Debug\libBSP.a(leds.o)
+ .comment       0x00000000       0x2b ../../BSP/Debug\libBSP.a(segs.o)
+
+.ARM.attributes
+                0x00000000       0x32
+ .ARM.attributes
+                0x00000000       0x32 ./lab3.o
+ .ARM.attributes
+                0x00000032       0x32 ./systemLab3.o
+ .ARM.attributes
+                0x00000064       0x32 ../../BSP/Debug\libBSP.a(leds.o)
+ .ARM.attributes
+                0x00000096       0x32 ../../BSP/Debug\libBSP.a(segs.o)
+
+.debug_frame    0x00000000      0x1e0
+ .debug_frame   0x00000000       0x50 ./lab3.o
+ .debug_frame   0x00000050       0x50 ./systemLab3.o
+ .debug_frame   0x000000a0       0xb0 ../../BSP/Debug\libBSP.a(leds.o)
+ .debug_frame   0x00000150       0x90 ../../BSP/Debug\libBSP.a(segs.o)
