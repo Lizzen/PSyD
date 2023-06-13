@@ -1,0 +1,1913 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"lab9-efectos.c"
+  21              	.Ltext0:
+  22              		.file 1 "../lab9-efectos.c"
+ 1872              		.align	2
+ 1875              	triangle:
+ 1876 0000 0000     		.short	0
+ 1877 0002 6400     		.short	100
+ 1878 0004 C800     		.short	200
+ 1879 0006 2C01     		.short	300
+ 1880 0008 9001     		.short	400
+ 1881 000a F401     		.short	500
+ 1882 000c 5802     		.short	600
+ 1883 000e BC02     		.short	700
+ 1884 0010 2003     		.short	800
+ 1885 0012 8403     		.short	900
+ 1886 0014 2003     		.short	800
+ 1887 0016 BC02     		.short	700
+ 1888 0018 5802     		.short	600
+ 1889 001a F401     		.short	500
+ 1890 001c 9001     		.short	400
+ 1891 001e 2C01     		.short	300
+ 1892 0020 C800     		.short	200
+ 1893 0022 6400     		.short	100
+ 1894 0024 0000     		.short	0
+ 1895 0026 9CFF     		.short	-100
+ 1896 0028 38FF     		.short	-200
+ 1897 002a D4FE     		.short	-300
+ 1898 002c 70FE     		.short	-400
+ 1899 002e 0CFE     		.short	-500
+ 1900 0030 A8FD     		.short	-600
+ 1901 0032 44FD     		.short	-700
+ 1902 0034 E0FC     		.short	-800
+ 1903 0036 7CFC     		.short	-900
+ 1904 0038 E0FC     		.short	-800
+ 1905 003a 44FD     		.short	-700
+ 1906 003c A8FD     		.short	-600
+ 1907 003e 0CFE     		.short	-500
+ 1908 0040 70FE     		.short	-400
+ 1909 0042 D4FE     		.short	-300
+ 1910 0044 38FF     		.short	-200
+ 1911 0046 9CFF     		.short	-100
+ 1912              		.global	square
+ 1913              		.align	2
+ 1916              	square:
+ 1917 0048 8403     		.short	900
+ 1918 004a 8403     		.short	900
+ 1919 004c 8403     		.short	900
+ 1920 004e 8403     		.short	900
+ 1921 0050 8403     		.short	900
+ 1922 0052 8403     		.short	900
+ 1923 0054 8403     		.short	900
+ 1924 0056 8403     		.short	900
+ 1925 0058 8403     		.short	900
+ 1926 005a 8403     		.short	900
+ 1927 005c 8403     		.short	900
+ 1928 005e 8403     		.short	900
+ 1929 0060 8403     		.short	900
+ 1930 0062 8403     		.short	900
+ 1931 0064 8403     		.short	900
+ 1932 0066 8403     		.short	900
+ 1933 0068 8403     		.short	900
+ 1934 006a 8403     		.short	900
+ 1935 006c 7CFC     		.short	-900
+ 1936 006e 7CFC     		.short	-900
+ 1937 0070 7CFC     		.short	-900
+ 1938 0072 7CFC     		.short	-900
+ 1939 0074 7CFC     		.short	-900
+ 1940 0076 7CFC     		.short	-900
+ 1941 0078 7CFC     		.short	-900
+ 1942 007a 7CFC     		.short	-900
+ 1943 007c 7CFC     		.short	-900
+ 1944 007e 7CFC     		.short	-900
+ 1945 0080 7CFC     		.short	-900
+ 1946 0082 7CFC     		.short	-900
+ 1947 0084 7CFC     		.short	-900
+ 1948 0086 7CFC     		.short	-900
+ 1949 0088 7CFC     		.short	-900
+ 1950 008a 7CFC     		.short	-900
+ 1951 008c 7CFC     		.short	-900
+ 1952 008e 7CFC     		.short	-900
+ 1953              		.global	sine
+ 1954              		.align	2
+ 1957              	sine:
+ 1958 0090 0000     		.short	0
+ 1959 0092 9C00     		.short	156
+ 1960 0094 3401     		.short	308
+ 1961 0096 C201     		.short	450
+ 1962 0098 4302     		.short	579
+ 1963 009a B102     		.short	689
+ 1964 009c 0B03     		.short	779
+ 1965 009e 4E03     		.short	846
+ 1966 00a0 7603     		.short	886
+ 1967 00a2 8403     		.short	900
+ 1968 00a4 7603     		.short	886
+ 1969 00a6 4E03     		.short	846
+ 1970 00a8 0B03     		.short	779
+ 1971 00aa B102     		.short	689
+ 1972 00ac 4302     		.short	579
+ 1973 00ae C201     		.short	450
+ 1974 00b0 3401     		.short	308
+ 1975 00b2 9C00     		.short	156
+ 1976 00b4 0000     		.short	0
+ 1977 00b6 64FF     		.short	-156
+ 1978 00b8 CCFE     		.short	-308
+ 1979 00ba 3EFE     		.short	-450
+ 1980 00bc BDFD     		.short	-579
+ 1981 00be 4FFD     		.short	-689
+ 1982 00c0 F5FC     		.short	-779
+ 1983 00c2 B2FC     		.short	-846
+ 1984 00c4 8AFC     		.short	-886
+ 1985 00c6 7CFC     		.short	-900
+ 1986 00c8 8AFC     		.short	-886
+ 1987 00ca B2FC     		.short	-846
+ 1988 00cc F5FC     		.short	-779
+ 1989 00ce 4FFD     		.short	-689
+ 1990 00d0 BDFD     		.short	-579
+ 1991 00d2 3EFE     		.short	-450
+ 1992 00d4 CCFE     		.short	-308
+ 1993 00d6 64FF     		.short	-156
+ 1994              		.section	.rodata
+ 1995              		.align	2
+ 1996              	.LC0:
+ 1997 0000 0A0A5265 		.ascii	"\012\012Reproducci\363n de sonido tabulado (LA cent"
+ 1997      70726F64 
+ 1997      75636369 
+ 1997      F36E2064 
+ 1997      6520736F 
+ 1998 002a 72616C20 		.ascii	"ral 440 Hz)\012\000"
+ 1998      34343020 
+ 1998      487A290A 
+ 1998      00
+ 1999 0037 00       		.align	2
+ 2000              	.LC1:
+ 2001 0038 28706172 		.ascii	"(para finalizar presione cualquier tecla)\012\000"
+ 2001      61206669 
+ 2001      6E616C69 
+ 2001      7A617220 
+ 2001      70726573 
+ 2002 0063 00       		.align	2
+ 2003              	.LC2:
+ 2004 0064 20202D20 		.ascii	"  - Sinusoide: escuche... \000"
+ 2004      53696E75 
+ 2004      736F6964 
+ 2004      653A2065 
+ 2004      73637563 
+ 2005 007f 00       		.align	2
+ 2006              	.LC3:
+ 2007 0080 4F4B0A00 		.ascii	"OK\012\000"
+ 2008              		.align	2
+ 2009              	.LC4:
+ 2010 0084 20202D20 		.ascii	"  - Onda cuadrada: escuche... \000"
+ 2010      4F6E6461 
+ 2010      20637561 
+ 2010      64726164 
+ 2010      613A2065 
+ 2011 00a3 00       		.align	2
+ 2012              	.LC5:
+ 2013 00a4 20202D20 		.ascii	"  - Onda triangular: escuche... \000"
+ 2013      4F6E6461 
+ 2013      20747269 
+ 2013      616E6775 
+ 2013      6C61723A 
+ 2014 00c5 000000   		.align	2
+ 2015              	.LC6:
+ 2016 00c8 0A456665 		.ascii	"\012Efectos de audio (dominio temporal)\012\000"
+ 2016      63746F73 
+ 2016      20646520 
+ 2016      61756469 
+ 2016      6F202864 
+ 2017 00ee 0000     		.align	2
+ 2018              	.LC7:
+ 2019 00f0 20202D20 		.ascii	"  - Grabacion: hable mientras los 7 segmentos est\351"
+ 2019      47726162 
+ 2019      6163696F 
+ 2019      6E3A2068 
+ 2019      61626C65 
+ 2020 0122 6E20656E 		.ascii	"n encendidos... \000"
+ 2020      63656E64 
+ 2020      69646F73 
+ 2020      2E2E2E20 
+ 2020      00
+ 2021 0133 00       		.align	2
+ 2022              	.LC8:
+ 2023 0134 20202D20 		.ascii	"  - Reproducci\363n a velocidad normal: escuche... "
+ 2023      52657072 
+ 2023      6F647563 
+ 2023      6369F36E 
+ 2023      20612076 
+ 2024 0164 00       		.ascii	"\000"
+ 2025 0165 000000   		.align	2
+ 2026              	.LC9:
+ 2027 0168 20202D20 		.ascii	"  - Reproducci\363n a media velocidad: escuche... \000"
+ 2027      52657072 
+ 2027      6F647563 
+ 2027      6369F36E 
+ 2027      2061206D 
+ 2028              		.align	2
+ 2029              	.LC10:
+ 2030 0198 20202D20 		.ascii	"  - Reproducci\363n a doble velocidad: escuche... \000"
+ 2030      52657072 
+ 2030      6F647563 
+ 2030      6369F36E 
+ 2030      20612064 
+ 2031              		.align	2
+ 2032              	.LC11:
+ 2033 01c8 20202D20 		.ascii	"  - Reproducci\363n inversa: escuche... \000"
+ 2033      52657072 
+ 2033      6F647563 
+ 2033      6369F36E 
+ 2033      20696E76 
+ 2034 01ee 0000     		.align	2
+ 2035              	.LC12:
+ 2036 01f0 20202D20 		.ascii	"  - Loopback: hable y escuche... \000"
+ 2036      4C6F6F70 
+ 2036      6261636B 
+ 2036      3A206861 
+ 2036      626C6520 
+ 2037 0212 0000     		.align	2
+ 2038              	.LC13:
+ 2039 0214 20202D20 		.ascii	"  - Echo (8 ms): hable y escuche... \000"
+ 2039      4563686F 
+ 2039      20283820 
+ 2039      6D73293A 
+ 2039      20686162 
+ 2040 0239 000000   		.align	2
+ 2041              	.LC14:
+ 2042 023c 20202D20 		.ascii	"  - Echo (45 ms): hable y escuche... \000"
+ 2042      4563686F 
+ 2042      20283435 
+ 2042      206D7329 
+ 2042      3A206861 
+ 2043 0262 0000     		.align	2
+ 2044              	.LC15:
+ 2045 0264 20202D20 		.ascii	"  - Echo (85 ms): hable y escuche... \000"
+ 2045      4563686F 
+ 2045      20283835 
+ 2045      206D7329 
+ 2045      3A206861 
+ 2046 028a 0000     		.align	2
+ 2047              	.LC16:
+ 2048 028c 20202D20 		.ascii	"  - Echo (150 ms): hable y escuche... \000"
+ 2048      4563686F 
+ 2048      20283135 
+ 2048      30206D73 
+ 2048      293A2068 
+ 2049 02b3 00       		.align	2
+ 2050              	.LC17:
+ 2051 02b4 20202D20 		.ascii	"  - Echo & fade (1 s): hable y escuche... \000"
+ 2051      4563686F 
+ 2051      20262066 
+ 2051      61646520 
+ 2051      28312073 
+ 2052 02df 00       		.align	2
+ 2053              	.LC18:
+ 2054 02e0 20202D20 		.ascii	"  - Reverberaci\363n (echo & fade 100 ms): hable y "
+ 2054      52657665 
+ 2054      72626572 
+ 2054      616369F3 
+ 2054      6E202865 
+ 2055 0310 65736375 		.ascii	"escuche... \000"
+ 2055      6368652E 
+ 2055      2E2E2000 
+ 2056              		.text
+ 2057              		.align	2
+ 2058              		.global	main
+ 2060              	main:
+ 2061              	.LFB0:
+   1:../lab9-efectos.c **** /*-------------------------------------------------------------------
+   2:../lab9-efectos.c **** **
+   3:../lab9-efectos.c **** **  Fichero:
+   4:../lab9-efectos.c **** **    lab9-efectos.c  11/5/2014
+   5:../lab9-efectos.c **** **
+   6:../lab9-efectos.c **** **    (c) J.M. Mendias
+   7:../lab9-efectos.c **** **    Programación de Sistemas y Dispositivos
+   8:../lab9-efectos.c **** **    Facultad de Informática. Universidad Complutense de Madrid
+   9:../lab9-efectos.c **** **
+  10:../lab9-efectos.c **** **  Propósito:
+  11:../lab9-efectos.c **** **    Test del laboratorio 9 (1a. parte)
+  12:../lab9-efectos.c **** **
+  13:../lab9-efectos.c **** **  Notas de diseño:
+  14:../lab9-efectos.c **** **
+  15:../lab9-efectos.c **** **-----------------------------------------------------------------*/
+  16:../lab9-efectos.c **** 
+  17:../lab9-efectos.c **** #include <s3c44b0x.h>
+  18:../lab9-efectos.c **** #include <common_types.h>
+  19:../lab9-efectos.c **** #include <system.h>
+  20:../lab9-efectos.c **** #include <segs.h>
+  21:../lab9-efectos.c **** #include <keypad.h>
+  22:../lab9-efectos.c **** #include <uart.h>
+  23:../lab9-efectos.c **** #include <uda1341ts.h>
+  24:../lab9-efectos.c **** #include <iis.h>
+  25:../lab9-efectos.c **** 
+  26:../lab9-efectos.c **** #define AUDIOBUFFER_SIZE   (16000*10) // 16000sps * 10s = 160000 samples
+  27:../lab9-efectos.c **** #define AUDIODELAY_MAXSIZE (16000*2)  // 16000sps * 2s  = 32000 samples
+  28:../lab9-efectos.c **** #define WAVETABLE_SIZE     (36)       // 16000sps / 440wps (LA) = 36 samples/wave
+  29:../lab9-efectos.c **** 
+  30:../lab9-efectos.c **** typedef struct {
+  31:../lab9-efectos.c **** 	int16 ch0[AUDIOBUFFER_SIZE];
+  32:../lab9-efectos.c **** 	int16 ch1[AUDIOBUFFER_SIZE];
+  33:../lab9-efectos.c **** } audiobuffer_t;
+  34:../lab9-efectos.c **** 
+  35:../lab9-efectos.c **** typedef struct {
+  36:../lab9-efectos.c **** 	int16 ch0[AUDIODELAY_MAXSIZE];
+  37:../lab9-efectos.c **** 	int16 ch1[AUDIODELAY_MAXSIZE];
+  38:../lab9-efectos.c **** 	uint16 size;
+  39:../lab9-efectos.c **** 	uint16 head;
+  40:../lab9-efectos.c **** 	uint16 tail;
+  41:../lab9-efectos.c **** } audiodelay_t;
+  42:../lab9-efectos.c **** 
+  43:../lab9-efectos.c **** audiobuffer_t buffer;
+  44:../lab9-efectos.c **** audiodelay_t delay_buffer;
+  45:../lab9-efectos.c **** 
+  46:../lab9-efectos.c **** /*
+  47:../lab9-efectos.c ****  * Tablas correspondientes a una onda de frecuencia 440 Hz (LA central) muestreada a 16000sps,
+  48:../lab9-efectos.c ****  * el patron de valores se repite cada 36 = 16000/440 muestras.
+  49:../lab9-efectos.c ****  *
+  50:../lab9-efectos.c ****  * Las muestras del audio codec son de 16 bits y los valores de la tabla requieren solo 11 bits,
+  51:../lab9-efectos.c ****  * por lo que la onda almacenada tiene un volumen bajo.
+  52:../lab9-efectos.c ****  */
+  53:../lab9-efectos.c **** 
+  54:../lab9-efectos.c **** int16 triangle[WAVETABLE_SIZE] =
+  55:../lab9-efectos.c **** {
+  56:../lab9-efectos.c ****       0,  100,  200,  300,  400,  500,  600,  700,  800,  900,  800,  700,  600,  500,  400,  300, 
+  57:../lab9-efectos.c ****       0, -100, -200, -300, -400, -500, -600, -700, -800, -900, -800, -700, -600, -500, -400, -300, 
+  58:../lab9-efectos.c **** };
+  59:../lab9-efectos.c **** 
+  60:../lab9-efectos.c **** 
+  61:../lab9-efectos.c **** int16 square[WAVETABLE_SIZE] =
+  62:../lab9-efectos.c **** {
+  63:../lab9-efectos.c **** 	900,  900,  900,  900,  900,  900,  900,  900,  900,  900,  900,  900,  900,  900,  900,  900,  90
+  64:../lab9-efectos.c ****    -900, -900, -900, -900, -900, -900, -900, -900, -900, -900, -900, -900, -900, -900, -900, -900, 
+  65:../lab9-efectos.c **** };
+  66:../lab9-efectos.c **** 
+  67:../lab9-efectos.c **** int16 sine[WAVETABLE_SIZE] =   // Calculado como sine[i] = 900 * sin(2*PI*i/36)
+  68:../lab9-efectos.c **** {
+  69:../lab9-efectos.c **** 	  0,  156,  308,  450,  579,  689,  779,  846,  886,  900,  886,  846,  779,  689,  579,  450,  30
+  70:../lab9-efectos.c **** 	  0, -156, -308, -450, -579, -689, -779, -846, -886, -900, -886, -846, -779, -689, -579, -450, -30
+  71:../lab9-efectos.c **** };
+  72:../lab9-efectos.c **** 
+  73:../lab9-efectos.c **** void audiodelay_init( audiodelay_t *buffer, uint16 size );
+  74:../lab9-efectos.c **** void audiodelay_put( audiodelay_t *buffer, int16 ch0, int16 ch1 );
+  75:../lab9-efectos.c **** void audiodelay_get( audiodelay_t *buffer, int16 *ch0, int16 *ch1 );
+  76:../lab9-efectos.c **** 
+  77:../lab9-efectos.c **** void main( void )
+  78:../lab9-efectos.c **** {
+ 2062              		.loc 1 78 0
+ 2063              		.cfi_startproc
+ 2064              		@ Function supports interworking.
+ 2065              		@ args = 0, pretend = 0, frame = 16
+ 2066              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2067 0000 0DC0A0E1 		mov	ip, sp
+ 2068              	.LCFI0:
+ 2069              		.cfi_def_cfa_register 12
+ 2070 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2071 0008 04B04CE2 		sub	fp, ip, #4
+ 2072              		.cfi_offset 14, -8
+ 2073              		.cfi_offset 13, -12
+ 2074              		.cfi_offset 11, -16
+ 2075              	.LCFI1:
+ 2076              		.cfi_def_cfa 11, 4
+ 2077 000c 10D04DE2 		sub	sp, sp, #16
+  79:../lab9-efectos.c **** 	uint32 i;
+  80:../lab9-efectos.c **** 	int16 ch0, ch1;
+  81:../lab9-efectos.c **** 	int16 ch0_aux, ch1_aux;
+  82:../lab9-efectos.c **** 
+  83:../lab9-efectos.c **** 	sys_init();
+ 2078              		.loc 1 83 0
+ 2079 0010 FEFFFFEB 		bl	sys_init
+  84:../lab9-efectos.c ****     uart0_init();
+ 2080              		.loc 1 84 0
+ 2081 0014 FEFFFFEB 		bl	uart0_init
+  85:../lab9-efectos.c ****     segs_init();
+ 2082              		.loc 1 85 0
+ 2083 0018 FEFFFFEB 		bl	segs_init
+  86:../lab9-efectos.c ****     keypad_init();
+ 2084              		.loc 1 86 0
+ 2085 001c FEFFFFEB 		bl	keypad_init
+  87:../lab9-efectos.c ****     uda1341ts_init();
+ 2086              		.loc 1 87 0
+ 2087 0020 FEFFFFEB 		bl	uda1341ts_init
+  88:../lab9-efectos.c ****     iis_init( IIS_POLLING );
+ 2088              		.loc 1 88 0
+ 2089 0024 0200A0E3 		mov	r0, #2
+ 2090 0028 FEFFFFEB 		bl	iis_init
+  89:../lab9-efectos.c **** 
+  90:../lab9-efectos.c ****     /************************************/
+  91:../lab9-efectos.c **** 
+  92:../lab9-efectos.c ****     uart0_puts( "\n\nReproducción de sonido tabulado (LA central 440 Hz)\n" );
+ 2091              		.loc 1 92 0
+ 2092 002c 4C0C9FE5 		ldr	r0, .L33
+ 2093 0030 FEFFFFEB 		bl	uart0_puts
+  93:../lab9-efectos.c ****     uart0_puts( "(para finalizar presione cualquier tecla)\n" );
+ 2094              		.loc 1 93 0
+ 2095 0034 480C9FE5 		ldr	r0, .L33+4
+ 2096 0038 FEFFFFEB 		bl	uart0_puts
+  94:../lab9-efectos.c **** 
+  95:../lab9-efectos.c ****     /************************************/
+  96:../lab9-efectos.c **** 
+  97:../lab9-efectos.c ****     uart0_puts( "  - Sinusoide: escuche... " );
+ 2097              		.loc 1 97 0
+ 2098 003c 440C9FE5 		ldr	r0, .L33+8
+ 2099 0040 FEFFFFEB 		bl	uart0_puts
+  98:../lab9-efectos.c ****     i = 0;
+ 2100              		.loc 1 98 0
+ 2101 0044 0030A0E3 		mov	r3, #0
+ 2102 0048 10300BE5 		str	r3, [fp, #-16]
+  99:../lab9-efectos.c ****     while( !keypad_pressed() )
+ 2103              		.loc 1 99 0
+ 2104 004c 180000EA 		b	.L2
+ 2105              	.L3:
+ 100:../lab9-efectos.c ****     {
+ 101:../lab9-efectos.c ****      	iis_putSample( sine[i], sine[i] );
+ 2106              		.loc 1 101 0
+ 2107 0050 342C9FE5 		ldr	r2, .L33+12
+ 2108 0054 10301BE5 		ldr	r3, [fp, #-16]
+ 2109 0058 8330A0E1 		mov	r3, r3, asl #1
+ 2110 005c 033082E0 		add	r3, r2, r3
+ 2111 0060 B020D3E1 		ldrh	r2, [r3, #0]
+ 2112 0064 201C9FE5 		ldr	r1, .L33+12
+ 2113 0068 10301BE5 		ldr	r3, [fp, #-16]
+ 2114 006c 8330A0E1 		mov	r3, r3, asl #1
+ 2115 0070 033081E0 		add	r3, r1, r3
+ 2116 0074 B030D3E1 		ldrh	r3, [r3, #0]
+ 2117 0078 0228A0E1 		mov	r2, r2, asl #16
+ 2118 007c 4228A0E1 		mov	r2, r2, asr #16
+ 2119 0080 0338A0E1 		mov	r3, r3, asl #16
+ 2120 0084 4338A0E1 		mov	r3, r3, asr #16
+ 2121 0088 0200A0E1 		mov	r0, r2
+ 2122 008c 0310A0E1 		mov	r1, r3
+ 2123 0090 FEFFFFEB 		bl	iis_putSample
+ 102:../lab9-efectos.c ****      	if( ++i > WAVETABLE_SIZE )
+ 2124              		.loc 1 102 0
+ 2125 0094 10301BE5 		ldr	r3, [fp, #-16]
+ 2126 0098 013083E2 		add	r3, r3, #1
+ 2127 009c 10300BE5 		str	r3, [fp, #-16]
+ 2128 00a0 10301BE5 		ldr	r3, [fp, #-16]
+ 2129 00a4 240053E3 		cmp	r3, #36
+ 2130 00a8 0100009A 		bls	.L2
+ 103:../lab9-efectos.c ****      		i = 0;
+ 2131              		.loc 1 103 0
+ 2132 00ac 0030A0E3 		mov	r3, #0
+ 2133 00b0 10300BE5 		str	r3, [fp, #-16]
+ 2134              	.L2:
+  99:../lab9-efectos.c ****     while( !keypad_pressed() )
+ 2135              		.loc 1 99 0 discriminator 1
+ 2136 00b4 FEFFFFEB 		bl	keypad_pressed
+ 2137 00b8 0030A0E1 		mov	r3, r0
+ 2138 00bc 000053E3 		cmp	r3, #0
+ 2139 00c0 E2FFFF0A 		beq	.L3
+ 104:../lab9-efectos.c ****     }
+ 105:../lab9-efectos.c ****     keypad_getchar();
+ 2140              		.loc 1 105 0
+ 2141 00c4 FEFFFFEB 		bl	keypad_getchar
+ 106:../lab9-efectos.c ****     uart0_puts( "OK\n" );
+ 2142              		.loc 1 106 0
+ 2143 00c8 C00B9FE5 		ldr	r0, .L33+16
+ 2144 00cc FEFFFFEB 		bl	uart0_puts
+ 107:../lab9-efectos.c **** 
+ 108:../lab9-efectos.c ****     /************************************/
+ 109:../lab9-efectos.c **** 
+ 110:../lab9-efectos.c ****     uart0_puts( "  - Onda cuadrada: escuche... " );
+ 2145              		.loc 1 110 0
+ 2146 00d0 BC0B9FE5 		ldr	r0, .L33+20
+ 2147 00d4 FEFFFFEB 		bl	uart0_puts
+ 111:../lab9-efectos.c **** 	i = 0;
+ 2148              		.loc 1 111 0
+ 2149 00d8 0030A0E3 		mov	r3, #0
+ 2150 00dc 10300BE5 		str	r3, [fp, #-16]
+ 112:../lab9-efectos.c ****     while( !keypad_pressed() )
+ 2151              		.loc 1 112 0
+ 2152 00e0 180000EA 		b	.L4
+ 2153              	.L5:
+ 113:../lab9-efectos.c ****     {
+ 114:../lab9-efectos.c ****      	iis_putSample( square[i], square[i] );
+ 2154              		.loc 1 114 0
+ 2155 00e4 AC2B9FE5 		ldr	r2, .L33+24
+ 2156 00e8 10301BE5 		ldr	r3, [fp, #-16]
+ 2157 00ec 8330A0E1 		mov	r3, r3, asl #1
+ 2158 00f0 033082E0 		add	r3, r2, r3
+ 2159 00f4 B020D3E1 		ldrh	r2, [r3, #0]
+ 2160 00f8 981B9FE5 		ldr	r1, .L33+24
+ 2161 00fc 10301BE5 		ldr	r3, [fp, #-16]
+ 2162 0100 8330A0E1 		mov	r3, r3, asl #1
+ 2163 0104 033081E0 		add	r3, r1, r3
+ 2164 0108 B030D3E1 		ldrh	r3, [r3, #0]
+ 2165 010c 0228A0E1 		mov	r2, r2, asl #16
+ 2166 0110 4228A0E1 		mov	r2, r2, asr #16
+ 2167 0114 0338A0E1 		mov	r3, r3, asl #16
+ 2168 0118 4338A0E1 		mov	r3, r3, asr #16
+ 2169 011c 0200A0E1 		mov	r0, r2
+ 2170 0120 0310A0E1 		mov	r1, r3
+ 2171 0124 FEFFFFEB 		bl	iis_putSample
+ 115:../lab9-efectos.c ****      	if( ++i > WAVETABLE_SIZE )
+ 2172              		.loc 1 115 0
+ 2173 0128 10301BE5 		ldr	r3, [fp, #-16]
+ 2174 012c 013083E2 		add	r3, r3, #1
+ 2175 0130 10300BE5 		str	r3, [fp, #-16]
+ 2176 0134 10301BE5 		ldr	r3, [fp, #-16]
+ 2177 0138 240053E3 		cmp	r3, #36
+ 2178 013c 0100009A 		bls	.L4
+ 116:../lab9-efectos.c ****      		i = 0;
+ 2179              		.loc 1 116 0
+ 2180 0140 0030A0E3 		mov	r3, #0
+ 2181 0144 10300BE5 		str	r3, [fp, #-16]
+ 2182              	.L4:
+ 112:../lab9-efectos.c ****     while( !keypad_pressed() )
+ 2183              		.loc 1 112 0 discriminator 1
+ 2184 0148 FEFFFFEB 		bl	keypad_pressed
+ 2185 014c 0030A0E1 		mov	r3, r0
+ 2186 0150 000053E3 		cmp	r3, #0
+ 2187 0154 E2FFFF0A 		beq	.L5
+ 117:../lab9-efectos.c ****     }
+ 118:../lab9-efectos.c ****     keypad_getchar();
+ 2188              		.loc 1 118 0
+ 2189 0158 FEFFFFEB 		bl	keypad_getchar
+ 119:../lab9-efectos.c ****     uart0_puts( "OK\n" );
+ 2190              		.loc 1 119 0
+ 2191 015c 2C0B9FE5 		ldr	r0, .L33+16
+ 2192 0160 FEFFFFEB 		bl	uart0_puts
+ 120:../lab9-efectos.c **** 
+ 121:../lab9-efectos.c ****     /************************************/
+ 122:../lab9-efectos.c **** 
+ 123:../lab9-efectos.c ****     uart0_puts( "  - Onda triangular: escuche... " );
+ 2193              		.loc 1 123 0
+ 2194 0164 300B9FE5 		ldr	r0, .L33+28
+ 2195 0168 FEFFFFEB 		bl	uart0_puts
+ 124:../lab9-efectos.c ****     i = 0;
+ 2196              		.loc 1 124 0
+ 2197 016c 0030A0E3 		mov	r3, #0
+ 2198 0170 10300BE5 		str	r3, [fp, #-16]
+ 125:../lab9-efectos.c **** 	while( !keypad_pressed() )
+ 2199              		.loc 1 125 0
+ 2200 0174 180000EA 		b	.L6
+ 2201              	.L7:
+ 126:../lab9-efectos.c ****     {
+ 127:../lab9-efectos.c ****      	iis_putSample( triangle[i], triangle[i] );
+ 2202              		.loc 1 127 0
+ 2203 0178 202B9FE5 		ldr	r2, .L33+32
+ 2204 017c 10301BE5 		ldr	r3, [fp, #-16]
+ 2205 0180 8330A0E1 		mov	r3, r3, asl #1
+ 2206 0184 033082E0 		add	r3, r2, r3
+ 2207 0188 B020D3E1 		ldrh	r2, [r3, #0]
+ 2208 018c 0C1B9FE5 		ldr	r1, .L33+32
+ 2209 0190 10301BE5 		ldr	r3, [fp, #-16]
+ 2210 0194 8330A0E1 		mov	r3, r3, asl #1
+ 2211 0198 033081E0 		add	r3, r1, r3
+ 2212 019c B030D3E1 		ldrh	r3, [r3, #0]
+ 2213 01a0 0228A0E1 		mov	r2, r2, asl #16
+ 2214 01a4 4228A0E1 		mov	r2, r2, asr #16
+ 2215 01a8 0338A0E1 		mov	r3, r3, asl #16
+ 2216 01ac 4338A0E1 		mov	r3, r3, asr #16
+ 2217 01b0 0200A0E1 		mov	r0, r2
+ 2218 01b4 0310A0E1 		mov	r1, r3
+ 2219 01b8 FEFFFFEB 		bl	iis_putSample
+ 128:../lab9-efectos.c ****      	if( ++i > WAVETABLE_SIZE )
+ 2220              		.loc 1 128 0
+ 2221 01bc 10301BE5 		ldr	r3, [fp, #-16]
+ 2222 01c0 013083E2 		add	r3, r3, #1
+ 2223 01c4 10300BE5 		str	r3, [fp, #-16]
+ 2224 01c8 10301BE5 		ldr	r3, [fp, #-16]
+ 2225 01cc 240053E3 		cmp	r3, #36
+ 2226 01d0 0100009A 		bls	.L6
+ 129:../lab9-efectos.c ****      		i = 0;
+ 2227              		.loc 1 129 0
+ 2228 01d4 0030A0E3 		mov	r3, #0
+ 2229 01d8 10300BE5 		str	r3, [fp, #-16]
+ 2230              	.L6:
+ 125:../lab9-efectos.c **** 	while( !keypad_pressed() )
+ 2231              		.loc 1 125 0 discriminator 1
+ 2232 01dc FEFFFFEB 		bl	keypad_pressed
+ 2233 01e0 0030A0E1 		mov	r3, r0
+ 2234 01e4 000053E3 		cmp	r3, #0
+ 2235 01e8 E2FFFF0A 		beq	.L7
+ 130:../lab9-efectos.c ****     }
+ 131:../lab9-efectos.c ****     keypad_getchar();
+ 2236              		.loc 1 131 0
+ 2237 01ec FEFFFFEB 		bl	keypad_getchar
+ 132:../lab9-efectos.c **** 	uart0_puts( "OK\n" );
+ 2238              		.loc 1 132 0
+ 2239 01f0 980A9FE5 		ldr	r0, .L33+16
+ 2240 01f4 FEFFFFEB 		bl	uart0_puts
+ 133:../lab9-efectos.c **** 
+ 134:../lab9-efectos.c ****     /************************************/
+ 135:../lab9-efectos.c **** 
+ 136:../lab9-efectos.c ****     uart0_puts( "\nEfectos de audio (dominio temporal)\n" );
+ 2241              		.loc 1 136 0
+ 2242 01f8 A40A9FE5 		ldr	r0, .L33+36
+ 2243 01fc FEFFFFEB 		bl	uart0_puts
+ 137:../lab9-efectos.c **** 
+ 138:../lab9-efectos.c ****     /************************************/
+ 139:../lab9-efectos.c **** 
+ 140:../lab9-efectos.c ****     uart0_puts( "  - Grabacion: hable mientras los 7 segmentos estén encendidos... " );
+ 2244              		.loc 1 140 0
+ 2245 0200 A00A9FE5 		ldr	r0, .L33+40
+ 2246 0204 FEFFFFEB 		bl	uart0_puts
+ 141:../lab9-efectos.c ****     segs_putchar( 8 );
+ 2247              		.loc 1 141 0
+ 2248 0208 0800A0E3 		mov	r0, #8
+ 2249 020c FEFFFFEB 		bl	segs_putchar
+ 142:../lab9-efectos.c ****     for( i=0; i<AUDIOBUFFER_SIZE; i++ )
+ 2250              		.loc 1 142 0
+ 2251 0210 0030A0E3 		mov	r3, #0
+ 2252 0214 10300BE5 		str	r3, [fp, #-16]
+ 2253 0218 0D0000EA 		b	.L8
+ 2254              	.L9:
+ 143:../lab9-efectos.c ****      	iis_getSample( &(buffer.ch0[i]), &(buffer.ch1[i]) );
+ 2255              		.loc 1 143 0 discriminator 2
+ 2256 021c 10301BE5 		ldr	r3, [fp, #-16]
+ 2257 0220 8320A0E1 		mov	r2, r3, asl #1
+ 2258 0224 803A9FE5 		ldr	r3, .L33+44
+ 2259 0228 032082E0 		add	r2, r2, r3
+ 2260 022c 10301BE5 		ldr	r3, [fp, #-16]
+ 2261 0230 8310A0E1 		mov	r1, r3, asl #1
+ 2262 0234 743A9FE5 		ldr	r3, .L33+48
+ 2263 0238 033081E0 		add	r3, r1, r3
+ 2264 023c 0200A0E1 		mov	r0, r2
+ 2265 0240 0310A0E1 		mov	r1, r3
+ 2266 0244 FEFFFFEB 		bl	iis_getSample
+ 142:../lab9-efectos.c ****     for( i=0; i<AUDIOBUFFER_SIZE; i++ )
+ 2267              		.loc 1 142 0 discriminator 2
+ 2268 0248 10301BE5 		ldr	r3, [fp, #-16]
+ 2269 024c 013083E2 		add	r3, r3, #1
+ 2270 0250 10300BE5 		str	r3, [fp, #-16]
+ 2271              	.L8:
+ 142:../lab9-efectos.c ****     for( i=0; i<AUDIOBUFFER_SIZE; i++ )
+ 2272              		.loc 1 142 0 is_stmt 0 discriminator 1
+ 2273 0254 10201BE5 		ldr	r2, [fp, #-16]
+ 2274 0258 543A9FE5 		ldr	r3, .L33+52
+ 2275 025c 030052E1 		cmp	r2, r3
+ 2276 0260 EDFFFF9A 		bls	.L9
+ 144:../lab9-efectos.c ****     segs_off();
+ 2277              		.loc 1 144 0 is_stmt 1
+ 2278 0264 FEFFFFEB 		bl	segs_off
+ 145:../lab9-efectos.c ****     uart0_puts( "OK\n" );
+ 2279              		.loc 1 145 0
+ 2280 0268 200A9FE5 		ldr	r0, .L33+16
+ 2281 026c FEFFFFEB 		bl	uart0_puts
+ 146:../lab9-efectos.c **** 
+ 147:../lab9-efectos.c ****     /************************************/
+ 148:../lab9-efectos.c **** 
+ 149:../lab9-efectos.c ****     uart0_puts( "  - Reproducción a velocidad normal: escuche... " );
+ 2282              		.loc 1 149 0
+ 2283 0270 400A9FE5 		ldr	r0, .L33+56
+ 2284 0274 FEFFFFEB 		bl	uart0_puts
+ 150:../lab9-efectos.c ****     for( i=0; i<AUDIOBUFFER_SIZE; i++ )
+ 2285              		.loc 1 150 0
+ 2286 0278 0030A0E3 		mov	r3, #0
+ 2287 027c 10300BE5 		str	r3, [fp, #-16]
+ 2288 0280 150000EA 		b	.L10
+ 2289              	.L11:
+ 151:../lab9-efectos.c ****      	iis_putSample( buffer.ch0[i], buffer.ch1[i] );
+ 2290              		.loc 1 151 0 discriminator 2
+ 2291 0284 202A9FE5 		ldr	r2, .L33+44
+ 2292 0288 10301BE5 		ldr	r3, [fp, #-16]
+ 2293 028c 8330A0E1 		mov	r3, r3, asl #1
+ 2294 0290 033082E0 		add	r3, r2, r3
+ 2295 0294 B020D3E1 		ldrh	r2, [r3, #0]
+ 2296 0298 0C1A9FE5 		ldr	r1, .L33+44
+ 2297 029c 10301BE5 		ldr	r3, [fp, #-16]
+ 2298 02a0 273A83E2 		add	r3, r3, #159744
+ 2299 02a4 013C83E2 		add	r3, r3, #256
+ 2300 02a8 8330A0E1 		mov	r3, r3, asl #1
+ 2301 02ac 033081E0 		add	r3, r1, r3
+ 2302 02b0 B030D3E1 		ldrh	r3, [r3, #0]
+ 2303 02b4 0228A0E1 		mov	r2, r2, asl #16
+ 2304 02b8 4228A0E1 		mov	r2, r2, asr #16
+ 2305 02bc 0338A0E1 		mov	r3, r3, asl #16
+ 2306 02c0 4338A0E1 		mov	r3, r3, asr #16
+ 2307 02c4 0200A0E1 		mov	r0, r2
+ 2308 02c8 0310A0E1 		mov	r1, r3
+ 2309 02cc FEFFFFEB 		bl	iis_putSample
+ 150:../lab9-efectos.c ****     for( i=0; i<AUDIOBUFFER_SIZE; i++ )
+ 2310              		.loc 1 150 0 discriminator 2
+ 2311 02d0 10301BE5 		ldr	r3, [fp, #-16]
+ 2312 02d4 013083E2 		add	r3, r3, #1
+ 2313 02d8 10300BE5 		str	r3, [fp, #-16]
+ 2314              	.L10:
+ 150:../lab9-efectos.c ****     for( i=0; i<AUDIOBUFFER_SIZE; i++ )
+ 2315              		.loc 1 150 0 is_stmt 0 discriminator 1
+ 2316 02dc 10201BE5 		ldr	r2, [fp, #-16]
+ 2317 02e0 CC399FE5 		ldr	r3, .L33+52
+ 2318 02e4 030052E1 		cmp	r2, r3
+ 2319 02e8 E5FFFF9A 		bls	.L11
+ 152:../lab9-efectos.c ****     uart0_puts( "OK\n" );
+ 2320              		.loc 1 152 0 is_stmt 1
+ 2321 02ec 9C099FE5 		ldr	r0, .L33+16
+ 2322 02f0 FEFFFFEB 		bl	uart0_puts
+ 153:../lab9-efectos.c **** 
+ 154:../lab9-efectos.c ****     uart0_puts( "  - Reproducción a media velocidad: escuche... " );
+ 2323              		.loc 1 154 0
+ 2324 02f4 C0099FE5 		ldr	r0, .L33+60
+ 2325 02f8 FEFFFFEB 		bl	uart0_puts
+ 155:../lab9-efectos.c ****     for( i=0; i<AUDIOBUFFER_SIZE; i++ )
+ 2326              		.loc 1 155 0
+ 2327 02fc 0030A0E3 		mov	r3, #0
+ 2328 0300 10300BE5 		str	r3, [fp, #-16]
+ 2329 0304 280000EA 		b	.L12
+ 2330              	.L13:
+ 156:../lab9-efectos.c ****     {
+ 157:../lab9-efectos.c ****      	iis_putSample( buffer.ch0[i], buffer.ch1[i] );	    // cada muestra almacenada se reproduce 2 
+ 2331              		.loc 1 157 0 discriminator 2
+ 2332 0308 9C299FE5 		ldr	r2, .L33+44
+ 2333 030c 10301BE5 		ldr	r3, [fp, #-16]
+ 2334 0310 8330A0E1 		mov	r3, r3, asl #1
+ 2335 0314 033082E0 		add	r3, r2, r3
+ 2336 0318 B020D3E1 		ldrh	r2, [r3, #0]
+ 2337 031c 88199FE5 		ldr	r1, .L33+44
+ 2338 0320 10301BE5 		ldr	r3, [fp, #-16]
+ 2339 0324 273A83E2 		add	r3, r3, #159744
+ 2340 0328 013C83E2 		add	r3, r3, #256
+ 2341 032c 8330A0E1 		mov	r3, r3, asl #1
+ 2342 0330 033081E0 		add	r3, r1, r3
+ 2343 0334 B030D3E1 		ldrh	r3, [r3, #0]
+ 2344 0338 0228A0E1 		mov	r2, r2, asl #16
+ 2345 033c 4228A0E1 		mov	r2, r2, asr #16
+ 2346 0340 0338A0E1 		mov	r3, r3, asl #16
+ 2347 0344 4338A0E1 		mov	r3, r3, asr #16
+ 2348 0348 0200A0E1 		mov	r0, r2
+ 2349 034c 0310A0E1 		mov	r1, r3
+ 2350 0350 FEFFFFEB 		bl	iis_putSample
+ 158:../lab9-efectos.c ****      	iis_putSample( buffer.ch0[i], buffer.ch1[i] );
+ 2351              		.loc 1 158 0 discriminator 2
+ 2352 0354 50299FE5 		ldr	r2, .L33+44
+ 2353 0358 10301BE5 		ldr	r3, [fp, #-16]
+ 2354 035c 8330A0E1 		mov	r3, r3, asl #1
+ 2355 0360 033082E0 		add	r3, r2, r3
+ 2356 0364 B020D3E1 		ldrh	r2, [r3, #0]
+ 2357 0368 3C199FE5 		ldr	r1, .L33+44
+ 2358 036c 10301BE5 		ldr	r3, [fp, #-16]
+ 2359 0370 273A83E2 		add	r3, r3, #159744
+ 2360 0374 013C83E2 		add	r3, r3, #256
+ 2361 0378 8330A0E1 		mov	r3, r3, asl #1
+ 2362 037c 033081E0 		add	r3, r1, r3
+ 2363 0380 B030D3E1 		ldrh	r3, [r3, #0]
+ 2364 0384 0228A0E1 		mov	r2, r2, asl #16
+ 2365 0388 4228A0E1 		mov	r2, r2, asr #16
+ 2366 038c 0338A0E1 		mov	r3, r3, asl #16
+ 2367 0390 4338A0E1 		mov	r3, r3, asr #16
+ 2368 0394 0200A0E1 		mov	r0, r2
+ 2369 0398 0310A0E1 		mov	r1, r3
+ 2370 039c FEFFFFEB 		bl	iis_putSample
+ 155:../lab9-efectos.c ****     for( i=0; i<AUDIOBUFFER_SIZE; i++ )
+ 2371              		.loc 1 155 0 discriminator 2
+ 2372 03a0 10301BE5 		ldr	r3, [fp, #-16]
+ 2373 03a4 013083E2 		add	r3, r3, #1
+ 2374 03a8 10300BE5 		str	r3, [fp, #-16]
+ 2375              	.L12:
+ 155:../lab9-efectos.c ****     for( i=0; i<AUDIOBUFFER_SIZE; i++ )
+ 2376              		.loc 1 155 0 is_stmt 0 discriminator 1
+ 2377 03ac 10201BE5 		ldr	r2, [fp, #-16]
+ 2378 03b0 FC389FE5 		ldr	r3, .L33+52
+ 2379 03b4 030052E1 		cmp	r2, r3
+ 2380 03b8 D2FFFF9A 		bls	.L13
+ 159:../lab9-efectos.c ****      }
+ 160:../lab9-efectos.c ****     uart0_puts( "OK\n" );
+ 2381              		.loc 1 160 0 is_stmt 1
+ 2382 03bc CC089FE5 		ldr	r0, .L33+16
+ 2383 03c0 FEFFFFEB 		bl	uart0_puts
+ 161:../lab9-efectos.c **** 
+ 162:../lab9-efectos.c ****     /************************************/
+ 163:../lab9-efectos.c **** 
+ 164:../lab9-efectos.c ****     uart0_puts( "  - Reproducción a doble velocidad: escuche... " );
+ 2384              		.loc 1 164 0
+ 2385 03c4 F4089FE5 		ldr	r0, .L33+64
+ 2386 03c8 FEFFFFEB 		bl	uart0_puts
+ 165:../lab9-efectos.c ****     for( i=0; i<AUDIOBUFFER_SIZE; i+=2 )		 	// se reproduce 1 de cada 2 muestras almacenadas
+ 2387              		.loc 1 165 0
+ 2388 03cc 0030A0E3 		mov	r3, #0
+ 2389 03d0 10300BE5 		str	r3, [fp, #-16]
+ 2390 03d4 150000EA 		b	.L14
+ 2391              	.L15:
+ 166:../lab9-efectos.c ****      	iis_putSample( buffer.ch0[i], buffer.ch1[i] );
+ 2392              		.loc 1 166 0 discriminator 2
+ 2393 03d8 CC289FE5 		ldr	r2, .L33+44
+ 2394 03dc 10301BE5 		ldr	r3, [fp, #-16]
+ 2395 03e0 8330A0E1 		mov	r3, r3, asl #1
+ 2396 03e4 033082E0 		add	r3, r2, r3
+ 2397 03e8 B020D3E1 		ldrh	r2, [r3, #0]
+ 2398 03ec B8189FE5 		ldr	r1, .L33+44
+ 2399 03f0 10301BE5 		ldr	r3, [fp, #-16]
+ 2400 03f4 273A83E2 		add	r3, r3, #159744
+ 2401 03f8 013C83E2 		add	r3, r3, #256
+ 2402 03fc 8330A0E1 		mov	r3, r3, asl #1
+ 2403 0400 033081E0 		add	r3, r1, r3
+ 2404 0404 B030D3E1 		ldrh	r3, [r3, #0]
+ 2405 0408 0228A0E1 		mov	r2, r2, asl #16
+ 2406 040c 4228A0E1 		mov	r2, r2, asr #16
+ 2407 0410 0338A0E1 		mov	r3, r3, asl #16
+ 2408 0414 4338A0E1 		mov	r3, r3, asr #16
+ 2409 0418 0200A0E1 		mov	r0, r2
+ 2410 041c 0310A0E1 		mov	r1, r3
+ 2411 0420 FEFFFFEB 		bl	iis_putSample
+ 165:../lab9-efectos.c ****     for( i=0; i<AUDIOBUFFER_SIZE; i+=2 )		 	// se reproduce 1 de cada 2 muestras almacenadas
+ 2412              		.loc 1 165 0 discriminator 2
+ 2413 0424 10301BE5 		ldr	r3, [fp, #-16]
+ 2414 0428 023083E2 		add	r3, r3, #2
+ 2415 042c 10300BE5 		str	r3, [fp, #-16]
+ 2416              	.L14:
+ 165:../lab9-efectos.c ****     for( i=0; i<AUDIOBUFFER_SIZE; i+=2 )		 	// se reproduce 1 de cada 2 muestras almacenadas
+ 2417              		.loc 1 165 0 is_stmt 0 discriminator 1
+ 2418 0430 10201BE5 		ldr	r2, [fp, #-16]
+ 2419 0434 78389FE5 		ldr	r3, .L33+52
+ 2420 0438 030052E1 		cmp	r2, r3
+ 2421 043c E5FFFF9A 		bls	.L15
+ 167:../lab9-efectos.c ****     uart0_puts( "OK\n" );
+ 2422              		.loc 1 167 0 is_stmt 1
+ 2423 0440 48089FE5 		ldr	r0, .L33+16
+ 2424 0444 FEFFFFEB 		bl	uart0_puts
+ 168:../lab9-efectos.c **** 
+ 169:../lab9-efectos.c ****     /************************************/
+ 170:../lab9-efectos.c **** 
+ 171:../lab9-efectos.c ****     uart0_puts( "  - Reproducción inversa: escuche... " );
+ 2425              		.loc 1 171 0
+ 2426 0448 74089FE5 		ldr	r0, .L33+68
+ 2427 044c FEFFFFEB 		bl	uart0_puts
+ 172:../lab9-efectos.c ****     for( i=0; i<AUDIOBUFFER_SIZE; i++ )
+ 2428              		.loc 1 172 0
+ 2429 0450 0030A0E3 		mov	r3, #0
+ 2430 0454 10300BE5 		str	r3, [fp, #-16]
+ 2431 0458 190000EA 		b	.L16
+ 2432              	.L17:
+ 173:../lab9-efectos.c ****      	iis_putSample( buffer.ch0[AUDIOBUFFER_SIZE-i], buffer.ch1[AUDIOBUFFER_SIZE-i] );
+ 2433              		.loc 1 173 0 discriminator 2
+ 2434 045c 10301BE5 		ldr	r3, [fp, #-16]
+ 2435 0460 273A63E2 		rsb	r3, r3, #159744
+ 2436 0464 013C83E2 		add	r3, r3, #256
+ 2437 0468 3C289FE5 		ldr	r2, .L33+44
+ 2438 046c 8330A0E1 		mov	r3, r3, asl #1
+ 2439 0470 033082E0 		add	r3, r2, r3
+ 2440 0474 B020D3E1 		ldrh	r2, [r3, #0]
+ 2441 0478 10301BE5 		ldr	r3, [fp, #-16]
+ 2442 047c 273A63E2 		rsb	r3, r3, #159744
+ 2443 0480 013C83E2 		add	r3, r3, #256
+ 2444 0484 20189FE5 		ldr	r1, .L33+44
+ 2445 0488 273A83E2 		add	r3, r3, #159744
+ 2446 048c 013C83E2 		add	r3, r3, #256
+ 2447 0490 8330A0E1 		mov	r3, r3, asl #1
+ 2448 0494 033081E0 		add	r3, r1, r3
+ 2449 0498 B030D3E1 		ldrh	r3, [r3, #0]
+ 2450 049c 0228A0E1 		mov	r2, r2, asl #16
+ 2451 04a0 4228A0E1 		mov	r2, r2, asr #16
+ 2452 04a4 0338A0E1 		mov	r3, r3, asl #16
+ 2453 04a8 4338A0E1 		mov	r3, r3, asr #16
+ 2454 04ac 0200A0E1 		mov	r0, r2
+ 2455 04b0 0310A0E1 		mov	r1, r3
+ 2456 04b4 FEFFFFEB 		bl	iis_putSample
+ 172:../lab9-efectos.c ****     for( i=0; i<AUDIOBUFFER_SIZE; i++ )
+ 2457              		.loc 1 172 0 discriminator 2
+ 2458 04b8 10301BE5 		ldr	r3, [fp, #-16]
+ 2459 04bc 013083E2 		add	r3, r3, #1
+ 2460 04c0 10300BE5 		str	r3, [fp, #-16]
+ 2461              	.L16:
+ 172:../lab9-efectos.c ****     for( i=0; i<AUDIOBUFFER_SIZE; i++ )
+ 2462              		.loc 1 172 0 is_stmt 0 discriminator 1
+ 2463 04c4 10201BE5 		ldr	r2, [fp, #-16]
+ 2464 04c8 E4379FE5 		ldr	r3, .L33+52
+ 2465 04cc 030052E1 		cmp	r2, r3
+ 2466 04d0 E1FFFF9A 		bls	.L17
+ 174:../lab9-efectos.c ****     uart0_puts( "OK\n" );
+ 2467              		.loc 1 174 0 is_stmt 1
+ 2468 04d4 B4079FE5 		ldr	r0, .L33+16
+ 2469 04d8 FEFFFFEB 		bl	uart0_puts
+ 175:../lab9-efectos.c **** 
+ 176:../lab9-efectos.c ****     /************************************/
+ 177:../lab9-efectos.c **** 
+ 178:../lab9-efectos.c ****     uart0_puts( "(para finalizar presione cualquier tecla)\n" );
+ 2470              		.loc 1 178 0
+ 2471 04dc A0079FE5 		ldr	r0, .L33+4
+ 2472 04e0 FEFFFFEB 		bl	uart0_puts
+ 179:../lab9-efectos.c ****     uart0_puts( "  - Loopback: hable y escuche... " );
+ 2473              		.loc 1 179 0
+ 2474 04e4 DC079FE5 		ldr	r0, .L33+72
+ 2475 04e8 FEFFFFEB 		bl	uart0_puts
+ 180:../lab9-efectos.c ****     while( !keypad_pressed() )
+ 2476              		.loc 1 180 0
+ 2477 04ec 0D0000EA 		b	.L18
+ 2478              	.L19:
+ 181:../lab9-efectos.c ****     {
+ 182:../lab9-efectos.c ****      	iis_getSample( &ch0, &ch1 );
+ 2479              		.loc 1 182 0
+ 2480 04f0 12204BE2 		sub	r2, fp, #18
+ 2481 04f4 14304BE2 		sub	r3, fp, #20
+ 2482 04f8 0200A0E1 		mov	r0, r2
+ 2483 04fc 0310A0E1 		mov	r1, r3
+ 2484 0500 FEFFFFEB 		bl	iis_getSample
+ 183:../lab9-efectos.c ****      	iis_putSample( ch0, ch1 );
+ 2485              		.loc 1 183 0
+ 2486 0504 B2215BE1 		ldrh	r2, [fp, #-18]
+ 2487 0508 B4315BE1 		ldrh	r3, [fp, #-20]
+ 2488 050c 0228A0E1 		mov	r2, r2, asl #16
+ 2489 0510 4228A0E1 		mov	r2, r2, asr #16
+ 2490 0514 0338A0E1 		mov	r3, r3, asl #16
+ 2491 0518 4338A0E1 		mov	r3, r3, asr #16
+ 2492 051c 0200A0E1 		mov	r0, r2
+ 2493 0520 0310A0E1 		mov	r1, r3
+ 2494 0524 FEFFFFEB 		bl	iis_putSample
+ 2495              	.L18:
+ 180:../lab9-efectos.c ****     while( !keypad_pressed() )
+ 2496              		.loc 1 180 0 discriminator 1
+ 2497 0528 FEFFFFEB 		bl	keypad_pressed
+ 2498 052c 0030A0E1 		mov	r3, r0
+ 2499 0530 000053E3 		cmp	r3, #0
+ 2500 0534 EDFFFF0A 		beq	.L19
+ 184:../lab9-efectos.c ****      }
+ 185:../lab9-efectos.c ****     keypad_getchar();
+ 2501              		.loc 1 185 0
+ 2502 0538 FEFFFFEB 		bl	keypad_getchar
+ 186:../lab9-efectos.c ****     uart0_puts( "OK\n" );
+ 2503              		.loc 1 186 0
+ 2504 053c 4C079FE5 		ldr	r0, .L33+16
+ 2505 0540 FEFFFFEB 		bl	uart0_puts
+ 187:../lab9-efectos.c **** 
+ 188:../lab9-efectos.c ****     /************************************/
+ 189:../lab9-efectos.c **** 
+ 190:../lab9-efectos.c ****     uart0_puts( "  - Echo (8 ms): hable y escuche... " );
+ 2506              		.loc 1 190 0
+ 2507 0544 80079FE5 		ldr	r0, .L33+76
+ 2508 0548 FEFFFFEB 		bl	uart0_puts
+ 191:../lab9-efectos.c ****     audiodelay_init( &delay_buffer, 128 );
+ 2509              		.loc 1 191 0
+ 2510 054c 7C079FE5 		ldr	r0, .L33+80
+ 2511 0550 8010A0E3 		mov	r1, #128
+ 2512 0554 FEFFFFEB 		bl	audiodelay_init
+ 192:../lab9-efectos.c ****     while( !keypad_pressed() )
+ 2513              		.loc 1 192 0
+ 2514 0558 3F0000EA 		b	.L20
+ 2515              	.L21:
+ 193:../lab9-efectos.c ****     {
+ 194:../lab9-efectos.c ****      	iis_getSample( &ch0, &ch1 );
+ 2516              		.loc 1 194 0
+ 2517 055c 12204BE2 		sub	r2, fp, #18
+ 2518 0560 14304BE2 		sub	r3, fp, #20
+ 2519 0564 0200A0E1 		mov	r0, r2
+ 2520 0568 0310A0E1 		mov	r1, r3
+ 2521 056c FEFFFFEB 		bl	iis_getSample
+ 195:../lab9-efectos.c ****     	audiodelay_get( &delay_buffer, &ch0_aux, &ch1_aux );
+ 2522              		.loc 1 195 0
+ 2523 0570 16204BE2 		sub	r2, fp, #22
+ 2524 0574 18304BE2 		sub	r3, fp, #24
+ 2525 0578 50079FE5 		ldr	r0, .L33+80
+ 2526 057c 0210A0E1 		mov	r1, r2
+ 2527 0580 0320A0E1 		mov	r2, r3
+ 2528 0584 FEFFFFEB 		bl	audiodelay_get
+ 196:../lab9-efectos.c ****      	ch0_aux = ch0 + (ch0_aux >> 1);
+ 2529              		.loc 1 196 0
+ 2530 0588 B6315BE1 		ldrh	r3, [fp, #-22]
+ 2531 058c 0338A0E1 		mov	r3, r3, asl #16
+ 2532 0590 4338A0E1 		mov	r3, r3, asr #16
+ 2533 0594 C330A0E1 		mov	r3, r3, asr #1
+ 2534 0598 0338A0E1 		mov	r3, r3, asl #16
+ 2535 059c 2338A0E1 		mov	r3, r3, lsr #16
+ 2536 05a0 0338A0E1 		mov	r3, r3, asl #16
+ 2537 05a4 2328A0E1 		mov	r2, r3, lsr #16
+ 2538 05a8 B2315BE1 		ldrh	r3, [fp, #-18]
+ 2539 05ac 0338A0E1 		mov	r3, r3, asl #16
+ 2540 05b0 2338A0E1 		mov	r3, r3, lsr #16
+ 2541 05b4 033082E0 		add	r3, r2, r3
+ 2542 05b8 0338A0E1 		mov	r3, r3, asl #16
+ 2543 05bc 2338A0E1 		mov	r3, r3, lsr #16
+ 2544 05c0 0338A0E1 		mov	r3, r3, asl #16
+ 2545 05c4 2338A0E1 		mov	r3, r3, lsr #16
+ 2546 05c8 B6314BE1 		strh	r3, [fp, #-22]	@ movhi
+ 197:../lab9-efectos.c ****      	ch1_aux = ch1 + (ch1_aux >> 1);
+ 2547              		.loc 1 197 0
+ 2548 05cc B8315BE1 		ldrh	r3, [fp, #-24]
+ 2549 05d0 0338A0E1 		mov	r3, r3, asl #16
+ 2550 05d4 4338A0E1 		mov	r3, r3, asr #16
+ 2551 05d8 C330A0E1 		mov	r3, r3, asr #1
+ 2552 05dc 0338A0E1 		mov	r3, r3, asl #16
+ 2553 05e0 2338A0E1 		mov	r3, r3, lsr #16
+ 2554 05e4 0338A0E1 		mov	r3, r3, asl #16
+ 2555 05e8 2328A0E1 		mov	r2, r3, lsr #16
+ 2556 05ec B4315BE1 		ldrh	r3, [fp, #-20]
+ 2557 05f0 0338A0E1 		mov	r3, r3, asl #16
+ 2558 05f4 2338A0E1 		mov	r3, r3, lsr #16
+ 2559 05f8 033082E0 		add	r3, r2, r3
+ 2560 05fc 0338A0E1 		mov	r3, r3, asl #16
+ 2561 0600 2338A0E1 		mov	r3, r3, lsr #16
+ 2562 0604 0338A0E1 		mov	r3, r3, asl #16
+ 2563 0608 2338A0E1 		mov	r3, r3, lsr #16
+ 2564 060c B8314BE1 		strh	r3, [fp, #-24]	@ movhi
+ 198:../lab9-efectos.c ****      	iis_putSample( ch0_aux, ch1_aux );
+ 2565              		.loc 1 198 0
+ 2566 0610 B6215BE1 		ldrh	r2, [fp, #-22]
+ 2567 0614 B8315BE1 		ldrh	r3, [fp, #-24]
+ 2568 0618 0228A0E1 		mov	r2, r2, asl #16
+ 2569 061c 4228A0E1 		mov	r2, r2, asr #16
+ 2570 0620 0338A0E1 		mov	r3, r3, asl #16
+ 2571 0624 4338A0E1 		mov	r3, r3, asr #16
+ 2572 0628 0200A0E1 		mov	r0, r2
+ 2573 062c 0310A0E1 		mov	r1, r3
+ 2574 0630 FEFFFFEB 		bl	iis_putSample
+ 199:../lab9-efectos.c ****     	audiodelay_put( &delay_buffer, ch0, ch1 );
+ 2575              		.loc 1 199 0
+ 2576 0634 B2215BE1 		ldrh	r2, [fp, #-18]
+ 2577 0638 B4315BE1 		ldrh	r3, [fp, #-20]
+ 2578 063c 0228A0E1 		mov	r2, r2, asl #16
+ 2579 0640 4228A0E1 		mov	r2, r2, asr #16
+ 2580 0644 0338A0E1 		mov	r3, r3, asl #16
+ 2581 0648 4338A0E1 		mov	r3, r3, asr #16
+ 2582 064c 7C069FE5 		ldr	r0, .L33+80
+ 2583 0650 0210A0E1 		mov	r1, r2
+ 2584 0654 0320A0E1 		mov	r2, r3
+ 2585 0658 FEFFFFEB 		bl	audiodelay_put
+ 2586              	.L20:
+ 192:../lab9-efectos.c ****     while( !keypad_pressed() )
+ 2587              		.loc 1 192 0 discriminator 1
+ 2588 065c FEFFFFEB 		bl	keypad_pressed
+ 2589 0660 0030A0E1 		mov	r3, r0
+ 2590 0664 000053E3 		cmp	r3, #0
+ 2591 0668 BBFFFF0A 		beq	.L21
+ 200:../lab9-efectos.c ****     }
+ 201:../lab9-efectos.c ****     keypad_getchar();
+ 2592              		.loc 1 201 0
+ 2593 066c FEFFFFEB 		bl	keypad_getchar
+ 202:../lab9-efectos.c ****     uart0_puts( "OK\n" );
+ 2594              		.loc 1 202 0
+ 2595 0670 18069FE5 		ldr	r0, .L33+16
+ 2596 0674 FEFFFFEB 		bl	uart0_puts
+ 203:../lab9-efectos.c **** 
+ 204:../lab9-efectos.c ****     /************************************/
+ 205:../lab9-efectos.c **** 
+ 206:../lab9-efectos.c ****     uart0_puts( "  - Echo (45 ms): hable y escuche... " );
+ 2597              		.loc 1 206 0
+ 2598 0678 54069FE5 		ldr	r0, .L33+84
+ 2599 067c FEFFFFEB 		bl	uart0_puts
+ 207:../lab9-efectos.c ****     audiodelay_init( &delay_buffer, 720 );
+ 2600              		.loc 1 207 0
+ 2601 0680 48069FE5 		ldr	r0, .L33+80
+ 2602 0684 2D1EA0E3 		mov	r1, #720
+ 2603 0688 FEFFFFEB 		bl	audiodelay_init
+ 208:../lab9-efectos.c ****     while( !keypad_pressed() )
+ 2604              		.loc 1 208 0
+ 2605 068c 3F0000EA 		b	.L22
+ 2606              	.L23:
+ 209:../lab9-efectos.c ****     {
+ 210:../lab9-efectos.c ****      	iis_getSample( &ch0, &ch1 );
+ 2607              		.loc 1 210 0
+ 2608 0690 12204BE2 		sub	r2, fp, #18
+ 2609 0694 14304BE2 		sub	r3, fp, #20
+ 2610 0698 0200A0E1 		mov	r0, r2
+ 2611 069c 0310A0E1 		mov	r1, r3
+ 2612 06a0 FEFFFFEB 		bl	iis_getSample
+ 211:../lab9-efectos.c ****     	audiodelay_get( &delay_buffer, &ch0_aux, &ch1_aux );
+ 2613              		.loc 1 211 0
+ 2614 06a4 16204BE2 		sub	r2, fp, #22
+ 2615 06a8 18304BE2 		sub	r3, fp, #24
+ 2616 06ac 1C069FE5 		ldr	r0, .L33+80
+ 2617 06b0 0210A0E1 		mov	r1, r2
+ 2618 06b4 0320A0E1 		mov	r2, r3
+ 2619 06b8 FEFFFFEB 		bl	audiodelay_get
+ 212:../lab9-efectos.c ****      	ch0_aux = ch0 + (ch0_aux >> 1);
+ 2620              		.loc 1 212 0
+ 2621 06bc B6315BE1 		ldrh	r3, [fp, #-22]
+ 2622 06c0 0338A0E1 		mov	r3, r3, asl #16
+ 2623 06c4 4338A0E1 		mov	r3, r3, asr #16
+ 2624 06c8 C330A0E1 		mov	r3, r3, asr #1
+ 2625 06cc 0338A0E1 		mov	r3, r3, asl #16
+ 2626 06d0 2338A0E1 		mov	r3, r3, lsr #16
+ 2627 06d4 0338A0E1 		mov	r3, r3, asl #16
+ 2628 06d8 2328A0E1 		mov	r2, r3, lsr #16
+ 2629 06dc B2315BE1 		ldrh	r3, [fp, #-18]
+ 2630 06e0 0338A0E1 		mov	r3, r3, asl #16
+ 2631 06e4 2338A0E1 		mov	r3, r3, lsr #16
+ 2632 06e8 033082E0 		add	r3, r2, r3
+ 2633 06ec 0338A0E1 		mov	r3, r3, asl #16
+ 2634 06f0 2338A0E1 		mov	r3, r3, lsr #16
+ 2635 06f4 0338A0E1 		mov	r3, r3, asl #16
+ 2636 06f8 2338A0E1 		mov	r3, r3, lsr #16
+ 2637 06fc B6314BE1 		strh	r3, [fp, #-22]	@ movhi
+ 213:../lab9-efectos.c ****      	ch1_aux = ch1 + (ch1_aux >> 1);
+ 2638              		.loc 1 213 0
+ 2639 0700 B8315BE1 		ldrh	r3, [fp, #-24]
+ 2640 0704 0338A0E1 		mov	r3, r3, asl #16
+ 2641 0708 4338A0E1 		mov	r3, r3, asr #16
+ 2642 070c C330A0E1 		mov	r3, r3, asr #1
+ 2643 0710 0338A0E1 		mov	r3, r3, asl #16
+ 2644 0714 2338A0E1 		mov	r3, r3, lsr #16
+ 2645 0718 0338A0E1 		mov	r3, r3, asl #16
+ 2646 071c 2328A0E1 		mov	r2, r3, lsr #16
+ 2647 0720 B4315BE1 		ldrh	r3, [fp, #-20]
+ 2648 0724 0338A0E1 		mov	r3, r3, asl #16
+ 2649 0728 2338A0E1 		mov	r3, r3, lsr #16
+ 2650 072c 033082E0 		add	r3, r2, r3
+ 2651 0730 0338A0E1 		mov	r3, r3, asl #16
+ 2652 0734 2338A0E1 		mov	r3, r3, lsr #16
+ 2653 0738 0338A0E1 		mov	r3, r3, asl #16
+ 2654 073c 2338A0E1 		mov	r3, r3, lsr #16
+ 2655 0740 B8314BE1 		strh	r3, [fp, #-24]	@ movhi
+ 214:../lab9-efectos.c ****      	iis_putSample( ch0_aux, ch1_aux );
+ 2656              		.loc 1 214 0
+ 2657 0744 B6215BE1 		ldrh	r2, [fp, #-22]
+ 2658 0748 B8315BE1 		ldrh	r3, [fp, #-24]
+ 2659 074c 0228A0E1 		mov	r2, r2, asl #16
+ 2660 0750 4228A0E1 		mov	r2, r2, asr #16
+ 2661 0754 0338A0E1 		mov	r3, r3, asl #16
+ 2662 0758 4338A0E1 		mov	r3, r3, asr #16
+ 2663 075c 0200A0E1 		mov	r0, r2
+ 2664 0760 0310A0E1 		mov	r1, r3
+ 2665 0764 FEFFFFEB 		bl	iis_putSample
+ 215:../lab9-efectos.c ****     	audiodelay_put( &delay_buffer, ch0, ch1 );
+ 2666              		.loc 1 215 0
+ 2667 0768 B2215BE1 		ldrh	r2, [fp, #-18]
+ 2668 076c B4315BE1 		ldrh	r3, [fp, #-20]
+ 2669 0770 0228A0E1 		mov	r2, r2, asl #16
+ 2670 0774 4228A0E1 		mov	r2, r2, asr #16
+ 2671 0778 0338A0E1 		mov	r3, r3, asl #16
+ 2672 077c 4338A0E1 		mov	r3, r3, asr #16
+ 2673 0780 48059FE5 		ldr	r0, .L33+80
+ 2674 0784 0210A0E1 		mov	r1, r2
+ 2675 0788 0320A0E1 		mov	r2, r3
+ 2676 078c FEFFFFEB 		bl	audiodelay_put
+ 2677              	.L22:
+ 208:../lab9-efectos.c ****     while( !keypad_pressed() )
+ 2678              		.loc 1 208 0 discriminator 1
+ 2679 0790 FEFFFFEB 		bl	keypad_pressed
+ 2680 0794 0030A0E1 		mov	r3, r0
+ 2681 0798 000053E3 		cmp	r3, #0
+ 2682 079c BBFFFF0A 		beq	.L23
+ 216:../lab9-efectos.c ****     }
+ 217:../lab9-efectos.c ****     keypad_getchar();
+ 2683              		.loc 1 217 0
+ 2684 07a0 FEFFFFEB 		bl	keypad_getchar
+ 218:../lab9-efectos.c ****     uart0_puts( "OK\n" );
+ 2685              		.loc 1 218 0
+ 2686 07a4 E4049FE5 		ldr	r0, .L33+16
+ 2687 07a8 FEFFFFEB 		bl	uart0_puts
+ 219:../lab9-efectos.c **** 
+ 220:../lab9-efectos.c ****     /************************************/
+ 221:../lab9-efectos.c **** 
+ 222:../lab9-efectos.c ****     uart0_puts( "  - Echo (85 ms): hable y escuche... " );
+ 2688              		.loc 1 222 0
+ 2689 07ac 24059FE5 		ldr	r0, .L33+88
+ 2690 07b0 FEFFFFEB 		bl	uart0_puts
+ 223:../lab9-efectos.c ****     audiodelay_init( &delay_buffer, 1280 );
+ 2691              		.loc 1 223 0
+ 2692 07b4 14059FE5 		ldr	r0, .L33+80
+ 2693 07b8 051CA0E3 		mov	r1, #1280
+ 2694 07bc FEFFFFEB 		bl	audiodelay_init
+ 224:../lab9-efectos.c ****     while( !keypad_pressed() )
+ 2695              		.loc 1 224 0
+ 2696 07c0 3F0000EA 		b	.L24
+ 2697              	.L25:
+ 225:../lab9-efectos.c ****     {
+ 226:../lab9-efectos.c ****      	iis_getSample( &ch0, &ch1 );
+ 2698              		.loc 1 226 0
+ 2699 07c4 12204BE2 		sub	r2, fp, #18
+ 2700 07c8 14304BE2 		sub	r3, fp, #20
+ 2701 07cc 0200A0E1 		mov	r0, r2
+ 2702 07d0 0310A0E1 		mov	r1, r3
+ 2703 07d4 FEFFFFEB 		bl	iis_getSample
+ 227:../lab9-efectos.c ****     	audiodelay_get( &delay_buffer, &ch0_aux, &ch1_aux );
+ 2704              		.loc 1 227 0
+ 2705 07d8 16204BE2 		sub	r2, fp, #22
+ 2706 07dc 18304BE2 		sub	r3, fp, #24
+ 2707 07e0 E8049FE5 		ldr	r0, .L33+80
+ 2708 07e4 0210A0E1 		mov	r1, r2
+ 2709 07e8 0320A0E1 		mov	r2, r3
+ 2710 07ec FEFFFFEB 		bl	audiodelay_get
+ 228:../lab9-efectos.c ****      	ch0_aux = ch0 + (ch0_aux >> 1);
+ 2711              		.loc 1 228 0
+ 2712 07f0 B6315BE1 		ldrh	r3, [fp, #-22]
+ 2713 07f4 0338A0E1 		mov	r3, r3, asl #16
+ 2714 07f8 4338A0E1 		mov	r3, r3, asr #16
+ 2715 07fc C330A0E1 		mov	r3, r3, asr #1
+ 2716 0800 0338A0E1 		mov	r3, r3, asl #16
+ 2717 0804 2338A0E1 		mov	r3, r3, lsr #16
+ 2718 0808 0338A0E1 		mov	r3, r3, asl #16
+ 2719 080c 2328A0E1 		mov	r2, r3, lsr #16
+ 2720 0810 B2315BE1 		ldrh	r3, [fp, #-18]
+ 2721 0814 0338A0E1 		mov	r3, r3, asl #16
+ 2722 0818 2338A0E1 		mov	r3, r3, lsr #16
+ 2723 081c 033082E0 		add	r3, r2, r3
+ 2724 0820 0338A0E1 		mov	r3, r3, asl #16
+ 2725 0824 2338A0E1 		mov	r3, r3, lsr #16
+ 2726 0828 0338A0E1 		mov	r3, r3, asl #16
+ 2727 082c 2338A0E1 		mov	r3, r3, lsr #16
+ 2728 0830 B6314BE1 		strh	r3, [fp, #-22]	@ movhi
+ 229:../lab9-efectos.c ****      	ch1_aux = ch1 + (ch1_aux >> 1);
+ 2729              		.loc 1 229 0
+ 2730 0834 B8315BE1 		ldrh	r3, [fp, #-24]
+ 2731 0838 0338A0E1 		mov	r3, r3, asl #16
+ 2732 083c 4338A0E1 		mov	r3, r3, asr #16
+ 2733 0840 C330A0E1 		mov	r3, r3, asr #1
+ 2734 0844 0338A0E1 		mov	r3, r3, asl #16
+ 2735 0848 2338A0E1 		mov	r3, r3, lsr #16
+ 2736 084c 0338A0E1 		mov	r3, r3, asl #16
+ 2737 0850 2328A0E1 		mov	r2, r3, lsr #16
+ 2738 0854 B4315BE1 		ldrh	r3, [fp, #-20]
+ 2739 0858 0338A0E1 		mov	r3, r3, asl #16
+ 2740 085c 2338A0E1 		mov	r3, r3, lsr #16
+ 2741 0860 033082E0 		add	r3, r2, r3
+ 2742 0864 0338A0E1 		mov	r3, r3, asl #16
+ 2743 0868 2338A0E1 		mov	r3, r3, lsr #16
+ 2744 086c 0338A0E1 		mov	r3, r3, asl #16
+ 2745 0870 2338A0E1 		mov	r3, r3, lsr #16
+ 2746 0874 B8314BE1 		strh	r3, [fp, #-24]	@ movhi
+ 230:../lab9-efectos.c ****      	iis_putSample( ch0_aux, ch1_aux );
+ 2747              		.loc 1 230 0
+ 2748 0878 B6215BE1 		ldrh	r2, [fp, #-22]
+ 2749 087c B8315BE1 		ldrh	r3, [fp, #-24]
+ 2750 0880 0228A0E1 		mov	r2, r2, asl #16
+ 2751 0884 4228A0E1 		mov	r2, r2, asr #16
+ 2752 0888 0338A0E1 		mov	r3, r3, asl #16
+ 2753 088c 4338A0E1 		mov	r3, r3, asr #16
+ 2754 0890 0200A0E1 		mov	r0, r2
+ 2755 0894 0310A0E1 		mov	r1, r3
+ 2756 0898 FEFFFFEB 		bl	iis_putSample
+ 231:../lab9-efectos.c ****     	audiodelay_put( &delay_buffer, ch0, ch1 );
+ 2757              		.loc 1 231 0
+ 2758 089c B2215BE1 		ldrh	r2, [fp, #-18]
+ 2759 08a0 B4315BE1 		ldrh	r3, [fp, #-20]
+ 2760 08a4 0228A0E1 		mov	r2, r2, asl #16
+ 2761 08a8 4228A0E1 		mov	r2, r2, asr #16
+ 2762 08ac 0338A0E1 		mov	r3, r3, asl #16
+ 2763 08b0 4338A0E1 		mov	r3, r3, asr #16
+ 2764 08b4 14049FE5 		ldr	r0, .L33+80
+ 2765 08b8 0210A0E1 		mov	r1, r2
+ 2766 08bc 0320A0E1 		mov	r2, r3
+ 2767 08c0 FEFFFFEB 		bl	audiodelay_put
+ 2768              	.L24:
+ 224:../lab9-efectos.c ****     while( !keypad_pressed() )
+ 2769              		.loc 1 224 0 discriminator 1
+ 2770 08c4 FEFFFFEB 		bl	keypad_pressed
+ 2771 08c8 0030A0E1 		mov	r3, r0
+ 2772 08cc 000053E3 		cmp	r3, #0
+ 2773 08d0 BBFFFF0A 		beq	.L25
+ 232:../lab9-efectos.c ****     }
+ 233:../lab9-efectos.c ****     keypad_getchar();
+ 2774              		.loc 1 233 0
+ 2775 08d4 FEFFFFEB 		bl	keypad_getchar
+ 234:../lab9-efectos.c ****     uart0_puts( "OK\n" );
+ 2776              		.loc 1 234 0
+ 2777 08d8 B0039FE5 		ldr	r0, .L33+16
+ 2778 08dc FEFFFFEB 		bl	uart0_puts
+ 235:../lab9-efectos.c **** 
+ 236:../lab9-efectos.c ****     /************************************/
+ 237:../lab9-efectos.c **** 
+ 238:../lab9-efectos.c ****     uart0_puts( "  - Echo (150 ms): hable y escuche... " );
+ 2779              		.loc 1 238 0
+ 2780 08e0 F4039FE5 		ldr	r0, .L33+92
+ 2781 08e4 FEFFFFEB 		bl	uart0_puts
+ 239:../lab9-efectos.c ****     audiodelay_init( &delay_buffer, 2400 );
+ 2782              		.loc 1 239 0
+ 2783 08e8 E0039FE5 		ldr	r0, .L33+80
+ 2784 08ec 961EA0E3 		mov	r1, #2400
+ 2785 08f0 FEFFFFEB 		bl	audiodelay_init
+ 240:../lab9-efectos.c ****     while( !keypad_pressed() )
+ 2786              		.loc 1 240 0
+ 2787 08f4 3F0000EA 		b	.L26
+ 2788              	.L27:
+ 241:../lab9-efectos.c ****     {
+ 242:../lab9-efectos.c ****      	iis_getSample( &ch0, &ch1 );
+ 2789              		.loc 1 242 0
+ 2790 08f8 12204BE2 		sub	r2, fp, #18
+ 2791 08fc 14304BE2 		sub	r3, fp, #20
+ 2792 0900 0200A0E1 		mov	r0, r2
+ 2793 0904 0310A0E1 		mov	r1, r3
+ 2794 0908 FEFFFFEB 		bl	iis_getSample
+ 243:../lab9-efectos.c ****     	audiodelay_get( &delay_buffer, &ch0_aux, &ch1_aux );
+ 2795              		.loc 1 243 0
+ 2796 090c 16204BE2 		sub	r2, fp, #22
+ 2797 0910 18304BE2 		sub	r3, fp, #24
+ 2798 0914 B4039FE5 		ldr	r0, .L33+80
+ 2799 0918 0210A0E1 		mov	r1, r2
+ 2800 091c 0320A0E1 		mov	r2, r3
+ 2801 0920 FEFFFFEB 		bl	audiodelay_get
+ 244:../lab9-efectos.c ****      	ch0_aux = ch0 + (ch0_aux >> 1);
+ 2802              		.loc 1 244 0
+ 2803 0924 B6315BE1 		ldrh	r3, [fp, #-22]
+ 2804 0928 0338A0E1 		mov	r3, r3, asl #16
+ 2805 092c 4338A0E1 		mov	r3, r3, asr #16
+ 2806 0930 C330A0E1 		mov	r3, r3, asr #1
+ 2807 0934 0338A0E1 		mov	r3, r3, asl #16
+ 2808 0938 2338A0E1 		mov	r3, r3, lsr #16
+ 2809 093c 0338A0E1 		mov	r3, r3, asl #16
+ 2810 0940 2328A0E1 		mov	r2, r3, lsr #16
+ 2811 0944 B2315BE1 		ldrh	r3, [fp, #-18]
+ 2812 0948 0338A0E1 		mov	r3, r3, asl #16
+ 2813 094c 2338A0E1 		mov	r3, r3, lsr #16
+ 2814 0950 033082E0 		add	r3, r2, r3
+ 2815 0954 0338A0E1 		mov	r3, r3, asl #16
+ 2816 0958 2338A0E1 		mov	r3, r3, lsr #16
+ 2817 095c 0338A0E1 		mov	r3, r3, asl #16
+ 2818 0960 2338A0E1 		mov	r3, r3, lsr #16
+ 2819 0964 B6314BE1 		strh	r3, [fp, #-22]	@ movhi
+ 245:../lab9-efectos.c ****      	ch1_aux = ch1 + (ch1_aux >> 1);
+ 2820              		.loc 1 245 0
+ 2821 0968 B8315BE1 		ldrh	r3, [fp, #-24]
+ 2822 096c 0338A0E1 		mov	r3, r3, asl #16
+ 2823 0970 4338A0E1 		mov	r3, r3, asr #16
+ 2824 0974 C330A0E1 		mov	r3, r3, asr #1
+ 2825 0978 0338A0E1 		mov	r3, r3, asl #16
+ 2826 097c 2338A0E1 		mov	r3, r3, lsr #16
+ 2827 0980 0338A0E1 		mov	r3, r3, asl #16
+ 2828 0984 2328A0E1 		mov	r2, r3, lsr #16
+ 2829 0988 B4315BE1 		ldrh	r3, [fp, #-20]
+ 2830 098c 0338A0E1 		mov	r3, r3, asl #16
+ 2831 0990 2338A0E1 		mov	r3, r3, lsr #16
+ 2832 0994 033082E0 		add	r3, r2, r3
+ 2833 0998 0338A0E1 		mov	r3, r3, asl #16
+ 2834 099c 2338A0E1 		mov	r3, r3, lsr #16
+ 2835 09a0 0338A0E1 		mov	r3, r3, asl #16
+ 2836 09a4 2338A0E1 		mov	r3, r3, lsr #16
+ 2837 09a8 B8314BE1 		strh	r3, [fp, #-24]	@ movhi
+ 246:../lab9-efectos.c ****      	iis_putSample( ch0_aux, ch1_aux );
+ 2838              		.loc 1 246 0
+ 2839 09ac B6215BE1 		ldrh	r2, [fp, #-22]
+ 2840 09b0 B8315BE1 		ldrh	r3, [fp, #-24]
+ 2841 09b4 0228A0E1 		mov	r2, r2, asl #16
+ 2842 09b8 4228A0E1 		mov	r2, r2, asr #16
+ 2843 09bc 0338A0E1 		mov	r3, r3, asl #16
+ 2844 09c0 4338A0E1 		mov	r3, r3, asr #16
+ 2845 09c4 0200A0E1 		mov	r0, r2
+ 2846 09c8 0310A0E1 		mov	r1, r3
+ 2847 09cc FEFFFFEB 		bl	iis_putSample
+ 247:../lab9-efectos.c ****     	audiodelay_put( &delay_buffer, ch0, ch1 );
+ 2848              		.loc 1 247 0
+ 2849 09d0 B2215BE1 		ldrh	r2, [fp, #-18]
+ 2850 09d4 B4315BE1 		ldrh	r3, [fp, #-20]
+ 2851 09d8 0228A0E1 		mov	r2, r2, asl #16
+ 2852 09dc 4228A0E1 		mov	r2, r2, asr #16
+ 2853 09e0 0338A0E1 		mov	r3, r3, asl #16
+ 2854 09e4 4338A0E1 		mov	r3, r3, asr #16
+ 2855 09e8 E0029FE5 		ldr	r0, .L33+80
+ 2856 09ec 0210A0E1 		mov	r1, r2
+ 2857 09f0 0320A0E1 		mov	r2, r3
+ 2858 09f4 FEFFFFEB 		bl	audiodelay_put
+ 2859              	.L26:
+ 240:../lab9-efectos.c ****     while( !keypad_pressed() )
+ 2860              		.loc 1 240 0 discriminator 1
+ 2861 09f8 FEFFFFEB 		bl	keypad_pressed
+ 2862 09fc 0030A0E1 		mov	r3, r0
+ 2863 0a00 000053E3 		cmp	r3, #0
+ 2864 0a04 BBFFFF0A 		beq	.L27
+ 248:../lab9-efectos.c ****     }
+ 249:../lab9-efectos.c ****     keypad_getchar();
+ 2865              		.loc 1 249 0
+ 2866 0a08 FEFFFFEB 		bl	keypad_getchar
+ 250:../lab9-efectos.c ****     uart0_puts( "OK\n" );
+ 2867              		.loc 1 250 0
+ 2868 0a0c 7C029FE5 		ldr	r0, .L33+16
+ 2869 0a10 FEFFFFEB 		bl	uart0_puts
+ 251:../lab9-efectos.c **** 
+ 252:../lab9-efectos.c ****     /************************************/
+ 253:../lab9-efectos.c **** 
+ 254:../lab9-efectos.c ****     uart0_puts( "  - Echo & fade (1 s): hable y escuche... " );
+ 2870              		.loc 1 254 0
+ 2871 0a14 C4029FE5 		ldr	r0, .L33+96
+ 2872 0a18 FEFFFFEB 		bl	uart0_puts
+ 255:../lab9-efectos.c ****     audiodelay_init( &delay_buffer, 16000 );
+ 2873              		.loc 1 255 0
+ 2874 0a1c AC029FE5 		ldr	r0, .L33+80
+ 2875 0a20 FA1DA0E3 		mov	r1, #16000
+ 2876 0a24 FEFFFFEB 		bl	audiodelay_init
+ 256:../lab9-efectos.c ****     while( !keypad_pressed() )
+ 2877              		.loc 1 256 0
+ 2878 0a28 3F0000EA 		b	.L28
+ 2879              	.L29:
+ 257:../lab9-efectos.c ****     {
+ 258:../lab9-efectos.c ****      	iis_getSample( &ch0, &ch1 );
+ 2880              		.loc 1 258 0
+ 2881 0a2c 12204BE2 		sub	r2, fp, #18
+ 2882 0a30 14304BE2 		sub	r3, fp, #20
+ 2883 0a34 0200A0E1 		mov	r0, r2
+ 2884 0a38 0310A0E1 		mov	r1, r3
+ 2885 0a3c FEFFFFEB 		bl	iis_getSample
+ 259:../lab9-efectos.c ****     	audiodelay_get( &delay_buffer, &ch0_aux, &ch1_aux );
+ 2886              		.loc 1 259 0
+ 2887 0a40 16204BE2 		sub	r2, fp, #22
+ 2888 0a44 18304BE2 		sub	r3, fp, #24
+ 2889 0a48 80029FE5 		ldr	r0, .L33+80
+ 2890 0a4c 0210A0E1 		mov	r1, r2
+ 2891 0a50 0320A0E1 		mov	r2, r3
+ 2892 0a54 FEFFFFEB 		bl	audiodelay_get
+ 260:../lab9-efectos.c ****       	ch0 = ch0 + (ch0_aux >> 1);
+ 2893              		.loc 1 260 0
+ 2894 0a58 B6315BE1 		ldrh	r3, [fp, #-22]
+ 2895 0a5c 0338A0E1 		mov	r3, r3, asl #16
+ 2896 0a60 4338A0E1 		mov	r3, r3, asr #16
+ 2897 0a64 C330A0E1 		mov	r3, r3, asr #1
+ 2898 0a68 0338A0E1 		mov	r3, r3, asl #16
+ 2899 0a6c 2338A0E1 		mov	r3, r3, lsr #16
+ 2900 0a70 0338A0E1 		mov	r3, r3, asl #16
+ 2901 0a74 2328A0E1 		mov	r2, r3, lsr #16
+ 2902 0a78 B2315BE1 		ldrh	r3, [fp, #-18]
+ 2903 0a7c 0338A0E1 		mov	r3, r3, asl #16
+ 2904 0a80 2338A0E1 		mov	r3, r3, lsr #16
+ 2905 0a84 033082E0 		add	r3, r2, r3
+ 2906 0a88 0338A0E1 		mov	r3, r3, asl #16
+ 2907 0a8c 2338A0E1 		mov	r3, r3, lsr #16
+ 2908 0a90 0338A0E1 		mov	r3, r3, asl #16
+ 2909 0a94 2338A0E1 		mov	r3, r3, lsr #16
+ 2910 0a98 B2314BE1 		strh	r3, [fp, #-18]	@ movhi
+ 261:../lab9-efectos.c ****       	ch1 = ch1 + (ch1_aux >> 1);
+ 2911              		.loc 1 261 0
+ 2912 0a9c B8315BE1 		ldrh	r3, [fp, #-24]
+ 2913 0aa0 0338A0E1 		mov	r3, r3, asl #16
+ 2914 0aa4 4338A0E1 		mov	r3, r3, asr #16
+ 2915 0aa8 C330A0E1 		mov	r3, r3, asr #1
+ 2916 0aac 0338A0E1 		mov	r3, r3, asl #16
+ 2917 0ab0 2338A0E1 		mov	r3, r3, lsr #16
+ 2918 0ab4 0338A0E1 		mov	r3, r3, asl #16
+ 2919 0ab8 2328A0E1 		mov	r2, r3, lsr #16
+ 2920 0abc B4315BE1 		ldrh	r3, [fp, #-20]
+ 2921 0ac0 0338A0E1 		mov	r3, r3, asl #16
+ 2922 0ac4 2338A0E1 		mov	r3, r3, lsr #16
+ 2923 0ac8 033082E0 		add	r3, r2, r3
+ 2924 0acc 0338A0E1 		mov	r3, r3, asl #16
+ 2925 0ad0 2338A0E1 		mov	r3, r3, lsr #16
+ 2926 0ad4 0338A0E1 		mov	r3, r3, asl #16
+ 2927 0ad8 2338A0E1 		mov	r3, r3, lsr #16
+ 2928 0adc B4314BE1 		strh	r3, [fp, #-20]	@ movhi
+ 262:../lab9-efectos.c ****      	iis_putSample( ch0, ch1 );
+ 2929              		.loc 1 262 0
+ 2930 0ae0 B2215BE1 		ldrh	r2, [fp, #-18]
+ 2931 0ae4 B4315BE1 		ldrh	r3, [fp, #-20]
+ 2932 0ae8 0228A0E1 		mov	r2, r2, asl #16
+ 2933 0aec 4228A0E1 		mov	r2, r2, asr #16
+ 2934 0af0 0338A0E1 		mov	r3, r3, asl #16
+ 2935 0af4 4338A0E1 		mov	r3, r3, asr #16
+ 2936 0af8 0200A0E1 		mov	r0, r2
+ 2937 0afc 0310A0E1 		mov	r1, r3
+ 2938 0b00 FEFFFFEB 		bl	iis_putSample
+ 263:../lab9-efectos.c ****     	audiodelay_put( &delay_buffer, ch0, ch1 );
+ 2939              		.loc 1 263 0
+ 2940 0b04 B2215BE1 		ldrh	r2, [fp, #-18]
+ 2941 0b08 B4315BE1 		ldrh	r3, [fp, #-20]
+ 2942 0b0c 0228A0E1 		mov	r2, r2, asl #16
+ 2943 0b10 4228A0E1 		mov	r2, r2, asr #16
+ 2944 0b14 0338A0E1 		mov	r3, r3, asl #16
+ 2945 0b18 4338A0E1 		mov	r3, r3, asr #16
+ 2946 0b1c AC019FE5 		ldr	r0, .L33+80
+ 2947 0b20 0210A0E1 		mov	r1, r2
+ 2948 0b24 0320A0E1 		mov	r2, r3
+ 2949 0b28 FEFFFFEB 		bl	audiodelay_put
+ 2950              	.L28:
+ 256:../lab9-efectos.c ****     while( !keypad_pressed() )
+ 2951              		.loc 1 256 0 discriminator 1
+ 2952 0b2c FEFFFFEB 		bl	keypad_pressed
+ 2953 0b30 0030A0E1 		mov	r3, r0
+ 2954 0b34 000053E3 		cmp	r3, #0
+ 2955 0b38 BBFFFF0A 		beq	.L29
+ 264:../lab9-efectos.c ****     }
+ 265:../lab9-efectos.c ****     keypad_getchar();
+ 2956              		.loc 1 265 0
+ 2957 0b3c FEFFFFEB 		bl	keypad_getchar
+ 266:../lab9-efectos.c ****     uart0_puts( "OK\n" );
+ 2958              		.loc 1 266 0
+ 2959 0b40 48019FE5 		ldr	r0, .L33+16
+ 2960 0b44 FEFFFFEB 		bl	uart0_puts
+ 267:../lab9-efectos.c **** 
+ 268:../lab9-efectos.c ****     /************************************/
+ 269:../lab9-efectos.c **** 
+ 270:../lab9-efectos.c ****     uart0_puts( "  - Reverberación (echo & fade 100 ms): hable y escuche... " );
+ 2961              		.loc 1 270 0
+ 2962 0b48 94019FE5 		ldr	r0, .L33+100
+ 2963 0b4c FEFFFFEB 		bl	uart0_puts
+ 271:../lab9-efectos.c ****     audiodelay_init( &delay_buffer, 1600 );
+ 2964              		.loc 1 271 0
+ 2965 0b50 78019FE5 		ldr	r0, .L33+80
+ 2966 0b54 191DA0E3 		mov	r1, #1600
+ 2967 0b58 FEFFFFEB 		bl	audiodelay_init
+ 272:../lab9-efectos.c ****     while( !keypad_pressed() )
+ 2968              		.loc 1 272 0
+ 2969 0b5c 3F0000EA 		b	.L30
+ 2970              	.L31:
+ 273:../lab9-efectos.c ****     {
+ 274:../lab9-efectos.c ****      	iis_getSample( &ch0, &ch1 );
+ 2971              		.loc 1 274 0
+ 2972 0b60 12204BE2 		sub	r2, fp, #18
+ 2973 0b64 14304BE2 		sub	r3, fp, #20
+ 2974 0b68 0200A0E1 		mov	r0, r2
+ 2975 0b6c 0310A0E1 		mov	r1, r3
+ 2976 0b70 FEFFFFEB 		bl	iis_getSample
+ 275:../lab9-efectos.c ****     	audiodelay_get( &delay_buffer, &ch0_aux, &ch1_aux );
+ 2977              		.loc 1 275 0
+ 2978 0b74 16204BE2 		sub	r2, fp, #22
+ 2979 0b78 18304BE2 		sub	r3, fp, #24
+ 2980 0b7c 4C019FE5 		ldr	r0, .L33+80
+ 2981 0b80 0210A0E1 		mov	r1, r2
+ 2982 0b84 0320A0E1 		mov	r2, r3
+ 2983 0b88 FEFFFFEB 		bl	audiodelay_get
+ 276:../lab9-efectos.c ****       	ch0 = ch0 + (ch0_aux >> 1);
+ 2984              		.loc 1 276 0
+ 2985 0b8c B6315BE1 		ldrh	r3, [fp, #-22]
+ 2986 0b90 0338A0E1 		mov	r3, r3, asl #16
+ 2987 0b94 4338A0E1 		mov	r3, r3, asr #16
+ 2988 0b98 C330A0E1 		mov	r3, r3, asr #1
+ 2989 0b9c 0338A0E1 		mov	r3, r3, asl #16
+ 2990 0ba0 2338A0E1 		mov	r3, r3, lsr #16
+ 2991 0ba4 0338A0E1 		mov	r3, r3, asl #16
+ 2992 0ba8 2328A0E1 		mov	r2, r3, lsr #16
+ 2993 0bac B2315BE1 		ldrh	r3, [fp, #-18]
+ 2994 0bb0 0338A0E1 		mov	r3, r3, asl #16
+ 2995 0bb4 2338A0E1 		mov	r3, r3, lsr #16
+ 2996 0bb8 033082E0 		add	r3, r2, r3
+ 2997 0bbc 0338A0E1 		mov	r3, r3, asl #16
+ 2998 0bc0 2338A0E1 		mov	r3, r3, lsr #16
+ 2999 0bc4 0338A0E1 		mov	r3, r3, asl #16
+ 3000 0bc8 2338A0E1 		mov	r3, r3, lsr #16
+ 3001 0bcc B2314BE1 		strh	r3, [fp, #-18]	@ movhi
+ 277:../lab9-efectos.c ****       	ch1 = ch1 + (ch1_aux >> 1);
+ 3002              		.loc 1 277 0
+ 3003 0bd0 B8315BE1 		ldrh	r3, [fp, #-24]
+ 3004 0bd4 0338A0E1 		mov	r3, r3, asl #16
+ 3005 0bd8 4338A0E1 		mov	r3, r3, asr #16
+ 3006 0bdc C330A0E1 		mov	r3, r3, asr #1
+ 3007 0be0 0338A0E1 		mov	r3, r3, asl #16
+ 3008 0be4 2338A0E1 		mov	r3, r3, lsr #16
+ 3009 0be8 0338A0E1 		mov	r3, r3, asl #16
+ 3010 0bec 2328A0E1 		mov	r2, r3, lsr #16
+ 3011 0bf0 B4315BE1 		ldrh	r3, [fp, #-20]
+ 3012 0bf4 0338A0E1 		mov	r3, r3, asl #16
+ 3013 0bf8 2338A0E1 		mov	r3, r3, lsr #16
+ 3014 0bfc 033082E0 		add	r3, r2, r3
+ 3015 0c00 0338A0E1 		mov	r3, r3, asl #16
+ 3016 0c04 2338A0E1 		mov	r3, r3, lsr #16
+ 3017 0c08 0338A0E1 		mov	r3, r3, asl #16
+ 3018 0c0c 2338A0E1 		mov	r3, r3, lsr #16
+ 3019 0c10 B4314BE1 		strh	r3, [fp, #-20]	@ movhi
+ 278:../lab9-efectos.c ****      	iis_putSample( ch0, ch1 );
+ 3020              		.loc 1 278 0
+ 3021 0c14 B2215BE1 		ldrh	r2, [fp, #-18]
+ 3022 0c18 B4315BE1 		ldrh	r3, [fp, #-20]
+ 3023 0c1c 0228A0E1 		mov	r2, r2, asl #16
+ 3024 0c20 4228A0E1 		mov	r2, r2, asr #16
+ 3025 0c24 0338A0E1 		mov	r3, r3, asl #16
+ 3026 0c28 4338A0E1 		mov	r3, r3, asr #16
+ 3027 0c2c 0200A0E1 		mov	r0, r2
+ 3028 0c30 0310A0E1 		mov	r1, r3
+ 3029 0c34 FEFFFFEB 		bl	iis_putSample
+ 279:../lab9-efectos.c ****     	audiodelay_put( &delay_buffer, ch0, ch1 );
+ 3030              		.loc 1 279 0
+ 3031 0c38 B2215BE1 		ldrh	r2, [fp, #-18]
+ 3032 0c3c B4315BE1 		ldrh	r3, [fp, #-20]
+ 3033 0c40 0228A0E1 		mov	r2, r2, asl #16
+ 3034 0c44 4228A0E1 		mov	r2, r2, asr #16
+ 3035 0c48 0338A0E1 		mov	r3, r3, asl #16
+ 3036 0c4c 4338A0E1 		mov	r3, r3, asr #16
+ 3037 0c50 78009FE5 		ldr	r0, .L33+80
+ 3038 0c54 0210A0E1 		mov	r1, r2
+ 3039 0c58 0320A0E1 		mov	r2, r3
+ 3040 0c5c FEFFFFEB 		bl	audiodelay_put
+ 3041              	.L30:
+ 272:../lab9-efectos.c ****     while( !keypad_pressed() )
+ 3042              		.loc 1 272 0 discriminator 1
+ 3043 0c60 FEFFFFEB 		bl	keypad_pressed
+ 3044 0c64 0030A0E1 		mov	r3, r0
+ 3045 0c68 000053E3 		cmp	r3, #0
+ 3046 0c6c BBFFFF0A 		beq	.L31
+ 280:../lab9-efectos.c ****      }
+ 281:../lab9-efectos.c ****     keypad_getchar();
+ 3047              		.loc 1 281 0
+ 3048 0c70 FEFFFFEB 		bl	keypad_getchar
+ 282:../lab9-efectos.c ****     uart0_puts( "OK\n" );
+ 3049              		.loc 1 282 0
+ 3050 0c74 14009FE5 		ldr	r0, .L33+16
+ 3051 0c78 FEFFFFEB 		bl	uart0_puts
+ 3052              	.L32:
+ 283:../lab9-efectos.c **** 
+ 284:../lab9-efectos.c ****     /************************************/
+ 285:../lab9-efectos.c **** 
+ 286:../lab9-efectos.c ****     while(1);
+ 3053              		.loc 1 286 0 discriminator 1
+ 3054 0c7c FEFFFFEA 		b	.L32
+ 3055              	.L34:
+ 3056              		.align	2
+ 3057              	.L33:
+ 3058 0c80 00000000 		.word	.LC0
+ 3059 0c84 38000000 		.word	.LC1
+ 3060 0c88 64000000 		.word	.LC2
+ 3061 0c8c 00000000 		.word	sine
+ 3062 0c90 80000000 		.word	.LC3
+ 3063 0c94 84000000 		.word	.LC4
+ 3064 0c98 00000000 		.word	square
+ 3065 0c9c A4000000 		.word	.LC5
+ 3066 0ca0 00000000 		.word	triangle
+ 3067 0ca4 C8000000 		.word	.LC6
+ 3068 0ca8 F0000000 		.word	.LC7
+ 3069 0cac 00000000 		.word	buffer
+ 3070 0cb0 00E20400 		.word	buffer+320000
+ 3071 0cb4 FF700200 		.word	159999
+ 3072 0cb8 34010000 		.word	.LC8
+ 3073 0cbc 68010000 		.word	.LC9
+ 3074 0cc0 98010000 		.word	.LC10
+ 3075 0cc4 C8010000 		.word	.LC11
+ 3076 0cc8 F0010000 		.word	.LC12
+ 3077 0ccc 14020000 		.word	.LC13
+ 3078 0cd0 00000000 		.word	delay_buffer
+ 3079 0cd4 3C020000 		.word	.LC14
+ 3080 0cd8 64020000 		.word	.LC15
+ 3081 0cdc 8C020000 		.word	.LC16
+ 3082 0ce0 B4020000 		.word	.LC17
+ 3083 0ce4 E0020000 		.word	.LC18
+ 3084              		.cfi_endproc
+ 3085              	.LFE0:
+ 3087              		.align	2
+ 3088              		.global	audiodelay_init
+ 3090              	audiodelay_init:
+ 3091              	.LFB1:
+ 287:../lab9-efectos.c **** 
+ 288:../lab9-efectos.c **** }
+ 289:../lab9-efectos.c **** 
+ 290:../lab9-efectos.c **** void audiodelay_init( audiodelay_t *buffer, uint16 size )
+ 291:../lab9-efectos.c **** {
+ 3092              		.loc 1 291 0
+ 3093              		.cfi_startproc
+ 3094              		@ Function supports interworking.
+ 3095              		@ args = 0, pretend = 0, frame = 16
+ 3096              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3097 0ce8 0DC0A0E1 		mov	ip, sp
+ 3098              	.LCFI2:
+ 3099              		.cfi_def_cfa_register 12
+ 3100 0cec 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 3101 0cf0 04B04CE2 		sub	fp, ip, #4
+ 3102              		.cfi_offset 14, -8
+ 3103              		.cfi_offset 13, -12
+ 3104              		.cfi_offset 11, -16
+ 3105              	.LCFI3:
+ 3106              		.cfi_def_cfa 11, 4
+ 3107 0cf4 10D04DE2 		sub	sp, sp, #16
+ 3108 0cf8 18000BE5 		str	r0, [fp, #-24]
+ 3109 0cfc 0130A0E1 		mov	r3, r1
+ 3110 0d00 BA314BE1 		strh	r3, [fp, #-26]	@ movhi
+ 292:../lab9-efectos.c **** 	uint16 i;
+ 293:../lab9-efectos.c **** 
+ 294:../lab9-efectos.c **** 	for( i=0; i<size; i++ )
+ 3111              		.loc 1 294 0
+ 3112 0d04 0030A0E3 		mov	r3, #0
+ 3113 0d08 BE304BE1 		strh	r3, [fp, #-14]	@ movhi
+ 3114 0d0c 0F0000EA 		b	.L36
+ 3115              	.L37:
+ 295:../lab9-efectos.c **** 	{
+ 296:../lab9-efectos.c **** 		buffer->ch0[i] = 0;
+ 3116              		.loc 1 296 0 discriminator 2
+ 3117 0d10 BE305BE1 		ldrh	r3, [fp, #-14]
+ 3118 0d14 18201BE5 		ldr	r2, [fp, #-24]
+ 3119 0d18 8330A0E1 		mov	r3, r3, asl #1
+ 3120 0d1c 033082E0 		add	r3, r2, r3
+ 3121 0d20 0020A0E3 		mov	r2, #0
+ 3122 0d24 B020C3E1 		strh	r2, [r3, #0]	@ movhi
+ 297:../lab9-efectos.c **** 		buffer->ch1[i] = 0;
+ 3123              		.loc 1 297 0 discriminator 2
+ 3124 0d28 BE305BE1 		ldrh	r3, [fp, #-14]
+ 3125 0d2c 18201BE5 		ldr	r2, [fp, #-24]
+ 3126 0d30 7D3C83E2 		add	r3, r3, #32000
+ 3127 0d34 8330A0E1 		mov	r3, r3, asl #1
+ 3128 0d38 033082E0 		add	r3, r2, r3
+ 3129 0d3c 0020A0E3 		mov	r2, #0
+ 3130 0d40 B020C3E1 		strh	r2, [r3, #0]	@ movhi
+ 294:../lab9-efectos.c **** 	for( i=0; i<size; i++ )
+ 3131              		.loc 1 294 0 discriminator 2
+ 3132 0d44 BE305BE1 		ldrh	r3, [fp, #-14]	@ movhi
+ 3133 0d48 013083E2 		add	r3, r3, #1
+ 3134 0d4c BE304BE1 		strh	r3, [fp, #-14]	@ movhi
+ 3135              	.L36:
+ 294:../lab9-efectos.c **** 	for( i=0; i<size; i++ )
+ 3136              		.loc 1 294 0 is_stmt 0 discriminator 1
+ 3137 0d50 BE205BE1 		ldrh	r2, [fp, #-14]
+ 3138 0d54 BA315BE1 		ldrh	r3, [fp, #-26]
+ 3139 0d58 030052E1 		cmp	r2, r3
+ 3140 0d5c EBFFFF3A 		bcc	.L37
+ 298:../lab9-efectos.c **** 	}
+ 299:../lab9-efectos.c **** 	buffer->head = 0;
+ 3141              		.loc 1 299 0 is_stmt 1
+ 3142 0d60 18201BE5 		ldr	r2, [fp, #-24]
+ 3143 0d64 30309FE5 		ldr	r3, .L38
+ 3144 0d68 0010A0E3 		mov	r1, #0
+ 3145 0d6c B31082E1 		strh	r1, [r2, r3]	@ movhi
+ 300:../lab9-efectos.c **** 	buffer->tail = 0;
+ 3146              		.loc 1 300 0
+ 3147 0d70 18201BE5 		ldr	r2, [fp, #-24]
+ 3148 0d74 24309FE5 		ldr	r3, .L38+4
+ 3149 0d78 0010A0E3 		mov	r1, #0
+ 3150 0d7c B31082E1 		strh	r1, [r2, r3]	@ movhi
+ 301:../lab9-efectos.c **** 	buffer->size = size;
+ 3151              		.loc 1 301 0
+ 3152 0d80 18201BE5 		ldr	r2, [fp, #-24]
+ 3153 0d84 7D3BA0E3 		mov	r3, #128000
+ 3154 0d88 BA115BE1 		ldrh	r1, [fp, #-26]	@ movhi
+ 3155 0d8c B31082E1 		strh	r1, [r2, r3]	@ movhi
+ 302:../lab9-efectos.c **** }
+ 3156              		.loc 1 302 0
+ 3157 0d90 0CD04BE2 		sub	sp, fp, #12
+ 3158 0d94 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 3159 0d98 1EFF2FE1 		bx	lr
+ 3160              	.L39:
+ 3161              		.align	2
+ 3162              	.L38:
+ 3163 0d9c 02F40100 		.word	128002
+ 3164 0da0 04F40100 		.word	128004
+ 3165              		.cfi_endproc
+ 3166              	.LFE1:
+ 3168              		.align	2
+ 3169              		.global	audiodelay_put
+ 3171              	audiodelay_put:
+ 3172              	.LFB2:
+ 303:../lab9-efectos.c **** 
+ 304:../lab9-efectos.c **** void audiodelay_put( audiodelay_t *buffer, int16 ch0, int16 ch1 )
+ 305:../lab9-efectos.c **** {
+ 3173              		.loc 1 305 0
+ 3174              		.cfi_startproc
+ 3175              		@ Function supports interworking.
+ 3176              		@ args = 0, pretend = 0, frame = 8
+ 3177              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3178 0da4 0DC0A0E1 		mov	ip, sp
+ 3179              	.LCFI4:
+ 3180              		.cfi_def_cfa_register 12
+ 3181 0da8 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 3182 0dac 04B04CE2 		sub	fp, ip, #4
+ 3183              		.cfi_offset 14, -8
+ 3184              		.cfi_offset 13, -12
+ 3185              		.cfi_offset 11, -16
+ 3186              	.LCFI5:
+ 3187              		.cfi_def_cfa 11, 4
+ 3188 0db0 08D04DE2 		sub	sp, sp, #8
+ 3189 0db4 10000BE5 		str	r0, [fp, #-16]
+ 3190 0db8 0230A0E1 		mov	r3, r2
+ 3191 0dbc B2114BE1 		strh	r1, [fp, #-18]	@ movhi
+ 3192 0dc0 B4314BE1 		strh	r3, [fp, #-20]	@ movhi
+ 306:../lab9-efectos.c **** 	buffer->ch0[buffer->head] = ch0;
+ 3193              		.loc 1 306 0
+ 3194 0dc4 10201BE5 		ldr	r2, [fp, #-16]
+ 3195 0dc8 98309FE5 		ldr	r3, .L42
+ 3196 0dcc B33092E1 		ldrh	r3, [r2, r3]
+ 3197 0dd0 10201BE5 		ldr	r2, [fp, #-16]
+ 3198 0dd4 8330A0E1 		mov	r3, r3, asl #1
+ 3199 0dd8 033082E0 		add	r3, r2, r3
+ 3200 0ddc B2215BE1 		ldrh	r2, [fp, #-18]	@ movhi
+ 3201 0de0 B020C3E1 		strh	r2, [r3, #0]	@ movhi
+ 307:../lab9-efectos.c **** 	buffer->ch1[buffer->head] = ch1;
+ 3202              		.loc 1 307 0
+ 3203 0de4 10201BE5 		ldr	r2, [fp, #-16]
+ 3204 0de8 78309FE5 		ldr	r3, .L42
+ 3205 0dec B33092E1 		ldrh	r3, [r2, r3]
+ 3206 0df0 10201BE5 		ldr	r2, [fp, #-16]
+ 3207 0df4 7D3C83E2 		add	r3, r3, #32000
+ 3208 0df8 8330A0E1 		mov	r3, r3, asl #1
+ 3209 0dfc 033082E0 		add	r3, r2, r3
+ 3210 0e00 B4215BE1 		ldrh	r2, [fp, #-20]	@ movhi
+ 3211 0e04 B020C3E1 		strh	r2, [r3, #0]	@ movhi
+ 308:../lab9-efectos.c **** 	if( ++(buffer->head) == buffer->size )
+ 3212              		.loc 1 308 0
+ 3213 0e08 10201BE5 		ldr	r2, [fp, #-16]
+ 3214 0e0c 54309FE5 		ldr	r3, .L42
+ 3215 0e10 B33092E1 		ldrh	r3, [r2, r3]
+ 3216 0e14 013083E2 		add	r3, r3, #1
+ 3217 0e18 0338A0E1 		mov	r3, r3, asl #16
+ 3218 0e1c 2318A0E1 		mov	r1, r3, lsr #16
+ 3219 0e20 10201BE5 		ldr	r2, [fp, #-16]
+ 3220 0e24 3C309FE5 		ldr	r3, .L42
+ 3221 0e28 B31082E1 		strh	r1, [r2, r3]	@ movhi
+ 3222 0e2c 10201BE5 		ldr	r2, [fp, #-16]
+ 3223 0e30 30309FE5 		ldr	r3, .L42
+ 3224 0e34 B32092E1 		ldrh	r2, [r2, r3]
+ 3225 0e38 10101BE5 		ldr	r1, [fp, #-16]
+ 3226 0e3c 7D3BA0E3 		mov	r3, #128000
+ 3227 0e40 B33091E1 		ldrh	r3, [r1, r3]
+ 3228 0e44 030052E1 		cmp	r2, r3
+ 3229 0e48 0300001A 		bne	.L40
+ 309:../lab9-efectos.c **** 		buffer->head = 0;
+ 3230              		.loc 1 309 0
+ 3231 0e4c 10201BE5 		ldr	r2, [fp, #-16]
+ 3232 0e50 10309FE5 		ldr	r3, .L42
+ 3233 0e54 0010A0E3 		mov	r1, #0
+ 3234 0e58 B31082E1 		strh	r1, [r2, r3]	@ movhi
+ 3235              	.L40:
+ 310:../lab9-efectos.c **** }
+ 3236              		.loc 1 310 0
+ 3237 0e5c 0CD04BE2 		sub	sp, fp, #12
+ 3238 0e60 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 3239 0e64 1EFF2FE1 		bx	lr
+ 3240              	.L43:
+ 3241              		.align	2
+ 3242              	.L42:
+ 3243 0e68 02F40100 		.word	128002
+ 3244              		.cfi_endproc
+ 3245              	.LFE2:
+ 3247              		.align	2
+ 3248              		.global	audiodelay_get
+ 3250              	audiodelay_get:
+ 3251              	.LFB3:
+ 311:../lab9-efectos.c **** 
+ 312:../lab9-efectos.c **** void audiodelay_get( audiodelay_t *buffer, int16 *ch0, int16 *ch1 )
+ 313:../lab9-efectos.c **** {
+ 3252              		.loc 1 313 0
+ 3253              		.cfi_startproc
+ 3254              		@ Function supports interworking.
+ 3255              		@ args = 0, pretend = 0, frame = 16
+ 3256              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3257 0e6c 0DC0A0E1 		mov	ip, sp
+ 3258              	.LCFI6:
+ 3259              		.cfi_def_cfa_register 12
+ 3260 0e70 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 3261 0e74 04B04CE2 		sub	fp, ip, #4
+ 3262              		.cfi_offset 14, -8
+ 3263              		.cfi_offset 13, -12
+ 3264              		.cfi_offset 11, -16
+ 3265              	.LCFI7:
+ 3266              		.cfi_def_cfa 11, 4
+ 3267 0e78 10D04DE2 		sub	sp, sp, #16
+ 3268 0e7c 10000BE5 		str	r0, [fp, #-16]
+ 3269 0e80 14100BE5 		str	r1, [fp, #-20]
+ 3270 0e84 18200BE5 		str	r2, [fp, #-24]
+ 314:../lab9-efectos.c **** 	*ch0 = buffer->ch0[buffer->tail];
+ 3271              		.loc 1 314 0
+ 3272 0e88 10201BE5 		ldr	r2, [fp, #-16]
+ 3273 0e8c A0309FE5 		ldr	r3, .L46
+ 3274 0e90 B33092E1 		ldrh	r3, [r2, r3]
+ 3275 0e94 10201BE5 		ldr	r2, [fp, #-16]
+ 3276 0e98 8330A0E1 		mov	r3, r3, asl #1
+ 3277 0e9c 033082E0 		add	r3, r2, r3
+ 3278 0ea0 B020D3E1 		ldrh	r2, [r3, #0]
+ 3279 0ea4 14301BE5 		ldr	r3, [fp, #-20]
+ 3280 0ea8 B020C3E1 		strh	r2, [r3, #0]	@ movhi
+ 315:../lab9-efectos.c **** 	*ch1 = buffer->ch1[buffer->tail];
+ 3281              		.loc 1 315 0
+ 3282 0eac 10201BE5 		ldr	r2, [fp, #-16]
+ 3283 0eb0 7C309FE5 		ldr	r3, .L46
+ 3284 0eb4 B33092E1 		ldrh	r3, [r2, r3]
+ 3285 0eb8 10201BE5 		ldr	r2, [fp, #-16]
+ 3286 0ebc 7D3C83E2 		add	r3, r3, #32000
+ 3287 0ec0 8330A0E1 		mov	r3, r3, asl #1
+ 3288 0ec4 033082E0 		add	r3, r2, r3
+ 3289 0ec8 B020D3E1 		ldrh	r2, [r3, #0]
+ 3290 0ecc 18301BE5 		ldr	r3, [fp, #-24]
+ 3291 0ed0 B020C3E1 		strh	r2, [r3, #0]	@ movhi
+ 316:../lab9-efectos.c **** 	if( ++(buffer->tail) == buffer->size )
+ 3292              		.loc 1 316 0
+ 3293 0ed4 10201BE5 		ldr	r2, [fp, #-16]
+ 3294 0ed8 54309FE5 		ldr	r3, .L46
+ 3295 0edc B33092E1 		ldrh	r3, [r2, r3]
+ 3296 0ee0 013083E2 		add	r3, r3, #1
+ 3297 0ee4 0338A0E1 		mov	r3, r3, asl #16
+ 3298 0ee8 2318A0E1 		mov	r1, r3, lsr #16
+ 3299 0eec 10201BE5 		ldr	r2, [fp, #-16]
+ 3300 0ef0 3C309FE5 		ldr	r3, .L46
+ 3301 0ef4 B31082E1 		strh	r1, [r2, r3]	@ movhi
+ 3302 0ef8 10201BE5 		ldr	r2, [fp, #-16]
+ 3303 0efc 30309FE5 		ldr	r3, .L46
+ 3304 0f00 B32092E1 		ldrh	r2, [r2, r3]
+ 3305 0f04 10101BE5 		ldr	r1, [fp, #-16]
+ 3306 0f08 7D3BA0E3 		mov	r3, #128000
+ 3307 0f0c B33091E1 		ldrh	r3, [r1, r3]
+ 3308 0f10 030052E1 		cmp	r2, r3
+ 3309 0f14 0300001A 		bne	.L44
+ 317:../lab9-efectos.c **** 		buffer->tail = 0;
+ 3310              		.loc 1 317 0
+ 3311 0f18 10201BE5 		ldr	r2, [fp, #-16]
+ 3312 0f1c 10309FE5 		ldr	r3, .L46
+ 3313 0f20 0010A0E3 		mov	r1, #0
+ 3314 0f24 B31082E1 		strh	r1, [r2, r3]	@ movhi
+ 3315              	.L44:
+ 318:../lab9-efectos.c **** }
+ 3316              		.loc 1 318 0
+ 3317 0f28 0CD04BE2 		sub	sp, fp, #12
+ 3318 0f2c 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 3319 0f30 1EFF2FE1 		bx	lr
+ 3320              	.L47:
+ 3321              		.align	2
+ 3322              	.L46:
+ 3323 0f34 04F40100 		.word	128004
+ 3324              		.cfi_endproc
+ 3325              	.LFE3:
+ 3327              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 lab9-efectos.c
+                            *COM*:0009c400 buffer
+                            *COM*:0001f406 delay_buffer
+C:\Users\DOSTATIC\AppData\Local\Temp\ccl77pUN.s:1875   .data:00000000 triangle
+C:\Users\DOSTATIC\AppData\Local\Temp\ccl77pUN.s:1872   .data:00000000 $d
+C:\Users\DOSTATIC\AppData\Local\Temp\ccl77pUN.s:1916   .data:00000048 square
+C:\Users\DOSTATIC\AppData\Local\Temp\ccl77pUN.s:1957   .data:00000090 sine
+C:\Users\DOSTATIC\AppData\Local\Temp\ccl77pUN.s:1995   .rodata:00000000 $d
+C:\Users\DOSTATIC\AppData\Local\Temp\ccl77pUN.s:2057   .text:00000000 $a
+C:\Users\DOSTATIC\AppData\Local\Temp\ccl77pUN.s:2060   .text:00000000 main
+C:\Users\DOSTATIC\AppData\Local\Temp\ccl77pUN.s:3090   .text:00000ce8 audiodelay_init
+C:\Users\DOSTATIC\AppData\Local\Temp\ccl77pUN.s:3250   .text:00000e6c audiodelay_get
+C:\Users\DOSTATIC\AppData\Local\Temp\ccl77pUN.s:3171   .text:00000da4 audiodelay_put
+C:\Users\DOSTATIC\AppData\Local\Temp\ccl77pUN.s:3058   .text:00000c80 $d
+C:\Users\DOSTATIC\AppData\Local\Temp\ccl77pUN.s:3087   .text:00000ce8 $a
+C:\Users\DOSTATIC\AppData\Local\Temp\ccl77pUN.s:3163   .text:00000d9c $d
+C:\Users\DOSTATIC\AppData\Local\Temp\ccl77pUN.s:3168   .text:00000da4 $a
+C:\Users\DOSTATIC\AppData\Local\Temp\ccl77pUN.s:3243   .text:00000e68 $d
+C:\Users\DOSTATIC\AppData\Local\Temp\ccl77pUN.s:3247   .text:00000e6c $a
+C:\Users\DOSTATIC\AppData\Local\Temp\ccl77pUN.s:3323   .text:00000f34 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+sys_init
+uart0_init
+segs_init
+keypad_init
+uda1341ts_init
+iis_init
+uart0_puts
+iis_putSample
+keypad_pressed
+keypad_getchar
+segs_putchar
+iis_getSample
+segs_off

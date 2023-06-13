@@ -1,0 +1,506 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"kernelcoop.c"
+  21              	.Ltext0:
+  22              		.file 1 "../kernelcoop.c"
+ 1685              		.align	2
+ 1686              	tasks:
+ 1687 0000 00000000 		.space	160
+ 1687      00000000 
+ 1687      00000000 
+ 1687      00000000 
+ 1687      00000000 
+ 1688              		.text
+ 1689              		.align	2
+ 1690              		.global	delete_task
+ 1692              	delete_task:
+ 1693              	.LFB0:
+   1:../kernelcoop.c **** /*-------------------------------------------------------------------
+   2:../kernelcoop.c **** **
+   3:../kernelcoop.c **** **  Fichero:
+   4:../kernelcoop.c **** **    kernelcoop.c  12/1/2021
+   5:../kernelcoop.c **** **
+   6:../kernelcoop.c **** **    (c) J.M. Mendias
+   7:../kernelcoop.c **** **    Programación de Sistemas y Dispositivos
+   8:../kernelcoop.c **** **    Facultad de Informática. Universidad Complutense de Madrid
+   9:../kernelcoop.c **** **
+  10:../kernelcoop.c **** **  Propósito:
+  11:../kernelcoop.c **** **    Kernel de planificación no expropiativa de tareas cooperativas
+  12:../kernelcoop.c **** **
+  13:../kernelcoop.c **** **  Notas de diseño:
+  14:../kernelcoop.c **** **
+  15:../kernelcoop.c **** **-----------------------------------------------------------------*/
+  16:../kernelcoop.c **** 
+  17:../kernelcoop.c **** #include <kernelcoop.h>
+  18:../kernelcoop.c **** #include <s3c44b0x.h>
+  19:../kernelcoop.c **** 
+  20:../kernelcoop.c **** static task_t tasks[MAX_TASKS];   /* Lista ordenada de TCBs */
+  21:../kernelcoop.c **** 
+  22:../kernelcoop.c **** void delete_task( uint32 id )
+  23:../kernelcoop.c **** {
+ 1694              		.loc 1 23 0
+ 1695              		.cfi_startproc
+ 1696              		@ Function supports interworking.
+ 1697              		@ args = 0, pretend = 0, frame = 8
+ 1698              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1699 0000 0DC0A0E1 		mov	ip, sp
+ 1700              	.LCFI0:
+ 1701              		.cfi_def_cfa_register 12
+ 1702 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1703 0008 04B04CE2 		sub	fp, ip, #4
+ 1704              		.cfi_offset 14, -8
+ 1705              		.cfi_offset 13, -12
+ 1706              		.cfi_offset 11, -16
+ 1707              	.LCFI1:
+ 1708              		.cfi_def_cfa 11, 4
+ 1709 000c 08D04DE2 		sub	sp, sp, #8
+ 1710 0010 10000BE5 		str	r0, [fp, #-16]
+  24:../kernelcoop.c ****     tasks[id].pfunction = NULL;
+ 1711              		.loc 1 24 0
+ 1712 0014 74309FE5 		ldr	r3, .L2
+ 1713 0018 10201BE5 		ldr	r2, [fp, #-16]
+ 1714 001c 0010A0E3 		mov	r1, #0
+ 1715 0020 021283E7 		str	r1, [r3, r2, asl #4]
+  25:../kernelcoop.c ****     tasks[id].period = 0; 
+ 1716              		.loc 1 25 0
+ 1717 0024 64109FE5 		ldr	r1, .L2
+ 1718 0028 10201BE5 		ldr	r2, [fp, #-16]
+ 1719 002c 0430A0E3 		mov	r3, #4
+ 1720 0030 0222A0E1 		mov	r2, r2, asl #4
+ 1721 0034 022081E0 		add	r2, r1, r2
+ 1722 0038 033082E0 		add	r3, r2, r3
+ 1723 003c 0020A0E3 		mov	r2, #0
+ 1724 0040 002083E5 		str	r2, [r3, #0]
+  26:../kernelcoop.c ****     tasks[id].ticks = 0;
+ 1725              		.loc 1 26 0
+ 1726 0044 44109FE5 		ldr	r1, .L2
+ 1727 0048 10201BE5 		ldr	r2, [fp, #-16]
+ 1728 004c 0830A0E3 		mov	r3, #8
+ 1729 0050 0222A0E1 		mov	r2, r2, asl #4
+ 1730 0054 022081E0 		add	r2, r1, r2
+ 1731 0058 033082E0 		add	r3, r2, r3
+ 1732 005c 0020A0E3 		mov	r2, #0
+ 1733 0060 002083E5 		str	r2, [r3, #0]
+  27:../kernelcoop.c ****     tasks[id].ready = FALSE;     
+ 1734              		.loc 1 27 0
+ 1735 0064 24109FE5 		ldr	r1, .L2
+ 1736 0068 10201BE5 		ldr	r2, [fp, #-16]
+ 1737 006c 0830A0E3 		mov	r3, #8
+ 1738 0070 0222A0E1 		mov	r2, r2, asl #4
+ 1739 0074 022081E0 		add	r2, r1, r2
+ 1740 0078 033082E0 		add	r3, r2, r3
+ 1741 007c 0020A0E3 		mov	r2, #0
+ 1742 0080 0420C3E5 		strb	r2, [r3, #4]
+  28:../kernelcoop.c **** }
+ 1743              		.loc 1 28 0
+ 1744 0084 0CD04BE2 		sub	sp, fp, #12
+ 1745 0088 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1746 008c 1EFF2FE1 		bx	lr
+ 1747              	.L3:
+ 1748              		.align	2
+ 1749              	.L2:
+ 1750 0090 00000000 		.word	tasks
+ 1751              		.cfi_endproc
+ 1752              	.LFE0:
+ 1754              		.align	2
+ 1755              		.global	create_task
+ 1757              	create_task:
+ 1758              	.LFB1:
+  29:../kernelcoop.c **** 
+  30:../kernelcoop.c **** uint32 create_task( void (*pfunction)( void ), uint32 period )
+  31:../kernelcoop.c **** {
+ 1759              		.loc 1 31 0
+ 1760              		.cfi_startproc
+ 1761              		@ Function supports interworking.
+ 1762              		@ args = 0, pretend = 0, frame = 16
+ 1763              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1764 0094 0DC0A0E1 		mov	ip, sp
+ 1765              	.LCFI2:
+ 1766              		.cfi_def_cfa_register 12
+ 1767 0098 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1768 009c 04B04CE2 		sub	fp, ip, #4
+ 1769              		.cfi_offset 14, -8
+ 1770              		.cfi_offset 13, -12
+ 1771              		.cfi_offset 11, -16
+ 1772              	.LCFI3:
+ 1773              		.cfi_def_cfa 11, 4
+ 1774 00a0 10D04DE2 		sub	sp, sp, #16
+ 1775 00a4 18000BE5 		str	r0, [fp, #-24]
+ 1776 00a8 1C100BE5 		str	r1, [fp, #-28]
+  32:../kernelcoop.c ****     uint32 id;
+  33:../kernelcoop.c ****     
+  34:../kernelcoop.c ****     for( id=0; id<MAX_TASKS && tasks[id].pfunction ; id++ ); /* Busca la primera entrada libre (con
+ 1777              		.loc 1 34 0
+ 1778 00ac 0030A0E3 		mov	r3, #0
+ 1779 00b0 10300BE5 		str	r3, [fp, #-16]
+ 1780 00b4 020000EA 		b	.L5
+ 1781              	.L7:
+ 1782              		.loc 1 34 0 is_stmt 0 discriminator 1
+ 1783 00b8 10301BE5 		ldr	r3, [fp, #-16]
+ 1784 00bc 013083E2 		add	r3, r3, #1
+ 1785 00c0 10300BE5 		str	r3, [fp, #-16]
+ 1786              	.L5:
+ 1787 00c4 10301BE5 		ldr	r3, [fp, #-16]
+ 1788 00c8 090053E3 		cmp	r3, #9
+ 1789 00cc 0400008A 		bhi	.L6
+ 1790              		.loc 1 34 0 discriminator 2
+ 1791 00d0 9C309FE5 		ldr	r3, .L8
+ 1792 00d4 10201BE5 		ldr	r2, [fp, #-16]
+ 1793 00d8 023293E7 		ldr	r3, [r3, r2, asl #4]
+ 1794 00dc 000053E3 		cmp	r3, #0
+ 1795 00e0 F4FFFF1A 		bne	.L7
+ 1796              	.L6:
+  35:../kernelcoop.c ****     
+  36:../kernelcoop.c ****     tasks[id].pfunction = pfunction;
+ 1797              		.loc 1 36 0 is_stmt 1
+ 1798 00e4 88309FE5 		ldr	r3, .L8
+ 1799 00e8 10201BE5 		ldr	r2, [fp, #-16]
+ 1800 00ec 18101BE5 		ldr	r1, [fp, #-24]
+ 1801 00f0 021283E7 		str	r1, [r3, r2, asl #4]
+  37:../kernelcoop.c ****     tasks[id].period = period; 
+ 1802              		.loc 1 37 0
+ 1803 00f4 78109FE5 		ldr	r1, .L8
+ 1804 00f8 10201BE5 		ldr	r2, [fp, #-16]
+ 1805 00fc 0430A0E3 		mov	r3, #4
+ 1806 0100 0222A0E1 		mov	r2, r2, asl #4
+ 1807 0104 022081E0 		add	r2, r1, r2
+ 1808 0108 033082E0 		add	r3, r2, r3
+ 1809 010c 1C201BE5 		ldr	r2, [fp, #-28]
+ 1810 0110 002083E5 		str	r2, [r3, #0]
+  38:../kernelcoop.c ****     tasks[id].ticks = 0;
+ 1811              		.loc 1 38 0
+ 1812 0114 58109FE5 		ldr	r1, .L8
+ 1813 0118 10201BE5 		ldr	r2, [fp, #-16]
+ 1814 011c 0830A0E3 		mov	r3, #8
+ 1815 0120 0222A0E1 		mov	r2, r2, asl #4
+ 1816 0124 022081E0 		add	r2, r1, r2
+ 1817 0128 033082E0 		add	r3, r2, r3
+ 1818 012c 0020A0E3 		mov	r2, #0
+ 1819 0130 002083E5 		str	r2, [r3, #0]
+  39:../kernelcoop.c ****     tasks[id].ready = FALSE;     
+ 1820              		.loc 1 39 0
+ 1821 0134 38109FE5 		ldr	r1, .L8
+ 1822 0138 10201BE5 		ldr	r2, [fp, #-16]
+ 1823 013c 0830A0E3 		mov	r3, #8
+ 1824 0140 0222A0E1 		mov	r2, r2, asl #4
+ 1825 0144 022081E0 		add	r2, r1, r2
+ 1826 0148 033082E0 		add	r3, r2, r3
+ 1827 014c 0020A0E3 		mov	r2, #0
+ 1828 0150 0420C3E5 		strb	r2, [r3, #4]
+  40:../kernelcoop.c ****         
+  41:../kernelcoop.c ****     (*pfunction)();     /* Asume que la primera llamada a la tarea la inicializa */
+ 1829              		.loc 1 41 0
+ 1830 0154 18301BE5 		ldr	r3, [fp, #-24]
+ 1831 0158 0FE0A0E1 		mov	lr, pc
+ 1832 015c 13FF2FE1 		bx	r3
+  42:../kernelcoop.c **** 
+  43:../kernelcoop.c ****     return id;    
+ 1833              		.loc 1 43 0
+ 1834 0160 10301BE5 		ldr	r3, [fp, #-16]
+  44:../kernelcoop.c **** }
+ 1835              		.loc 1 44 0
+ 1836 0164 0300A0E1 		mov	r0, r3
+ 1837 0168 0CD04BE2 		sub	sp, fp, #12
+ 1838 016c 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1839 0170 1EFF2FE1 		bx	lr
+ 1840              	.L9:
+ 1841              		.align	2
+ 1842              	.L8:
+ 1843 0174 00000000 		.word	tasks
+ 1844              		.cfi_endproc
+ 1845              	.LFE1:
+ 1847              		.align	2
+ 1848              		.global	scheduler_init
+ 1850              	scheduler_init:
+ 1851              	.LFB2:
+  45:../kernelcoop.c **** 
+  46:../kernelcoop.c **** void scheduler_init( void )
+  47:../kernelcoop.c **** {
+ 1852              		.loc 1 47 0
+ 1853              		.cfi_startproc
+ 1854              		@ Function supports interworking.
+ 1855              		@ args = 0, pretend = 0, frame = 8
+ 1856              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1857 0178 0DC0A0E1 		mov	ip, sp
+ 1858              	.LCFI4:
+ 1859              		.cfi_def_cfa_register 12
+ 1860 017c 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1861 0180 04B04CE2 		sub	fp, ip, #4
+ 1862              		.cfi_offset 14, -8
+ 1863              		.cfi_offset 13, -12
+ 1864              		.cfi_offset 11, -16
+ 1865              	.LCFI5:
+ 1866              		.cfi_def_cfa 11, 4
+ 1867 0184 08D04DE2 		sub	sp, sp, #8
+  48:../kernelcoop.c ****     uint32 id;
+  49:../kernelcoop.c ****     
+  50:../kernelcoop.c ****     for( id=0; id<MAX_TASKS; id++ )
+ 1868              		.loc 1 50 0
+ 1869 0188 0030A0E3 		mov	r3, #0
+ 1870 018c 10300BE5 		str	r3, [fp, #-16]
+ 1871 0190 040000EA 		b	.L11
+ 1872              	.L12:
+  51:../kernelcoop.c ****         delete_task( id );
+ 1873              		.loc 1 51 0 discriminator 2
+ 1874 0194 10001BE5 		ldr	r0, [fp, #-16]
+ 1875 0198 FEFFFFEB 		bl	delete_task
+  50:../kernelcoop.c ****     for( id=0; id<MAX_TASKS; id++ )
+ 1876              		.loc 1 50 0 discriminator 2
+ 1877 019c 10301BE5 		ldr	r3, [fp, #-16]
+ 1878 01a0 013083E2 		add	r3, r3, #1
+ 1879 01a4 10300BE5 		str	r3, [fp, #-16]
+ 1880              	.L11:
+  50:../kernelcoop.c ****     for( id=0; id<MAX_TASKS; id++ )
+ 1881              		.loc 1 50 0 is_stmt 0 discriminator 1
+ 1882 01a8 10301BE5 		ldr	r3, [fp, #-16]
+ 1883 01ac 090053E3 		cmp	r3, #9
+ 1884 01b0 F7FFFF9A 		bls	.L12
+  52:../kernelcoop.c **** };
+ 1885              		.loc 1 52 0 is_stmt 1
+ 1886 01b4 0CD04BE2 		sub	sp, fp, #12
+ 1887 01b8 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1888 01bc 1EFF2FE1 		bx	lr
+ 1889              		.cfi_endproc
+ 1890              	.LFE2:
+ 1892              		.align	2
+ 1893              		.global	scheduler
+ 1895              	scheduler:
+ 1896              	.LFB3:
+  53:../kernelcoop.c **** 
+  54:../kernelcoop.c **** void scheduler( void ) /* Esta funcion es la ISR del timer0 */
+  55:../kernelcoop.c **** {
+ 1897              		.loc 1 55 0
+ 1898              		.cfi_startproc
+ 1899              		@ Interrupt Service Routine.
+ 1900              		@ args = 0, pretend = 0, frame = 8
+ 1901              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1902 01c0 04C02DE5 		str	ip, [sp, #-4]!
+ 1903 01c4 0DC0A0E1 		mov	ip, sp
+ 1904              	.LCFI6:
+ 1905              		.cfi_def_cfa_register 12
+ 1906 01c8 0FD82DE9 		stmfd	sp!, {r0, r1, r2, r3, fp, ip, lr, pc}
+ 1907 01cc 04B04CE2 		sub	fp, ip, #4
+ 1908              		.cfi_offset 14, -8
+ 1909              		.cfi_offset 13, -12
+ 1910              		.cfi_offset 11, -16
+ 1911              		.cfi_offset 3, -20
+ 1912              		.cfi_offset 2, -24
+ 1913              		.cfi_offset 1, -28
+ 1914              		.cfi_offset 0, -32
+ 1915              	.LCFI7:
+ 1916              		.cfi_def_cfa 11, 4
+ 1917 01d0 08D04DE2 		sub	sp, sp, #8
+  56:../kernelcoop.c ****     uint32 id;
+  57:../kernelcoop.c ****     
+  58:../kernelcoop.c ****     I_ISPC = BIT_TIMER0;    /* Borra el bit de interrupción pendiente */
+ 1918              		.loc 1 58 0
+ 1919 01d4 08319FE5 		ldr	r3, .L17
+ 1920 01d8 022AA0E3 		mov	r2, #8192
+ 1921 01dc 002083E5 		str	r2, [r3, #0]
+  59:../kernelcoop.c **** 
+  60:../kernelcoop.c ****     for( id=0; id<MAX_TASKS; id++ )                     /* Recorre la lista completa de TCB */
+ 1922              		.loc 1 60 0
+ 1923 01e0 0030A0E3 		mov	r3, #0
+ 1924 01e4 20300BE5 		str	r3, [fp, #-32]
+ 1925 01e8 360000EA 		b	.L14
+ 1926              	.L16:
+  61:../kernelcoop.c ****         if( tasks[id].pfunction )
+ 1927              		.loc 1 61 0
+ 1928 01ec F4309FE5 		ldr	r3, .L17+4
+ 1929 01f0 20201BE5 		ldr	r2, [fp, #-32]
+ 1930 01f4 023293E7 		ldr	r3, [r3, r2, asl #4]
+ 1931 01f8 000053E3 		cmp	r3, #0
+ 1932 01fc 2E00000A 		beq	.L15
+  62:../kernelcoop.c ****             if( ++tasks[id].ticks == tasks[id].period ) /* Si el contador de ticks equivale a su pe
+ 1933              		.loc 1 62 0
+ 1934 0200 E0109FE5 		ldr	r1, .L17+4
+ 1935 0204 20201BE5 		ldr	r2, [fp, #-32]
+ 1936 0208 0830A0E3 		mov	r3, #8
+ 1937 020c 0222A0E1 		mov	r2, r2, asl #4
+ 1938 0210 022081E0 		add	r2, r1, r2
+ 1939 0214 033082E0 		add	r3, r2, r3
+ 1940 0218 003093E5 		ldr	r3, [r3, #0]
+ 1941 021c 012083E2 		add	r2, r3, #1
+ 1942 0220 C0009FE5 		ldr	r0, .L17+4
+ 1943 0224 20101BE5 		ldr	r1, [fp, #-32]
+ 1944 0228 0830A0E3 		mov	r3, #8
+ 1945 022c 0112A0E1 		mov	r1, r1, asl #4
+ 1946 0230 011080E0 		add	r1, r0, r1
+ 1947 0234 033081E0 		add	r3, r1, r3
+ 1948 0238 002083E5 		str	r2, [r3, #0]
+ 1949 023c A4109FE5 		ldr	r1, .L17+4
+ 1950 0240 20201BE5 		ldr	r2, [fp, #-32]
+ 1951 0244 0830A0E3 		mov	r3, #8
+ 1952 0248 0222A0E1 		mov	r2, r2, asl #4
+ 1953 024c 022081E0 		add	r2, r1, r2
+ 1954 0250 033082E0 		add	r3, r2, r3
+ 1955 0254 002093E5 		ldr	r2, [r3, #0]
+ 1956 0258 88009FE5 		ldr	r0, .L17+4
+ 1957 025c 20101BE5 		ldr	r1, [fp, #-32]
+ 1958 0260 0430A0E3 		mov	r3, #4
+ 1959 0264 0112A0E1 		mov	r1, r1, asl #4
+ 1960 0268 011080E0 		add	r1, r0, r1
+ 1961 026c 033081E0 		add	r3, r1, r3
+ 1962 0270 003093E5 		ldr	r3, [r3, #0]
+ 1963 0274 030052E1 		cmp	r2, r3
+ 1964 0278 0F00001A 		bne	.L15
+  63:../kernelcoop.c ****             {
+  64:../kernelcoop.c ****                 tasks[id].ticks = 0;                    /* Inicializa a 0 su contador de ticks */
+ 1965              		.loc 1 64 0
+ 1966 027c 64109FE5 		ldr	r1, .L17+4
+ 1967 0280 20201BE5 		ldr	r2, [fp, #-32]
+ 1968 0284 0830A0E3 		mov	r3, #8
+ 1969 0288 0222A0E1 		mov	r2, r2, asl #4
+ 1970 028c 022081E0 		add	r2, r1, r2
+ 1971 0290 033082E0 		add	r3, r2, r3
+ 1972 0294 0020A0E3 		mov	r2, #0
+ 1973 0298 002083E5 		str	r2, [r3, #0]
+  65:../kernelcoop.c ****                 tasks[id].ready = TRUE;                 /* Pasa la tarea a estado "preparado" */
+ 1974              		.loc 1 65 0
+ 1975 029c 44109FE5 		ldr	r1, .L17+4
+ 1976 02a0 20201BE5 		ldr	r2, [fp, #-32]
+ 1977 02a4 0830A0E3 		mov	r3, #8
+ 1978 02a8 0222A0E1 		mov	r2, r2, asl #4
+ 1979 02ac 022081E0 		add	r2, r1, r2
+ 1980 02b0 033082E0 		add	r3, r2, r3
+ 1981 02b4 0120A0E3 		mov	r2, #1
+ 1982 02b8 0420C3E5 		strb	r2, [r3, #4]
+ 1983              	.L15:
+  60:../kernelcoop.c ****     for( id=0; id<MAX_TASKS; id++ )                     /* Recorre la lista completa de TCB */
+ 1984              		.loc 1 60 0
+ 1985 02bc 20301BE5 		ldr	r3, [fp, #-32]
+ 1986 02c0 013083E2 		add	r3, r3, #1
+ 1987 02c4 20300BE5 		str	r3, [fp, #-32]
+ 1988              	.L14:
+  60:../kernelcoop.c ****     for( id=0; id<MAX_TASKS; id++ )                     /* Recorre la lista completa de TCB */
+ 1989              		.loc 1 60 0 is_stmt 0 discriminator 1
+ 1990 02c8 20301BE5 		ldr	r3, [fp, #-32]
+ 1991 02cc 090053E3 		cmp	r3, #9
+ 1992 02d0 C5FFFF9A 		bls	.L16
+  66:../kernelcoop.c ****             };
+  67:../kernelcoop.c **** };
+ 1993              		.loc 1 67 0 is_stmt 1
+ 1994 02d4 1CD04BE2 		sub	sp, fp, #28
+ 1995 02d8 0F689DE8 		ldmfd	sp, {r0, r1, r2, r3, fp, sp, lr}
+ 1996 02dc 04C09DE4 		ldmfd	sp!, {ip}
+ 1997 02e0 04F05EE2 		subs	pc, lr, #4
+ 1998              	.L18:
+ 1999              		.align	2
+ 2000              	.L17:
+ 2001 02e4 2400E001 		.word	31457316
+ 2002 02e8 00000000 		.word	tasks
+ 2003              		.cfi_endproc
+ 2004              	.LFE3:
+ 2006              		.align	2
+ 2007              		.global	dispacher
+ 2009              	dispacher:
+ 2010              	.LFB4:
+  68:../kernelcoop.c ****     
+  69:../kernelcoop.c **** void dispacher( void )
+  70:../kernelcoop.c **** {
+ 2011              		.loc 1 70 0
+ 2012              		.cfi_startproc
+ 2013              		@ Function supports interworking.
+ 2014              		@ args = 0, pretend = 0, frame = 8
+ 2015              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2016 02ec 0DC0A0E1 		mov	ip, sp
+ 2017              	.LCFI8:
+ 2018              		.cfi_def_cfa_register 12
+ 2019 02f0 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2020 02f4 04B04CE2 		sub	fp, ip, #4
+ 2021              		.cfi_offset 14, -8
+ 2022              		.cfi_offset 13, -12
+ 2023              		.cfi_offset 11, -16
+ 2024              	.LCFI9:
+ 2025              		.cfi_def_cfa 11, 4
+ 2026 02f8 08D04DE2 		sub	sp, sp, #8
+  71:../kernelcoop.c ****     uint32 id;
+  72:../kernelcoop.c ****     
+  73:../kernelcoop.c ****     for( id=0; id<MAX_TASKS; id++ )                     /* Recorre la lista completa de TCB */
+ 2027              		.loc 1 73 0
+ 2028 02fc 0030A0E3 		mov	r3, #0
+ 2029 0300 10300BE5 		str	r3, [fp, #-16]
+ 2030 0304 180000EA 		b	.L20
+ 2031              	.L22:
+  74:../kernelcoop.c ****         if( tasks[id].ready == TRUE )                   /* Si la tarea está en estado "preparado": 
+ 2032              		.loc 1 74 0
+ 2033 0308 74109FE5 		ldr	r1, .L23
+ 2034 030c 10201BE5 		ldr	r2, [fp, #-16]
+ 2035 0310 0830A0E3 		mov	r3, #8
+ 2036 0314 0222A0E1 		mov	r2, r2, asl #4
+ 2037 0318 022081E0 		add	r2, r1, r2
+ 2038 031c 033082E0 		add	r3, r2, r3
+ 2039 0320 0430D3E5 		ldrb	r3, [r3, #4]	@ zero_extendqisi2
+ 2040 0324 010053E3 		cmp	r3, #1
+ 2041 0328 0C00001A 		bne	.L21
+  75:../kernelcoop.c ****         {
+  76:../kernelcoop.c ****             (*tasks[id].pfunction)();                   /* La ejecuta */
+ 2042              		.loc 1 76 0
+ 2043 032c 50309FE5 		ldr	r3, .L23
+ 2044 0330 10201BE5 		ldr	r2, [fp, #-16]
+ 2045 0334 023293E7 		ldr	r3, [r3, r2, asl #4]
+ 2046 0338 0FE0A0E1 		mov	lr, pc
+ 2047 033c 13FF2FE1 		bx	r3
+  77:../kernelcoop.c ****             tasks[id].ready = FALSE;                    /* Pasa la tarea a estado "no preparado" */
+ 2048              		.loc 1 77 0
+ 2049 0340 3C109FE5 		ldr	r1, .L23
+ 2050 0344 10201BE5 		ldr	r2, [fp, #-16]
+ 2051 0348 0830A0E3 		mov	r3, #8
+ 2052 034c 0222A0E1 		mov	r2, r2, asl #4
+ 2053 0350 022081E0 		add	r2, r1, r2
+ 2054 0354 033082E0 		add	r3, r2, r3
+ 2055 0358 0020A0E3 		mov	r2, #0
+ 2056 035c 0420C3E5 		strb	r2, [r3, #4]
+ 2057              	.L21:
+  73:../kernelcoop.c ****     for( id=0; id<MAX_TASKS; id++ )                     /* Recorre la lista completa de TCB */
+ 2058              		.loc 1 73 0
+ 2059 0360 10301BE5 		ldr	r3, [fp, #-16]
+ 2060 0364 013083E2 		add	r3, r3, #1
+ 2061 0368 10300BE5 		str	r3, [fp, #-16]
+ 2062              	.L20:
+  73:../kernelcoop.c ****     for( id=0; id<MAX_TASKS; id++ )                     /* Recorre la lista completa de TCB */
+ 2063              		.loc 1 73 0 is_stmt 0 discriminator 1
+ 2064 036c 10301BE5 		ldr	r3, [fp, #-16]
+ 2065 0370 090053E3 		cmp	r3, #9
+ 2066 0374 E3FFFF9A 		bls	.L22
+  78:../kernelcoop.c ****         }
+  79:../kernelcoop.c **** };
+ 2067              		.loc 1 79 0 is_stmt 1
+ 2068 0378 0CD04BE2 		sub	sp, fp, #12
+ 2069 037c 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 2070 0380 1EFF2FE1 		bx	lr
+ 2071              	.L24:
+ 2072              		.align	2
+ 2073              	.L23:
+ 2074 0384 00000000 		.word	tasks
+ 2075              		.cfi_endproc
+ 2076              	.LFE4:
+ 2078              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 kernelcoop.c
+C:\Users\USUARI~1\AppData\Local\Temp\ccIkS5Bq.s:1685   .bss:00000000 $d
+C:\Users\USUARI~1\AppData\Local\Temp\ccIkS5Bq.s:1686   .bss:00000000 tasks
+C:\Users\USUARI~1\AppData\Local\Temp\ccIkS5Bq.s:1689   .text:00000000 $a
+C:\Users\USUARI~1\AppData\Local\Temp\ccIkS5Bq.s:1692   .text:00000000 delete_task
+C:\Users\USUARI~1\AppData\Local\Temp\ccIkS5Bq.s:1750   .text:00000090 $d
+C:\Users\USUARI~1\AppData\Local\Temp\ccIkS5Bq.s:1754   .text:00000094 $a
+C:\Users\USUARI~1\AppData\Local\Temp\ccIkS5Bq.s:1757   .text:00000094 create_task
+C:\Users\USUARI~1\AppData\Local\Temp\ccIkS5Bq.s:1843   .text:00000174 $d
+C:\Users\USUARI~1\AppData\Local\Temp\ccIkS5Bq.s:1847   .text:00000178 $a
+C:\Users\USUARI~1\AppData\Local\Temp\ccIkS5Bq.s:1850   .text:00000178 scheduler_init
+C:\Users\USUARI~1\AppData\Local\Temp\ccIkS5Bq.s:1895   .text:000001c0 scheduler
+C:\Users\USUARI~1\AppData\Local\Temp\ccIkS5Bq.s:2001   .text:000002e4 $d
+C:\Users\USUARI~1\AppData\Local\Temp\ccIkS5Bq.s:2006   .text:000002ec $a
+C:\Users\USUARI~1\AppData\Local\Temp\ccIkS5Bq.s:2009   .text:000002ec dispacher
+C:\Users\USUARI~1\AppData\Local\Temp\ccIkS5Bq.s:2074   .text:00000384 $d
+                     .debug_frame:00000010 $d
+
+NO UNDEFINED SYMBOLS
