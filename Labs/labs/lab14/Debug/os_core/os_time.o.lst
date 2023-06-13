@@ -1,0 +1,822 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"os_time.c"
+  21              	.Ltext0:
+  22              		.file 1 "../os_core/os_time.c"
+ 1635              		.align	2
+ 1636              		.global	OSTimeDly
+ 1638              	OSTimeDly:
+ 1639              	.LFB0:
+   1:../os_core/os_time.c **** /*
+   2:../os_core/os_time.c **** ***************************************************************************************************
+   3:../os_core/os_time.c **** *                                                uC/OS-II
+   4:../os_core/os_time.c **** *                                          The Real-Time Kernel
+   5:../os_core/os_time.c **** *                                             TIME MANAGEMENT
+   6:../os_core/os_time.c **** *
+   7:../os_core/os_time.c **** *                          (c) Copyright 1992-2003, Jean J. Labrosse, Weston, FL
+   8:../os_core/os_time.c **** *                                           All Rights Reserved
+   9:../os_core/os_time.c **** *
+  10:../os_core/os_time.c **** * File    : OS_TIME.C
+  11:../os_core/os_time.c **** * By      : Jean J. Labrosse
+  12:../os_core/os_time.c **** * Version : V2.76
+  13:../os_core/os_time.c **** ***************************************************************************************************
+  14:../os_core/os_time.c **** */
+  15:../os_core/os_time.c **** 
+  16:../os_core/os_time.c **** #ifndef  OS_MASTER_FILE
+  17:../os_core/os_time.c **** #include "ucos_ii.h"
+  18:../os_core/os_time.c **** #endif
+  19:../os_core/os_time.c **** 
+  20:../os_core/os_time.c **** /*
+  21:../os_core/os_time.c **** ***************************************************************************************************
+  22:../os_core/os_time.c **** *                                DELAY TASK 'n' TICKS   (n from 0 to 65535)
+  23:../os_core/os_time.c **** *
+  24:../os_core/os_time.c **** * Description: This function is called to delay execution of the currently running task until the
+  25:../os_core/os_time.c **** *              specified number of system ticks expires.  This, of course, directly equates to dela
+  26:../os_core/os_time.c **** *              the current task for some time to expire.  No delay will result If the specified del
+  27:../os_core/os_time.c **** *              0.  If the specified delay is greater than 0 then, a context switch will result.
+  28:../os_core/os_time.c **** *
+  29:../os_core/os_time.c **** * Arguments  : ticks     is the time delay that the task will be suspended in number of clock 'tick
+  30:../os_core/os_time.c **** *                        Note that by specifying 0, the task will not be delayed.
+  31:../os_core/os_time.c **** *
+  32:../os_core/os_time.c **** * Returns    : none
+  33:../os_core/os_time.c **** ***************************************************************************************************
+  34:../os_core/os_time.c **** */
+  35:../os_core/os_time.c **** 
+  36:../os_core/os_time.c **** void  OSTimeDly (INT16U ticks)
+  37:../os_core/os_time.c **** {
+ 1640              		.loc 1 37 0
+ 1641              		.cfi_startproc
+ 1642              		@ Function supports interworking.
+ 1643              		@ args = 0, pretend = 0, frame = 16
+ 1644              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1645 0000 0DC0A0E1 		mov	ip, sp
+ 1646              	.LCFI0:
+ 1647              		.cfi_def_cfa_register 12
+ 1648 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1649 0008 04B04CE2 		sub	fp, ip, #4
+ 1650              		.cfi_offset 14, -8
+ 1651              		.cfi_offset 13, -12
+ 1652              		.cfi_offset 11, -16
+ 1653              	.LCFI1:
+ 1654              		.cfi_def_cfa 11, 4
+ 1655 000c 10D04DE2 		sub	sp, sp, #16
+ 1656 0010 0030A0E1 		mov	r3, r0
+ 1657 0014 B6314BE1 		strh	r3, [fp, #-22]	@ movhi
+  38:../os_core/os_time.c ****     INT8U      y;
+  39:../os_core/os_time.c **** #if OS_CRITICAL_METHOD == 3                      /* Allocate storage for CPU status register       
+  40:../os_core/os_time.c ****     OS_CPU_SR  cpu_sr;
+  41:../os_core/os_time.c **** 
+  42:../os_core/os_time.c **** 
+  43:../os_core/os_time.c **** 
+  44:../os_core/os_time.c ****     cpu_sr = 0;                                  /* Prevent compiler warning                       
+  45:../os_core/os_time.c **** #endif    
+  46:../os_core/os_time.c ****     if (ticks > 0) {                             /* 0 means no delay!                              
+ 1658              		.loc 1 46 0
+ 1659 0018 B6315BE1 		ldrh	r3, [fp, #-22]
+ 1660 001c 000053E3 		cmp	r3, #0
+ 1661 0020 3100000A 		beq	.L1
+  47:../os_core/os_time.c ****         OS_ENTER_CRITICAL();
+ 1662              		.loc 1 47 0
+ 1663              	@ 47 "../os_core/os_time.c" 1
+ 1664 0024 00000FE1 		mrs   r0, cpsr              
+ 1665 0028 04002DE5 	stmfd sp!, {r0}             
+ 1666 002c C00080E3 	orr   r0, r0, #0b11000000   
+ 1667 0030 00F021E1 	msr   cpsr_c, r0              
+ 1668              	@ 0 "" 2
+  48:../os_core/os_time.c ****         y            =  OSTCBCur->OSTCBY;        /* Delay current task                             
+ 1669              		.loc 1 48 0
+ 1670 0034 BC309FE5 		ldr	r3, .L4
+ 1671 0038 003093E5 		ldr	r3, [r3, #0]
+ 1672 003c 3030D3E5 		ldrb	r3, [r3, #48]
+ 1673 0040 0D304BE5 		strb	r3, [fp, #-13]
+  49:../os_core/os_time.c ****         OSRdyTbl[y] &= ~OSTCBCur->OSTCBBitX;
+ 1674              		.loc 1 49 0
+ 1675 0044 0D305BE5 		ldrb	r3, [fp, #-13]	@ zero_extendqisi2
+ 1676 0048 0D205BE5 		ldrb	r2, [fp, #-13]	@ zero_extendqisi2
+ 1677 004c A8109FE5 		ldr	r1, .L4+4
+ 1678 0050 0220D1E7 		ldrb	r2, [r1, r2]	@ zero_extendqisi2
+ 1679 0054 FF1002E2 		and	r1, r2, #255
+ 1680 0058 98209FE5 		ldr	r2, .L4
+ 1681 005c 002092E5 		ldr	r2, [r2, #0]
+ 1682 0060 3120D2E5 		ldrb	r2, [r2, #49]	@ zero_extendqisi2
+ 1683 0064 FF2002E2 		and	r2, r2, #255
+ 1684 0068 0220E0E1 		mvn	r2, r2
+ 1685 006c FF2002E2 		and	r2, r2, #255
+ 1686 0070 022001E0 		and	r2, r1, r2
+ 1687 0074 FF2002E2 		and	r2, r2, #255
+ 1688 0078 FF1002E2 		and	r1, r2, #255
+ 1689 007c 78209FE5 		ldr	r2, .L4+4
+ 1690 0080 0310C2E7 		strb	r1, [r2, r3]
+  50:../os_core/os_time.c ****         if (OSRdyTbl[y] == 0) {  
+ 1691              		.loc 1 50 0
+ 1692 0084 0D305BE5 		ldrb	r3, [fp, #-13]	@ zero_extendqisi2
+ 1693 0088 6C209FE5 		ldr	r2, .L4+4
+ 1694 008c 0330D2E7 		ldrb	r3, [r2, r3]	@ zero_extendqisi2
+ 1695 0090 000053E3 		cmp	r3, #0
+ 1696 0094 0D00001A 		bne	.L3
+  51:../os_core/os_time.c ****             OSRdyGrp &= ~OSTCBCur->OSTCBBitY;
+ 1697              		.loc 1 51 0
+ 1698 0098 58309FE5 		ldr	r3, .L4
+ 1699 009c 003093E5 		ldr	r3, [r3, #0]
+ 1700 00a0 3230D3E5 		ldrb	r3, [r3, #50]	@ zero_extendqisi2
+ 1701 00a4 FF3003E2 		and	r3, r3, #255
+ 1702 00a8 0330E0E1 		mvn	r3, r3
+ 1703 00ac FF2003E2 		and	r2, r3, #255
+ 1704 00b0 48309FE5 		ldr	r3, .L4+8
+ 1705 00b4 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 1706 00b8 FF3003E2 		and	r3, r3, #255
+ 1707 00bc 033002E0 		and	r3, r2, r3
+ 1708 00c0 FF3003E2 		and	r3, r3, #255
+ 1709 00c4 FF2003E2 		and	r2, r3, #255
+ 1710 00c8 30309FE5 		ldr	r3, .L4+8
+ 1711 00cc 0020C3E5 		strb	r2, [r3, #0]
+ 1712              	.L3:
+  52:../os_core/os_time.c ****         }
+  53:../os_core/os_time.c ****         OSTCBCur->OSTCBDly = ticks;              /* Load ticks in TCB                              
+ 1713              		.loc 1 53 0
+ 1714 00d0 20309FE5 		ldr	r3, .L4
+ 1715 00d4 003093E5 		ldr	r3, [r3, #0]
+ 1716 00d8 B6215BE1 		ldrh	r2, [fp, #-22]	@ movhi
+ 1717 00dc BA22C3E1 		strh	r2, [r3, #42]	@ movhi
+  54:../os_core/os_time.c ****         OS_EXIT_CRITICAL();
+ 1718              		.loc 1 54 0
+ 1719              	@ 54 "../os_core/os_time.c" 1
+ 1720 00e0 04009DE4 		ldmfd sp!, {r0}             
+ 1721 00e4 00F021E1 	msr   cpsr_c, r0              
+ 1722              	@ 0 "" 2
+  55:../os_core/os_time.c ****         OS_Sched();                              /* Find next task to run!                         
+ 1723              		.loc 1 55 0
+ 1724 00e8 FEFFFFEB 		bl	OS_Sched
+ 1725              	.L1:
+  56:../os_core/os_time.c ****     }
+  57:../os_core/os_time.c **** }
+ 1726              		.loc 1 57 0
+ 1727 00ec 0CD04BE2 		sub	sp, fp, #12
+ 1728 00f0 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1729 00f4 1EFF2FE1 		bx	lr
+ 1730              	.L5:
+ 1731              		.align	2
+ 1732              	.L4:
+ 1733 00f8 00000000 		.word	OSTCBCur
+ 1734 00fc 00000000 		.word	OSRdyTbl
+ 1735 0100 00000000 		.word	OSRdyGrp
+ 1736              		.cfi_endproc
+ 1737              	.LFE0:
+ 1739              		.align	2
+ 1740              		.global	OSTimeDlyHMSM
+ 1742              	OSTimeDlyHMSM:
+ 1743              	.LFB1:
+  58:../os_core/os_time.c **** /*$PAGE*/
+  59:../os_core/os_time.c **** /*
+  60:../os_core/os_time.c **** ***************************************************************************************************
+  61:../os_core/os_time.c **** *                                     DELAY TASK FOR SPECIFIED TIME
+  62:../os_core/os_time.c **** *
+  63:../os_core/os_time.c **** * Description: This function is called to delay execution of the currently running task until some 
+  64:../os_core/os_time.c **** *              expires.  This call allows you to specify the delay time in HOURS, MINUTES, SECONDS 
+  65:../os_core/os_time.c **** *              MILLISECONDS instead of ticks.
+  66:../os_core/os_time.c **** *
+  67:../os_core/os_time.c **** * Arguments  : hours     specifies the number of hours that the task will be delayed (max. is 255)
+  68:../os_core/os_time.c **** *              minutes   specifies the number of minutes (max. 59)
+  69:../os_core/os_time.c **** *              seconds   specifies the number of seconds (max. 59)
+  70:../os_core/os_time.c **** *              milli     specifies the number of milliseconds (max. 999)
+  71:../os_core/os_time.c **** *
+  72:../os_core/os_time.c **** * Returns    : OS_NO_ERR
+  73:../os_core/os_time.c **** *              OS_TIME_INVALID_MINUTES
+  74:../os_core/os_time.c **** *              OS_TIME_INVALID_SECONDS
+  75:../os_core/os_time.c **** *              OS_TIME_INVALID_MS
+  76:../os_core/os_time.c **** *              OS_TIME_ZERO_DLY
+  77:../os_core/os_time.c **** *
+  78:../os_core/os_time.c **** * Note(s)    : The resolution on the milliseconds depends on the tick rate.  For example, you can't
+  79:../os_core/os_time.c **** *              a 10 mS delay if the ticker interrupts every 100 mS.  In this case, the delay would 
+  80:../os_core/os_time.c **** *              set to 0.  The actual delay is rounded to the nearest tick.
+  81:../os_core/os_time.c **** ***************************************************************************************************
+  82:../os_core/os_time.c **** */
+  83:../os_core/os_time.c **** 
+  84:../os_core/os_time.c **** #if OS_TIME_DLY_HMSM_EN > 0
+  85:../os_core/os_time.c **** INT8U  OSTimeDlyHMSM (INT8U hours, INT8U minutes, INT8U seconds, INT16U milli)
+  86:../os_core/os_time.c **** {
+ 1744              		.loc 1 86 0
+ 1745              		.cfi_startproc
+ 1746              		@ Function supports interworking.
+ 1747              		@ args = 0, pretend = 0, frame = 16
+ 1748              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1749 0104 0DC0A0E1 		mov	ip, sp
+ 1750              	.LCFI2:
+ 1751              		.cfi_def_cfa_register 12
+ 1752 0108 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1753 010c 04B04CE2 		sub	fp, ip, #4
+ 1754              		.cfi_offset 14, -8
+ 1755              		.cfi_offset 13, -12
+ 1756              		.cfi_offset 11, -16
+ 1757              	.LCFI3:
+ 1758              		.cfi_def_cfa 11, 4
+ 1759 0110 10D04DE2 		sub	sp, sp, #16
+ 1760 0114 15004BE5 		strb	r0, [fp, #-21]
+ 1761 0118 16104BE5 		strb	r1, [fp, #-22]
+ 1762 011c 17204BE5 		strb	r2, [fp, #-23]
+ 1763 0120 BA314BE1 		strh	r3, [fp, #-26]	@ movhi
+  87:../os_core/os_time.c ****     INT32U ticks;
+  88:../os_core/os_time.c ****     INT16U loops;
+  89:../os_core/os_time.c **** 
+  90:../os_core/os_time.c **** 
+  91:../os_core/os_time.c **** #if OS_ARG_CHK_EN > 0
+  92:../os_core/os_time.c ****     if (hours == 0) {
+ 1764              		.loc 1 92 0
+ 1765 0124 15305BE5 		ldrb	r3, [fp, #-21]	@ zero_extendqisi2
+ 1766 0128 000053E3 		cmp	r3, #0
+ 1767 012c 0A00001A 		bne	.L7
+  93:../os_core/os_time.c ****         if (minutes == 0) {
+ 1768              		.loc 1 93 0
+ 1769 0130 16305BE5 		ldrb	r3, [fp, #-22]	@ zero_extendqisi2
+ 1770 0134 000053E3 		cmp	r3, #0
+ 1771 0138 0700001A 		bne	.L7
+  94:../os_core/os_time.c ****             if (seconds == 0) {
+ 1772              		.loc 1 94 0
+ 1773 013c 17305BE5 		ldrb	r3, [fp, #-23]	@ zero_extendqisi2
+ 1774 0140 000053E3 		cmp	r3, #0
+ 1775 0144 0400001A 		bne	.L7
+  95:../os_core/os_time.c ****                 if (milli == 0) {
+ 1776              		.loc 1 95 0
+ 1777 0148 BA315BE1 		ldrh	r3, [fp, #-26]
+ 1778 014c 000053E3 		cmp	r3, #0
+ 1779 0150 0100001A 		bne	.L7
+  96:../os_core/os_time.c ****                     return (OS_TIME_ZERO_DLY);
+ 1780              		.loc 1 96 0
+ 1781 0154 5430A0E3 		mov	r3, #84
+ 1782 0158 4C0000EA 		b	.L8
+ 1783              	.L7:
+  97:../os_core/os_time.c ****                 }
+  98:../os_core/os_time.c ****             }
+  99:../os_core/os_time.c ****         }
+ 100:../os_core/os_time.c ****     }
+ 101:../os_core/os_time.c ****     if (minutes > 59) {
+ 1784              		.loc 1 101 0
+ 1785 015c 16305BE5 		ldrb	r3, [fp, #-22]	@ zero_extendqisi2
+ 1786 0160 3B0053E3 		cmp	r3, #59
+ 1787 0164 0100009A 		bls	.L9
+ 102:../os_core/os_time.c ****         return (OS_TIME_INVALID_MINUTES);        /* Validate arguments to be within range          
+ 1788              		.loc 1 102 0
+ 1789 0168 5130A0E3 		mov	r3, #81
+ 1790 016c 470000EA 		b	.L8
+ 1791              	.L9:
+ 103:../os_core/os_time.c ****     }
+ 104:../os_core/os_time.c ****     if (seconds > 59) {
+ 1792              		.loc 1 104 0
+ 1793 0170 17305BE5 		ldrb	r3, [fp, #-23]	@ zero_extendqisi2
+ 1794 0174 3B0053E3 		cmp	r3, #59
+ 1795 0178 0100009A 		bls	.L10
+ 105:../os_core/os_time.c ****         return (OS_TIME_INVALID_SECONDS);
+ 1796              		.loc 1 105 0
+ 1797 017c 5230A0E3 		mov	r3, #82
+ 1798 0180 420000EA 		b	.L8
+ 1799              	.L10:
+ 106:../os_core/os_time.c ****     }
+ 107:../os_core/os_time.c ****     if (milli > 999) {
+ 1800              		.loc 1 107 0
+ 1801 0184 BA215BE1 		ldrh	r2, [fp, #-26]
+ 1802 0188 10319FE5 		ldr	r3, .L14
+ 1803 018c 030052E1 		cmp	r2, r3
+ 1804 0190 0100009A 		bls	.L11
+ 108:../os_core/os_time.c ****         return (OS_TIME_INVALID_MILLI);
+ 1805              		.loc 1 108 0
+ 1806 0194 5330A0E3 		mov	r3, #83
+ 1807 0198 3C0000EA 		b	.L8
+ 1808              	.L11:
+ 109:../os_core/os_time.c ****     }
+ 110:../os_core/os_time.c **** #endif
+ 111:../os_core/os_time.c ****                                                  /* Compute the total number of clock ticks require
+ 112:../os_core/os_time.c ****                                                  /* .. (rounded to the nearest tick)               
+ 113:../os_core/os_time.c ****     ticks = ((INT32U)hours * 3600L + (INT32U)minutes * 60L + (INT32U)seconds) * OS_TICKS_PER_SEC
+ 1809              		.loc 1 113 0
+ 1810 019c 15205BE5 		ldrb	r2, [fp, #-21]	@ zero_extendqisi2
+ 1811 01a0 0230A0E1 		mov	r3, r2
+ 1812 01a4 0332A0E1 		mov	r3, r3, asl #4
+ 1813 01a8 033062E0 		rsb	r3, r2, r3
+ 1814 01ac 0322A0E1 		mov	r2, r3, asl #4
+ 1815 01b0 022063E0 		rsb	r2, r3, r2
+ 1816 01b4 0232A0E1 		mov	r3, r2, asl #4
+ 1817 01b8 0320A0E1 		mov	r2, r3
+ 1818 01bc 0210A0E1 		mov	r1, r2
+ 1819 01c0 16205BE5 		ldrb	r2, [fp, #-22]	@ zero_extendqisi2
+ 1820 01c4 0230A0E1 		mov	r3, r2
+ 1821 01c8 0332A0E1 		mov	r3, r3, asl #4
+ 1822 01cc 033062E0 		rsb	r3, r2, r3
+ 1823 01d0 0331A0E1 		mov	r3, r3, asl #2
+ 1824 01d4 032081E0 		add	r2, r1, r3
+ 1825 01d8 17305BE5 		ldrb	r3, [fp, #-23]	@ zero_extendqisi2
+ 1826 01dc 032082E0 		add	r2, r2, r3
+ 1827 01e0 0230A0E1 		mov	r3, r2
+ 1828 01e4 0331A0E1 		mov	r3, r3, asl #2
+ 1829 01e8 023083E0 		add	r3, r3, r2
+ 1830 01ec 0321A0E1 		mov	r2, r3, asl #2
+ 1831 01f0 023083E0 		add	r3, r3, r2
+ 1832 01f4 0331A0E1 		mov	r3, r3, asl #2
+ 1833 01f8 0310A0E1 		mov	r1, r3
+ 114:../os_core/os_time.c ****           + OS_TICKS_PER_SEC * ((INT32U)milli + 500L / OS_TICKS_PER_SEC) / 1000L;
+ 1834              		.loc 1 114 0
+ 1835 01fc BA215BE1 		ldrh	r2, [fp, #-26]
+ 1836 0200 0230A0E1 		mov	r3, r2
+ 1837 0204 0331A0E1 		mov	r3, r3, asl #2
+ 1838 0208 023083E0 		add	r3, r3, r2
+ 1839 020c 0321A0E1 		mov	r2, r3, asl #2
+ 1840 0210 023083E0 		add	r3, r3, r2
+ 1841 0214 0331A0E1 		mov	r3, r3, asl #2
+ 1842 0218 7D2F83E2 		add	r2, r3, #500
+ 1843 021c 80309FE5 		ldr	r3, .L14+4
+ 1844 0220 920383E0 		umull	r0, r3, r2, r3
+ 1845 0224 2333A0E1 		mov	r3, r3, lsr #6
+ 113:../os_core/os_time.c ****     ticks = ((INT32U)hours * 3600L + (INT32U)minutes * 60L + (INT32U)seconds) * OS_TICKS_PER_SEC
+ 1846              		.loc 1 113 0
+ 1847 0228 033081E0 		add	r3, r1, r3
+ 1848 022c 14300BE5 		str	r3, [fp, #-20]
+ 115:../os_core/os_time.c ****     loops = (INT16U)(ticks / 65536L);            /* Compute the integral number of 65536 tick delay
+ 1849              		.loc 1 115 0
+ 1850 0230 14301BE5 		ldr	r3, [fp, #-20]
+ 1851 0234 2338A0E1 		mov	r3, r3, lsr #16
+ 1852 0238 BE304BE1 		strh	r3, [fp, #-14]	@ movhi
+ 116:../os_core/os_time.c ****     ticks = ticks % 65536L;                      /* Obtain  the fractional number of ticks         
+ 1853              		.loc 1 116 0
+ 1854 023c 14301BE5 		ldr	r3, [fp, #-20]
+ 1855 0240 0338A0E1 		mov	r3, r3, asl #16
+ 1856 0244 2338A0E1 		mov	r3, r3, lsr #16
+ 1857 0248 14300BE5 		str	r3, [fp, #-20]
+ 117:../os_core/os_time.c ****     OSTimeDly((INT16U)ticks);
+ 1858              		.loc 1 117 0
+ 1859 024c 14301BE5 		ldr	r3, [fp, #-20]
+ 1860 0250 0338A0E1 		mov	r3, r3, asl #16
+ 1861 0254 2338A0E1 		mov	r3, r3, lsr #16
+ 1862 0258 0300A0E1 		mov	r0, r3
+ 1863 025c FEFFFFEB 		bl	OSTimeDly
+ 118:../os_core/os_time.c ****     while (loops > 0) {
+ 1864              		.loc 1 118 0
+ 1865 0260 060000EA 		b	.L12
+ 1866              	.L13:
+ 119:../os_core/os_time.c ****         OSTimeDly((INT16U)32768u);
+ 1867              		.loc 1 119 0
+ 1868 0264 0209A0E3 		mov	r0, #32768
+ 1869 0268 FEFFFFEB 		bl	OSTimeDly
+ 120:../os_core/os_time.c ****         OSTimeDly((INT16U)32768u);
+ 1870              		.loc 1 120 0
+ 1871 026c 0209A0E3 		mov	r0, #32768
+ 1872 0270 FEFFFFEB 		bl	OSTimeDly
+ 121:../os_core/os_time.c ****         loops--;
+ 1873              		.loc 1 121 0
+ 1874 0274 BE305BE1 		ldrh	r3, [fp, #-14]	@ movhi
+ 1875 0278 013043E2 		sub	r3, r3, #1
+ 1876 027c BE304BE1 		strh	r3, [fp, #-14]	@ movhi
+ 1877              	.L12:
+ 118:../os_core/os_time.c ****     while (loops > 0) {
+ 1878              		.loc 1 118 0 discriminator 1
+ 1879 0280 BE305BE1 		ldrh	r3, [fp, #-14]
+ 1880 0284 000053E3 		cmp	r3, #0
+ 1881 0288 F5FFFF1A 		bne	.L13
+ 122:../os_core/os_time.c ****     }
+ 123:../os_core/os_time.c ****     return (OS_NO_ERR);
+ 1882              		.loc 1 123 0
+ 1883 028c 0030A0E3 		mov	r3, #0
+ 1884              	.L8:
+ 124:../os_core/os_time.c **** }
+ 1885              		.loc 1 124 0
+ 1886 0290 0300A0E1 		mov	r0, r3
+ 1887 0294 0CD04BE2 		sub	sp, fp, #12
+ 1888 0298 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1889 029c 1EFF2FE1 		bx	lr
+ 1890              	.L15:
+ 1891              		.align	2
+ 1892              	.L14:
+ 1893 02a0 E7030000 		.word	999
+ 1894 02a4 D34D6210 		.word	274877907
+ 1895              		.cfi_endproc
+ 1896              	.LFE1:
+ 1898              		.align	2
+ 1899              		.global	OSTimeDlyResume
+ 1901              	OSTimeDlyResume:
+ 1902              	.LFB2:
+ 125:../os_core/os_time.c **** #endif
+ 126:../os_core/os_time.c **** /*$PAGE*/
+ 127:../os_core/os_time.c **** /*
+ 128:../os_core/os_time.c **** ***************************************************************************************************
+ 129:../os_core/os_time.c **** *                                         RESUME A DELAYED TASK
+ 130:../os_core/os_time.c **** *
+ 131:../os_core/os_time.c **** * Description: This function is used resume a task that has been delayed through a call to either
+ 132:../os_core/os_time.c **** *              OSTimeDly() or OSTimeDlyHMSM().  Note that you can call this function to resume a
+ 133:../os_core/os_time.c **** *              task that is waiting for an event with timeout.  This would make the task look
+ 134:../os_core/os_time.c **** *              like a timeout occurred.  
+ 135:../os_core/os_time.c **** *
+ 136:../os_core/os_time.c **** *              Also, you cannot resume a task that has called OSTimeDlyHMSM() with a combined time 
+ 137:../os_core/os_time.c **** *              exceeds 65535 clock ticks.  In other words, if the clock tick runs at 100 Hz then, y
+ 138:../os_core/os_time.c **** *              not be able to resume a delayed task that called OSTimeDlyHMSM(0, 10, 55, 350) or hi
+ 139:../os_core/os_time.c **** *
+ 140:../os_core/os_time.c **** *                  (10 Minutes * 60 + 55 Seconds + 0.35) * 100 ticks/second.
+ 141:../os_core/os_time.c **** *
+ 142:../os_core/os_time.c **** * Arguments  : prio                      specifies the priority of the task to resume
+ 143:../os_core/os_time.c **** *
+ 144:../os_core/os_time.c **** * Returns    : OS_NO_ERR                 Task has been resumed
+ 145:../os_core/os_time.c **** *              OS_PRIO_INVALID           if the priority you specify is higher that the maximum all
+ 146:../os_core/os_time.c **** *                                        (i.e. >= OS_LOWEST_PRIO)
+ 147:../os_core/os_time.c **** *              OS_TIME_NOT_DLY           Task is not waiting for time to expire
+ 148:../os_core/os_time.c **** *              OS_TASK_NOT_EXIST         The desired task has not been created or has been assigned
+ 149:../os_core/os_time.c **** ***************************************************************************************************
+ 150:../os_core/os_time.c **** */
+ 151:../os_core/os_time.c **** 
+ 152:../os_core/os_time.c **** #if OS_TIME_DLY_RESUME_EN > 0
+ 153:../os_core/os_time.c **** INT8U  OSTimeDlyResume (INT8U prio)
+ 154:../os_core/os_time.c **** {
+ 1903              		.loc 1 154 0
+ 1904              		.cfi_startproc
+ 1905              		@ Function supports interworking.
+ 1906              		@ args = 0, pretend = 0, frame = 16
+ 1907              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1908 02a8 0DC0A0E1 		mov	ip, sp
+ 1909              	.LCFI4:
+ 1910              		.cfi_def_cfa_register 12
+ 1911 02ac 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1912 02b0 04B04CE2 		sub	fp, ip, #4
+ 1913              		.cfi_offset 14, -8
+ 1914              		.cfi_offset 13, -12
+ 1915              		.cfi_offset 11, -16
+ 1916              	.LCFI5:
+ 1917              		.cfi_def_cfa 11, 4
+ 1918 02b4 10D04DE2 		sub	sp, sp, #16
+ 1919 02b8 0030A0E1 		mov	r3, r0
+ 1920 02bc 15304BE5 		strb	r3, [fp, #-21]
+ 155:../os_core/os_time.c ****     OS_TCB    *ptcb;
+ 156:../os_core/os_time.c **** #if OS_CRITICAL_METHOD == 3                                    /* Storage for CPU status register  
+ 157:../os_core/os_time.c ****     OS_CPU_SR  cpu_sr;
+ 158:../os_core/os_time.c **** 
+ 159:../os_core/os_time.c **** 
+ 160:../os_core/os_time.c **** 
+ 161:../os_core/os_time.c ****     cpu_sr = 0;                                                /* Prevent compiler warning         
+ 162:../os_core/os_time.c **** #endif    
+ 163:../os_core/os_time.c ****     if (prio >= OS_LOWEST_PRIO) {
+ 1921              		.loc 1 163 0
+ 1922 02c0 15305BE5 		ldrb	r3, [fp, #-21]	@ zero_extendqisi2
+ 1923 02c4 3E0053E3 		cmp	r3, #62
+ 1924 02c8 0100009A 		bls	.L17
+ 164:../os_core/os_time.c ****         return (OS_PRIO_INVALID);
+ 1925              		.loc 1 164 0
+ 1926 02cc 2A30A0E3 		mov	r3, #42
+ 1927 02d0 520000EA 		b	.L18
+ 1928              	.L17:
+ 165:../os_core/os_time.c ****     }
+ 166:../os_core/os_time.c ****     OS_ENTER_CRITICAL();
+ 1929              		.loc 1 166 0
+ 1930              	@ 166 "../os_core/os_time.c" 1
+ 1931 02d4 00000FE1 		mrs   r0, cpsr              
+ 1932 02d8 04002DE5 	stmfd sp!, {r0}             
+ 1933 02dc C00080E3 	orr   r0, r0, #0b11000000   
+ 1934 02e0 00F021E1 	msr   cpsr_c, r0              
+ 1935              	@ 0 "" 2
+ 167:../os_core/os_time.c ****     ptcb = (OS_TCB *)OSTCBPrioTbl[prio];                       /* Make sure that task exist        
+ 1936              		.loc 1 167 0
+ 1937 02e4 15205BE5 		ldrb	r2, [fp, #-21]	@ zero_extendqisi2
+ 1938 02e8 40319FE5 		ldr	r3, .L26
+ 1939 02ec 023193E7 		ldr	r3, [r3, r2, asl #2]
+ 1940 02f0 10300BE5 		str	r3, [fp, #-16]
+ 168:../os_core/os_time.c ****     if (ptcb == (OS_TCB *)0) {
+ 1941              		.loc 1 168 0
+ 1942 02f4 10301BE5 		ldr	r3, [fp, #-16]
+ 1943 02f8 000053E3 		cmp	r3, #0
+ 1944 02fc 0300001A 		bne	.L19
+ 169:../os_core/os_time.c ****         OS_EXIT_CRITICAL();
+ 1945              		.loc 1 169 0
+ 1946              	@ 169 "../os_core/os_time.c" 1
+ 1947 0300 04009DE4 		ldmfd sp!, {r0}             
+ 1948 0304 00F021E1 	msr   cpsr_c, r0              
+ 1949              	@ 0 "" 2
+ 170:../os_core/os_time.c ****         return (OS_TASK_NOT_EXIST);                            /* The task does not exist          
+ 1950              		.loc 1 170 0
+ 1951 0308 0B30A0E3 		mov	r3, #11
+ 1952 030c 430000EA 		b	.L18
+ 1953              	.L19:
+ 171:../os_core/os_time.c ****     }
+ 172:../os_core/os_time.c ****     if (ptcb == (OS_TCB *)1) {
+ 1954              		.loc 1 172 0
+ 1955 0310 10301BE5 		ldr	r3, [fp, #-16]
+ 1956 0314 010053E3 		cmp	r3, #1
+ 1957 0318 0300001A 		bne	.L20
+ 173:../os_core/os_time.c ****         OS_EXIT_CRITICAL();
+ 1958              		.loc 1 173 0
+ 1959              	@ 173 "../os_core/os_time.c" 1
+ 1960 031c 04009DE4 		ldmfd sp!, {r0}             
+ 1961 0320 00F021E1 	msr   cpsr_c, r0              
+ 1962              	@ 0 "" 2
+ 174:../os_core/os_time.c ****         return (OS_TASK_NOT_EXIST);                            /* The task does not exist          
+ 1963              		.loc 1 174 0
+ 1964 0324 0B30A0E3 		mov	r3, #11
+ 1965 0328 3C0000EA 		b	.L18
+ 1966              	.L20:
+ 175:../os_core/os_time.c ****     }
+ 176:../os_core/os_time.c ****     if (ptcb->OSTCBDly == 0) {                                 /* See if task is delayed           
+ 1967              		.loc 1 176 0
+ 1968 032c 10301BE5 		ldr	r3, [fp, #-16]
+ 1969 0330 BA32D3E1 		ldrh	r3, [r3, #42]
+ 1970 0334 000053E3 		cmp	r3, #0
+ 1971 0338 0300001A 		bne	.L21
+ 177:../os_core/os_time.c ****         OS_EXIT_CRITICAL();
+ 1972              		.loc 1 177 0
+ 1973              	@ 177 "../os_core/os_time.c" 1
+ 1974 033c 04009DE4 		ldmfd sp!, {r0}             
+ 1975 0340 00F021E1 	msr   cpsr_c, r0              
+ 1976              	@ 0 "" 2
+ 178:../os_core/os_time.c ****         return (OS_TIME_NOT_DLY);                              /* Indicate that task was not delaye
+ 1977              		.loc 1 178 0
+ 1978 0344 5030A0E3 		mov	r3, #80
+ 1979 0348 340000EA 		b	.L18
+ 1980              	.L21:
+ 179:../os_core/os_time.c ****     }
+ 180:../os_core/os_time.c **** 
+ 181:../os_core/os_time.c ****     ptcb->OSTCBDly = 0;                                        /* Clear the time delay             
+ 1981              		.loc 1 181 0
+ 1982 034c 10301BE5 		ldr	r3, [fp, #-16]
+ 1983 0350 0020A0E3 		mov	r2, #0
+ 1984 0354 BA22C3E1 		strh	r2, [r3, #42]	@ movhi
+ 182:../os_core/os_time.c ****     if ((ptcb->OSTCBStat & OS_STAT_PEND_ANY) != OS_STAT_RDY) {
+ 1985              		.loc 1 182 0
+ 1986 0358 10301BE5 		ldr	r3, [fp, #-16]
+ 1987 035c 2C30D3E5 		ldrb	r3, [r3, #44]	@ zero_extendqisi2
+ 1988 0360 373003E2 		and	r3, r3, #55
+ 1989 0364 000053E3 		cmp	r3, #0
+ 1990 0368 0900000A 		beq	.L22
+ 183:../os_core/os_time.c ****         ptcb->OSTCBStat   &= ~OS_STAT_PEND_ANY;                /* Yes, Clear status flag           
+ 1991              		.loc 1 183 0
+ 1992 036c 10301BE5 		ldr	r3, [fp, #-16]
+ 1993 0370 2C30D3E5 		ldrb	r3, [r3, #44]	@ zero_extendqisi2
+ 1994 0374 3730C3E3 		bic	r3, r3, #55
+ 1995 0378 FF2003E2 		and	r2, r3, #255
+ 1996 037c 10301BE5 		ldr	r3, [fp, #-16]
+ 1997 0380 2C20C3E5 		strb	r2, [r3, #44]
+ 184:../os_core/os_time.c ****         ptcb->OSTCBPendTO  = TRUE;                             /* Indicate PEND timeout            
+ 1998              		.loc 1 184 0
+ 1999 0384 10301BE5 		ldr	r3, [fp, #-16]
+ 2000 0388 0120A0E3 		mov	r2, #1
+ 2001 038c 2D20C3E5 		strb	r2, [r3, #45]
+ 2002 0390 020000EA 		b	.L23
+ 2003              	.L22:
+ 185:../os_core/os_time.c ****     } else {
+ 186:../os_core/os_time.c ****         ptcb->OSTCBPendTO  = FALSE;
+ 2004              		.loc 1 186 0
+ 2005 0394 10301BE5 		ldr	r3, [fp, #-16]
+ 2006 0398 0020A0E3 		mov	r2, #0
+ 2007 039c 2D20C3E5 		strb	r2, [r3, #45]
+ 2008              	.L23:
+ 187:../os_core/os_time.c ****     }
+ 188:../os_core/os_time.c ****     if ((ptcb->OSTCBStat & OS_STAT_SUSPEND) == OS_STAT_RDY) {  /* Is task suspended?               
+ 2009              		.loc 1 188 0
+ 2010 03a0 10301BE5 		ldr	r3, [fp, #-16]
+ 2011 03a4 2C30D3E5 		ldrb	r3, [r3, #44]	@ zero_extendqisi2
+ 2012 03a8 083003E2 		and	r3, r3, #8
+ 2013 03ac 000053E3 		cmp	r3, #0
+ 2014 03b0 1700001A 		bne	.L24
+ 189:../os_core/os_time.c ****         OSRdyGrp               |= ptcb->OSTCBBitY;             /* No,  Make ready                  
+ 2015              		.loc 1 189 0
+ 2016 03b4 10301BE5 		ldr	r3, [fp, #-16]
+ 2017 03b8 3220D3E5 		ldrb	r2, [r3, #50]	@ zero_extendqisi2
+ 2018 03bc 70309FE5 		ldr	r3, .L26+4
+ 2019 03c0 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 2020 03c4 033082E1 		orr	r3, r2, r3
+ 2021 03c8 FF2003E2 		and	r2, r3, #255
+ 2022 03cc 60309FE5 		ldr	r3, .L26+4
+ 2023 03d0 0020C3E5 		strb	r2, [r3, #0]
+ 190:../os_core/os_time.c ****         OSRdyTbl[ptcb->OSTCBY] |= ptcb->OSTCBBitX;
+ 2024              		.loc 1 190 0
+ 2025 03d4 10301BE5 		ldr	r3, [fp, #-16]
+ 2026 03d8 3030D3E5 		ldrb	r3, [r3, #48]	@ zero_extendqisi2
+ 2027 03dc 10201BE5 		ldr	r2, [fp, #-16]
+ 2028 03e0 3020D2E5 		ldrb	r2, [r2, #48]	@ zero_extendqisi2
+ 2029 03e4 4C109FE5 		ldr	r1, .L26+8
+ 2030 03e8 0210D1E7 		ldrb	r1, [r1, r2]	@ zero_extendqisi2
+ 2031 03ec 10201BE5 		ldr	r2, [fp, #-16]
+ 2032 03f0 3120D2E5 		ldrb	r2, [r2, #49]	@ zero_extendqisi2
+ 2033 03f4 022081E1 		orr	r2, r1, r2
+ 2034 03f8 FF1002E2 		and	r1, r2, #255
+ 2035 03fc 34209FE5 		ldr	r2, .L26+8
+ 2036 0400 0310C2E7 		strb	r1, [r2, r3]
+ 191:../os_core/os_time.c ****         OS_EXIT_CRITICAL();
+ 2037              		.loc 1 191 0
+ 2038              	@ 191 "../os_core/os_time.c" 1
+ 2039 0404 04009DE4 		ldmfd sp!, {r0}             
+ 2040 0408 00F021E1 	msr   cpsr_c, r0              
+ 2041              	@ 0 "" 2
+ 192:../os_core/os_time.c ****         OS_Sched();                                           /* See if this is new highest priorit
+ 2042              		.loc 1 192 0
+ 2043 040c FEFFFFEB 		bl	OS_Sched
+ 2044 0410 010000EA 		b	.L25
+ 2045              	.L24:
+ 193:../os_core/os_time.c ****     } else {
+ 194:../os_core/os_time.c ****         OS_EXIT_CRITICAL();                                   /* Task may be suspended             
+ 2046              		.loc 1 194 0
+ 2047              	@ 194 "../os_core/os_time.c" 1
+ 2048 0414 04009DE4 		ldmfd sp!, {r0}             
+ 2049 0418 00F021E1 	msr   cpsr_c, r0              
+ 2050              	@ 0 "" 2
+ 2051              	.L25:
+ 195:../os_core/os_time.c ****     }
+ 196:../os_core/os_time.c ****     return (OS_NO_ERR);
+ 2052              		.loc 1 196 0
+ 2053 041c 0030A0E3 		mov	r3, #0
+ 2054              	.L18:
+ 197:../os_core/os_time.c **** }
+ 2055              		.loc 1 197 0
+ 2056 0420 0300A0E1 		mov	r0, r3
+ 2057 0424 0CD04BE2 		sub	sp, fp, #12
+ 2058 0428 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 2059 042c 1EFF2FE1 		bx	lr
+ 2060              	.L27:
+ 2061              		.align	2
+ 2062              	.L26:
+ 2063 0430 00000000 		.word	OSTCBPrioTbl
+ 2064 0434 00000000 		.word	OSRdyGrp
+ 2065 0438 00000000 		.word	OSRdyTbl
+ 2066              		.cfi_endproc
+ 2067              	.LFE2:
+ 2069              		.align	2
+ 2070              		.global	OSTimeGet
+ 2072              	OSTimeGet:
+ 2073              	.LFB3:
+ 198:../os_core/os_time.c **** #endif    
+ 199:../os_core/os_time.c **** /*$PAGE*/
+ 200:../os_core/os_time.c **** /*
+ 201:../os_core/os_time.c **** ***************************************************************************************************
+ 202:../os_core/os_time.c **** *                                         GET CURRENT SYSTEM TIME
+ 203:../os_core/os_time.c **** *
+ 204:../os_core/os_time.c **** * Description: This function is used by your application to obtain the current value of the 32-bit
+ 205:../os_core/os_time.c **** *              counter which keeps track of the number of clock ticks.
+ 206:../os_core/os_time.c **** *
+ 207:../os_core/os_time.c **** * Arguments  : none
+ 208:../os_core/os_time.c **** *
+ 209:../os_core/os_time.c **** * Returns    : The current value of OSTime
+ 210:../os_core/os_time.c **** ***************************************************************************************************
+ 211:../os_core/os_time.c **** */
+ 212:../os_core/os_time.c **** 
+ 213:../os_core/os_time.c **** #if OS_TIME_GET_SET_EN > 0
+ 214:../os_core/os_time.c **** INT32U  OSTimeGet (void)
+ 215:../os_core/os_time.c **** {
+ 2074              		.loc 1 215 0
+ 2075              		.cfi_startproc
+ 2076              		@ Function supports interworking.
+ 2077              		@ args = 0, pretend = 0, frame = 8
+ 2078              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2079 043c 0DC0A0E1 		mov	ip, sp
+ 2080              	.LCFI6:
+ 2081              		.cfi_def_cfa_register 12
+ 2082 0440 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2083 0444 04B04CE2 		sub	fp, ip, #4
+ 2084              		.cfi_offset 14, -8
+ 2085              		.cfi_offset 13, -12
+ 2086              		.cfi_offset 11, -16
+ 2087              	.LCFI7:
+ 2088              		.cfi_def_cfa 11, 4
+ 2089 0448 08D04DE2 		sub	sp, sp, #8
+ 216:../os_core/os_time.c ****     INT32U     ticks;
+ 217:../os_core/os_time.c **** #if OS_CRITICAL_METHOD == 3                      /* Allocate storage for CPU status register       
+ 218:../os_core/os_time.c ****     OS_CPU_SR  cpu_sr;
+ 219:../os_core/os_time.c **** 
+ 220:../os_core/os_time.c **** 
+ 221:../os_core/os_time.c **** 
+ 222:../os_core/os_time.c ****     cpu_sr = 0;                                  /* Prevent compiler warning                       
+ 223:../os_core/os_time.c **** #endif    
+ 224:../os_core/os_time.c ****     OS_ENTER_CRITICAL();
+ 2090              		.loc 1 224 0
+ 2091              	@ 224 "../os_core/os_time.c" 1
+ 2092 044c 00000FE1 		mrs   r0, cpsr              
+ 2093 0450 04002DE5 	stmfd sp!, {r0}             
+ 2094 0454 C00080E3 	orr   r0, r0, #0b11000000   
+ 2095 0458 00F021E1 	msr   cpsr_c, r0              
+ 2096              	@ 0 "" 2
+ 225:../os_core/os_time.c ****     ticks = OSTime;
+ 2097              		.loc 1 225 0
+ 2098 045c 20309FE5 		ldr	r3, .L29
+ 2099 0460 003093E5 		ldr	r3, [r3, #0]
+ 2100 0464 10300BE5 		str	r3, [fp, #-16]
+ 226:../os_core/os_time.c ****     OS_EXIT_CRITICAL();
+ 2101              		.loc 1 226 0
+ 2102              	@ 226 "../os_core/os_time.c" 1
+ 2103 0468 04009DE4 		ldmfd sp!, {r0}             
+ 2104 046c 00F021E1 	msr   cpsr_c, r0              
+ 2105              	@ 0 "" 2
+ 227:../os_core/os_time.c ****     return (ticks);
+ 2106              		.loc 1 227 0
+ 2107 0470 10301BE5 		ldr	r3, [fp, #-16]
+ 228:../os_core/os_time.c **** }
+ 2108              		.loc 1 228 0
+ 2109 0474 0300A0E1 		mov	r0, r3
+ 2110 0478 0CD04BE2 		sub	sp, fp, #12
+ 2111 047c 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 2112 0480 1EFF2FE1 		bx	lr
+ 2113              	.L30:
+ 2114              		.align	2
+ 2115              	.L29:
+ 2116 0484 00000000 		.word	OSTime
+ 2117              		.cfi_endproc
+ 2118              	.LFE3:
+ 2120              		.align	2
+ 2121              		.global	OSTimeSet
+ 2123              	OSTimeSet:
+ 2124              	.LFB4:
+ 229:../os_core/os_time.c **** #endif    
+ 230:../os_core/os_time.c **** 
+ 231:../os_core/os_time.c **** /*
+ 232:../os_core/os_time.c **** ***************************************************************************************************
+ 233:../os_core/os_time.c **** *                                            SET SYSTEM CLOCK
+ 234:../os_core/os_time.c **** *
+ 235:../os_core/os_time.c **** * Description: This function sets the 32-bit counter which keeps track of the number of clock ticks
+ 236:../os_core/os_time.c **** *
+ 237:../os_core/os_time.c **** * Arguments  : ticks      specifies the new value that OSTime needs to take.
+ 238:../os_core/os_time.c **** *
+ 239:../os_core/os_time.c **** * Returns    : none
+ 240:../os_core/os_time.c **** ***************************************************************************************************
+ 241:../os_core/os_time.c **** */
+ 242:../os_core/os_time.c **** 
+ 243:../os_core/os_time.c **** #if OS_TIME_GET_SET_EN > 0
+ 244:../os_core/os_time.c **** void  OSTimeSet (INT32U ticks)
+ 245:../os_core/os_time.c **** {
+ 2125              		.loc 1 245 0
+ 2126              		.cfi_startproc
+ 2127              		@ Function supports interworking.
+ 2128              		@ args = 0, pretend = 0, frame = 8
+ 2129              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2130 0488 0DC0A0E1 		mov	ip, sp
+ 2131              	.LCFI8:
+ 2132              		.cfi_def_cfa_register 12
+ 2133 048c 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2134 0490 04B04CE2 		sub	fp, ip, #4
+ 2135              		.cfi_offset 14, -8
+ 2136              		.cfi_offset 13, -12
+ 2137              		.cfi_offset 11, -16
+ 2138              	.LCFI9:
+ 2139              		.cfi_def_cfa 11, 4
+ 2140 0494 08D04DE2 		sub	sp, sp, #8
+ 2141 0498 10000BE5 		str	r0, [fp, #-16]
+ 246:../os_core/os_time.c **** #if OS_CRITICAL_METHOD == 3                      /* Allocate storage for CPU status register       
+ 247:../os_core/os_time.c ****     OS_CPU_SR  cpu_sr;
+ 248:../os_core/os_time.c **** 
+ 249:../os_core/os_time.c **** 
+ 250:../os_core/os_time.c **** 
+ 251:../os_core/os_time.c ****     cpu_sr = 0;                                  /* Prevent compiler warning                       
+ 252:../os_core/os_time.c **** #endif    
+ 253:../os_core/os_time.c ****     OS_ENTER_CRITICAL();
+ 2142              		.loc 1 253 0
+ 2143              	@ 253 "../os_core/os_time.c" 1
+ 2144 049c 00000FE1 		mrs   r0, cpsr              
+ 2145 04a0 04002DE5 	stmfd sp!, {r0}             
+ 2146 04a4 C00080E3 	orr   r0, r0, #0b11000000   
+ 2147 04a8 00F021E1 	msr   cpsr_c, r0              
+ 2148              	@ 0 "" 2
+ 254:../os_core/os_time.c ****     OSTime = ticks;
+ 2149              		.loc 1 254 0
+ 2150 04ac 18309FE5 		ldr	r3, .L32
+ 2151 04b0 10201BE5 		ldr	r2, [fp, #-16]
+ 2152 04b4 002083E5 		str	r2, [r3, #0]
+ 255:../os_core/os_time.c ****     OS_EXIT_CRITICAL();
+ 2153              		.loc 1 255 0
+ 2154              	@ 255 "../os_core/os_time.c" 1
+ 2155 04b8 04009DE4 		ldmfd sp!, {r0}             
+ 2156 04bc 00F021E1 	msr   cpsr_c, r0              
+ 2157              	@ 0 "" 2
+ 256:../os_core/os_time.c **** }
+ 2158              		.loc 1 256 0
+ 2159 04c0 0CD04BE2 		sub	sp, fp, #12
+ 2160 04c4 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 2161 04c8 1EFF2FE1 		bx	lr
+ 2162              	.L33:
+ 2163              		.align	2
+ 2164              	.L32:
+ 2165 04cc 00000000 		.word	OSTime
+ 2166              		.cfi_endproc
+ 2167              	.LFE4:
+ 2169              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 os_time.c
+C:\Users\USUARI~1\AppData\Local\Temp\cc9d7BrD.s:1635   .text:00000000 $a
+C:\Users\USUARI~1\AppData\Local\Temp\cc9d7BrD.s:1638   .text:00000000 OSTimeDly
+C:\Users\USUARI~1\AppData\Local\Temp\cc9d7BrD.s:1733   .text:000000f8 $d
+C:\Users\USUARI~1\AppData\Local\Temp\cc9d7BrD.s:1739   .text:00000104 $a
+C:\Users\USUARI~1\AppData\Local\Temp\cc9d7BrD.s:1742   .text:00000104 OSTimeDlyHMSM
+C:\Users\USUARI~1\AppData\Local\Temp\cc9d7BrD.s:1893   .text:000002a0 $d
+C:\Users\USUARI~1\AppData\Local\Temp\cc9d7BrD.s:1898   .text:000002a8 $a
+C:\Users\USUARI~1\AppData\Local\Temp\cc9d7BrD.s:1901   .text:000002a8 OSTimeDlyResume
+C:\Users\USUARI~1\AppData\Local\Temp\cc9d7BrD.s:2063   .text:00000430 $d
+C:\Users\USUARI~1\AppData\Local\Temp\cc9d7BrD.s:2069   .text:0000043c $a
+C:\Users\USUARI~1\AppData\Local\Temp\cc9d7BrD.s:2072   .text:0000043c OSTimeGet
+C:\Users\USUARI~1\AppData\Local\Temp\cc9d7BrD.s:2116   .text:00000484 $d
+C:\Users\USUARI~1\AppData\Local\Temp\cc9d7BrD.s:2120   .text:00000488 $a
+C:\Users\USUARI~1\AppData\Local\Temp\cc9d7BrD.s:2123   .text:00000488 OSTimeSet
+C:\Users\USUARI~1\AppData\Local\Temp\cc9d7BrD.s:2165   .text:000004cc $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+OS_Sched
+OSTCBCur
+OSRdyTbl
+OSRdyGrp
+OSTCBPrioTbl
+OSTime

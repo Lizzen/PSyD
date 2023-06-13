@@ -1,0 +1,1189 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"os_mem.c"
+  21              	.Ltext0:
+  22              		.file 1 "../os_core/os_mem.c"
+ 1635              		.align	2
+ 1636              		.global	OSMemCreate
+ 1638              	OSMemCreate:
+ 1639              	.LFB0:
+   1:../os_core/os_mem.c **** /*
+   2:../os_core/os_mem.c **** ***************************************************************************************************
+   3:../os_core/os_mem.c **** *                                                uC/OS-II
+   4:../os_core/os_mem.c **** *                                          The Real-Time Kernel
+   5:../os_core/os_mem.c **** *                                            MEMORY MANAGEMENT
+   6:../os_core/os_mem.c **** *
+   7:../os_core/os_mem.c **** *                          (c) Copyright 1992-2003, Jean J. Labrosse, Weston, FL
+   8:../os_core/os_mem.c **** *                                           All Rights Reserved
+   9:../os_core/os_mem.c **** *
+  10:../os_core/os_mem.c **** * File    : OS_MEM.C
+  11:../os_core/os_mem.c **** * By      : Jean J. Labrosse
+  12:../os_core/os_mem.c **** * Version : V2.76
+  13:../os_core/os_mem.c **** ***************************************************************************************************
+  14:../os_core/os_mem.c **** */
+  15:../os_core/os_mem.c **** 
+  16:../os_core/os_mem.c **** #ifndef  OS_MASTER_FILE
+  17:../os_core/os_mem.c **** #include "ucos_ii.h"
+  18:../os_core/os_mem.c **** #endif
+  19:../os_core/os_mem.c **** 
+  20:../os_core/os_mem.c **** #if (OS_MEM_EN > 0) && (OS_MAX_MEM_PART > 0)
+  21:../os_core/os_mem.c **** /*
+  22:../os_core/os_mem.c **** ***************************************************************************************************
+  23:../os_core/os_mem.c **** *                                        CREATE A MEMORY PARTITION
+  24:../os_core/os_mem.c **** *
+  25:../os_core/os_mem.c **** * Description : Create a fixed-sized memory partition that will be managed by uC/OS-II.
+  26:../os_core/os_mem.c **** *
+  27:../os_core/os_mem.c **** * Arguments   : addr     is the starting address of the memory partition
+  28:../os_core/os_mem.c **** *
+  29:../os_core/os_mem.c **** *               nblks    is the number of memory blocks to create from the partition.
+  30:../os_core/os_mem.c **** *
+  31:../os_core/os_mem.c **** *               blksize  is the size (in bytes) of each block in the memory partition.
+  32:../os_core/os_mem.c **** *
+  33:../os_core/os_mem.c **** *               err      is a pointer to a variable containing an error message which will be set b
+  34:../os_core/os_mem.c **** *                        this function to either:
+  35:../os_core/os_mem.c **** *
+  36:../os_core/os_mem.c **** *                        OS_NO_ERR            if the memory partition has been created correctly.
+  37:../os_core/os_mem.c **** *                        OS_MEM_INVALID_ADDR  you are specifying an invalid address for the memory 
+  38:../os_core/os_mem.c **** *                                             storage of the partition.
+  39:../os_core/os_mem.c **** *                        OS_MEM_INVALID_PART  no free partitions available
+  40:../os_core/os_mem.c **** *                        OS_MEM_INVALID_BLKS  user specified an invalid number of blocks (must be >
+  41:../os_core/os_mem.c **** *                        OS_MEM_INVALID_SIZE  user specified an invalid block size
+  42:../os_core/os_mem.c **** *                                             (must be greater than the size of a pointer)
+  43:../os_core/os_mem.c **** * Returns    : != (OS_MEM *)0  is the partition was created
+  44:../os_core/os_mem.c **** *              == (OS_MEM *)0  if the partition was not created because of invalid arguments or, no
+  45:../os_core/os_mem.c **** *                              free partition is available.
+  46:../os_core/os_mem.c **** ***************************************************************************************************
+  47:../os_core/os_mem.c **** */
+  48:../os_core/os_mem.c **** 
+  49:../os_core/os_mem.c **** OS_MEM  *OSMemCreate (void *addr, INT32U nblks, INT32U blksize, INT8U *err)
+  50:../os_core/os_mem.c **** {
+ 1640              		.loc 1 50 0
+ 1641              		.cfi_startproc
+ 1642              		@ Function supports interworking.
+ 1643              		@ args = 0, pretend = 0, frame = 32
+ 1644              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1645 0000 0DC0A0E1 		mov	ip, sp
+ 1646              	.LCFI0:
+ 1647              		.cfi_def_cfa_register 12
+ 1648 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1649 0008 04B04CE2 		sub	fp, ip, #4
+ 1650              		.cfi_offset 14, -8
+ 1651              		.cfi_offset 13, -12
+ 1652              		.cfi_offset 11, -16
+ 1653              	.LCFI1:
+ 1654              		.cfi_def_cfa 11, 4
+ 1655 000c 20D04DE2 		sub	sp, sp, #32
+ 1656 0010 20000BE5 		str	r0, [fp, #-32]
+ 1657 0014 24100BE5 		str	r1, [fp, #-36]
+ 1658 0018 28200BE5 		str	r2, [fp, #-40]
+ 1659 001c 2C300BE5 		str	r3, [fp, #-44]
+  51:../os_core/os_mem.c ****     OS_MEM    *pmem;
+  52:../os_core/os_mem.c ****     INT8U     *pblk;
+  53:../os_core/os_mem.c ****     void     **plink;
+  54:../os_core/os_mem.c ****     INT32U     i;
+  55:../os_core/os_mem.c **** #if OS_CRITICAL_METHOD == 3                           /* Allocate storage for CPU status register  
+  56:../os_core/os_mem.c ****     OS_CPU_SR  cpu_sr;
+  57:../os_core/os_mem.c **** 
+  58:../os_core/os_mem.c **** 
+  59:../os_core/os_mem.c **** 
+  60:../os_core/os_mem.c ****     cpu_sr = 0;                                       /* Prevent compiler warning                  
+  61:../os_core/os_mem.c **** #endif    
+  62:../os_core/os_mem.c **** #if OS_ARG_CHK_EN > 0
+  63:../os_core/os_mem.c ****     if (addr == (void *)0) {                          /* Must pass a valid address for the memory p
+ 1660              		.loc 1 63 0
+ 1661 0020 20301BE5 		ldr	r3, [fp, #-32]
+ 1662 0024 000053E3 		cmp	r3, #0
+ 1663 0028 0400001A 		bne	.L2
+  64:../os_core/os_mem.c ****         *err = OS_MEM_INVALID_ADDR;
+ 1664              		.loc 1 64 0
+ 1665 002c 2C301BE5 		ldr	r3, [fp, #-44]
+ 1666 0030 7620A0E3 		mov	r2, #118
+ 1667 0034 0020C3E5 		strb	r2, [r3, #0]
+  65:../os_core/os_mem.c ****         return ((OS_MEM *)0);
+ 1668              		.loc 1 65 0
+ 1669 0038 0030A0E3 		mov	r3, #0
+ 1670 003c 5A0000EA 		b	.L3
+ 1671              	.L2:
+  66:../os_core/os_mem.c ****     }
+  67:../os_core/os_mem.c ****     if (nblks < 2) {                                  /* Must have at least 2 blocks per partition 
+ 1672              		.loc 1 67 0
+ 1673 0040 24301BE5 		ldr	r3, [fp, #-36]
+ 1674 0044 010053E3 		cmp	r3, #1
+ 1675 0048 0400008A 		bhi	.L4
+  68:../os_core/os_mem.c ****         *err = OS_MEM_INVALID_BLKS;
+ 1676              		.loc 1 68 0
+ 1677 004c 2C301BE5 		ldr	r3, [fp, #-44]
+ 1678 0050 6F20A0E3 		mov	r2, #111
+ 1679 0054 0020C3E5 		strb	r2, [r3, #0]
+  69:../os_core/os_mem.c ****         return ((OS_MEM *)0);
+ 1680              		.loc 1 69 0
+ 1681 0058 0030A0E3 		mov	r3, #0
+ 1682 005c 520000EA 		b	.L3
+ 1683              	.L4:
+  70:../os_core/os_mem.c ****     }
+  71:../os_core/os_mem.c ****     if (blksize < sizeof(void *)) {                   /* Must contain space for at least a pointer 
+ 1684              		.loc 1 71 0
+ 1685 0060 28301BE5 		ldr	r3, [fp, #-40]
+ 1686 0064 030053E3 		cmp	r3, #3
+ 1687 0068 0400008A 		bhi	.L5
+  72:../os_core/os_mem.c ****         *err = OS_MEM_INVALID_SIZE;
+ 1688              		.loc 1 72 0
+ 1689 006c 2C301BE5 		ldr	r3, [fp, #-44]
+ 1690 0070 7020A0E3 		mov	r2, #112
+ 1691 0074 0020C3E5 		strb	r2, [r3, #0]
+  73:../os_core/os_mem.c ****         return ((OS_MEM *)0);
+ 1692              		.loc 1 73 0
+ 1693 0078 0030A0E3 		mov	r3, #0
+ 1694 007c 4A0000EA 		b	.L3
+ 1695              	.L5:
+  74:../os_core/os_mem.c ****     }
+  75:../os_core/os_mem.c **** #endif
+  76:../os_core/os_mem.c ****     OS_ENTER_CRITICAL();
+ 1696              		.loc 1 76 0
+ 1697              	@ 76 "../os_core/os_mem.c" 1
+ 1698 0080 00000FE1 		mrs   r0, cpsr              
+ 1699 0084 04002DE5 	stmfd sp!, {r0}             
+ 1700 0088 C00080E3 	orr   r0, r0, #0b11000000   
+ 1701 008c 00F021E1 	msr   cpsr_c, r0              
+ 1702              	@ 0 "" 2
+  77:../os_core/os_mem.c ****     pmem = OSMemFreeList;                             /* Get next free memory partition            
+ 1703              		.loc 1 77 0
+ 1704 0090 24319FE5 		ldr	r3, .L10
+ 1705 0094 003093E5 		ldr	r3, [r3, #0]
+ 1706 0098 1C300BE5 		str	r3, [fp, #-28]
+  78:../os_core/os_mem.c ****     if (OSMemFreeList != (OS_MEM *)0) {               /* See if pool of free partitions was empty  
+ 1707              		.loc 1 78 0
+ 1708 009c 18319FE5 		ldr	r3, .L10
+ 1709 00a0 003093E5 		ldr	r3, [r3, #0]
+ 1710 00a4 000053E3 		cmp	r3, #0
+ 1711 00a8 0500000A 		beq	.L6
+  79:../os_core/os_mem.c ****         OSMemFreeList = (OS_MEM *)OSMemFreeList->OSMemFreeList;
+ 1712              		.loc 1 79 0
+ 1713 00ac 08319FE5 		ldr	r3, .L10
+ 1714 00b0 003093E5 		ldr	r3, [r3, #0]
+ 1715 00b4 043093E5 		ldr	r3, [r3, #4]
+ 1716 00b8 0320A0E1 		mov	r2, r3
+ 1717 00bc F8309FE5 		ldr	r3, .L10
+ 1718 00c0 002083E5 		str	r2, [r3, #0]
+ 1719              	.L6:
+  80:../os_core/os_mem.c ****     }
+  81:../os_core/os_mem.c ****     OS_EXIT_CRITICAL();
+ 1720              		.loc 1 81 0
+ 1721              	@ 81 "../os_core/os_mem.c" 1
+ 1722 00c4 04009DE4 		ldmfd sp!, {r0}             
+ 1723 00c8 00F021E1 	msr   cpsr_c, r0              
+ 1724              	@ 0 "" 2
+  82:../os_core/os_mem.c ****     if (pmem == (OS_MEM *)0) {                        /* See if we have a memory partition         
+ 1725              		.loc 1 82 0
+ 1726 00cc 1C301BE5 		ldr	r3, [fp, #-28]
+ 1727 00d0 000053E3 		cmp	r3, #0
+ 1728 00d4 0400001A 		bne	.L7
+  83:../os_core/os_mem.c ****         *err = OS_MEM_INVALID_PART;
+ 1729              		.loc 1 83 0
+ 1730 00d8 2C301BE5 		ldr	r3, [fp, #-44]
+ 1731 00dc 6E20A0E3 		mov	r2, #110
+ 1732 00e0 0020C3E5 		strb	r2, [r3, #0]
+  84:../os_core/os_mem.c ****         return ((OS_MEM *)0);
+ 1733              		.loc 1 84 0
+ 1734 00e4 0030A0E3 		mov	r3, #0
+ 1735 00e8 2F0000EA 		b	.L3
+ 1736              	.L7:
+  85:../os_core/os_mem.c ****     }
+  86:../os_core/os_mem.c ****     plink = (void **)addr;                            /* Create linked list of free memory blocks  
+ 1737              		.loc 1 86 0
+ 1738 00ec 20301BE5 		ldr	r3, [fp, #-32]
+ 1739 00f0 14300BE5 		str	r3, [fp, #-20]
+  87:../os_core/os_mem.c ****     pblk  = (INT8U *)((INT32U)addr + blksize);
+ 1740              		.loc 1 87 0
+ 1741 00f4 20201BE5 		ldr	r2, [fp, #-32]
+ 1742 00f8 28301BE5 		ldr	r3, [fp, #-40]
+ 1743 00fc 033082E0 		add	r3, r2, r3
+ 1744 0100 10300BE5 		str	r3, [fp, #-16]
+  88:../os_core/os_mem.c ****     for (i = 0; i < (nblks - 1); i++) {
+ 1745              		.loc 1 88 0
+ 1746 0104 0030A0E3 		mov	r3, #0
+ 1747 0108 18300BE5 		str	r3, [fp, #-24]
+ 1748 010c 0B0000EA 		b	.L8
+ 1749              	.L9:
+  89:../os_core/os_mem.c ****        *plink = (void *)pblk;                         /* Save pointer to NEXT block in CURRENT bloc
+ 1750              		.loc 1 89 0 discriminator 2
+ 1751 0110 14301BE5 		ldr	r3, [fp, #-20]
+ 1752 0114 10201BE5 		ldr	r2, [fp, #-16]
+ 1753 0118 002083E5 		str	r2, [r3, #0]
+  90:../os_core/os_mem.c ****         plink = (void **)pblk;                        /* Position to  NEXT      block              
+ 1754              		.loc 1 90 0 discriminator 2
+ 1755 011c 10301BE5 		ldr	r3, [fp, #-16]
+ 1756 0120 14300BE5 		str	r3, [fp, #-20]
+  91:../os_core/os_mem.c ****         pblk  = (INT8U *)((INT32U)pblk + blksize);    /* Point to the FOLLOWING block              
+ 1757              		.loc 1 91 0 discriminator 2
+ 1758 0124 10201BE5 		ldr	r2, [fp, #-16]
+ 1759 0128 28301BE5 		ldr	r3, [fp, #-40]
+ 1760 012c 033082E0 		add	r3, r2, r3
+ 1761 0130 10300BE5 		str	r3, [fp, #-16]
+  88:../os_core/os_mem.c ****     for (i = 0; i < (nblks - 1); i++) {
+ 1762              		.loc 1 88 0 discriminator 2
+ 1763 0134 18301BE5 		ldr	r3, [fp, #-24]
+ 1764 0138 013083E2 		add	r3, r3, #1
+ 1765 013c 18300BE5 		str	r3, [fp, #-24]
+ 1766              	.L8:
+  88:../os_core/os_mem.c ****     for (i = 0; i < (nblks - 1); i++) {
+ 1767              		.loc 1 88 0 is_stmt 0 discriminator 1
+ 1768 0140 24301BE5 		ldr	r3, [fp, #-36]
+ 1769 0144 012043E2 		sub	r2, r3, #1
+ 1770 0148 18301BE5 		ldr	r3, [fp, #-24]
+ 1771 014c 030052E1 		cmp	r2, r3
+ 1772 0150 EEFFFF8A 		bhi	.L9
+  92:../os_core/os_mem.c ****     }
+  93:../os_core/os_mem.c ****     *plink              = (void *)0;                  /* Last memory block points to NULL          
+ 1773              		.loc 1 93 0 is_stmt 1
+ 1774 0154 14301BE5 		ldr	r3, [fp, #-20]
+ 1775 0158 0020A0E3 		mov	r2, #0
+ 1776 015c 002083E5 		str	r2, [r3, #0]
+  94:../os_core/os_mem.c ****     pmem->OSMemAddr     = addr;                       /* Store start address of memory partition   
+ 1777              		.loc 1 94 0
+ 1778 0160 1C301BE5 		ldr	r3, [fp, #-28]
+ 1779 0164 20201BE5 		ldr	r2, [fp, #-32]
+ 1780 0168 002083E5 		str	r2, [r3, #0]
+  95:../os_core/os_mem.c ****     pmem->OSMemFreeList = addr;                       /* Initialize pointer to pool of free blocks 
+ 1781              		.loc 1 95 0
+ 1782 016c 1C301BE5 		ldr	r3, [fp, #-28]
+ 1783 0170 20201BE5 		ldr	r2, [fp, #-32]
+ 1784 0174 042083E5 		str	r2, [r3, #4]
+  96:../os_core/os_mem.c ****     pmem->OSMemNFree    = nblks;                      /* Store number of free blocks in MCB        
+ 1785              		.loc 1 96 0
+ 1786 0178 1C301BE5 		ldr	r3, [fp, #-28]
+ 1787 017c 24201BE5 		ldr	r2, [fp, #-36]
+ 1788 0180 102083E5 		str	r2, [r3, #16]
+  97:../os_core/os_mem.c ****     pmem->OSMemNBlks    = nblks;
+ 1789              		.loc 1 97 0
+ 1790 0184 1C301BE5 		ldr	r3, [fp, #-28]
+ 1791 0188 24201BE5 		ldr	r2, [fp, #-36]
+ 1792 018c 0C2083E5 		str	r2, [r3, #12]
+  98:../os_core/os_mem.c ****     pmem->OSMemBlkSize  = blksize;                    /* Store block size of each memory blocks    
+ 1793              		.loc 1 98 0
+ 1794 0190 1C301BE5 		ldr	r3, [fp, #-28]
+ 1795 0194 28201BE5 		ldr	r2, [fp, #-40]
+ 1796 0198 082083E5 		str	r2, [r3, #8]
+  99:../os_core/os_mem.c ****     *err                = OS_NO_ERR;
+ 1797              		.loc 1 99 0
+ 1798 019c 2C301BE5 		ldr	r3, [fp, #-44]
+ 1799 01a0 0020A0E3 		mov	r2, #0
+ 1800 01a4 0020C3E5 		strb	r2, [r3, #0]
+ 100:../os_core/os_mem.c ****     return (pmem);
+ 1801              		.loc 1 100 0
+ 1802 01a8 1C301BE5 		ldr	r3, [fp, #-28]
+ 1803              	.L3:
+ 101:../os_core/os_mem.c **** }
+ 1804              		.loc 1 101 0
+ 1805 01ac 0300A0E1 		mov	r0, r3
+ 1806 01b0 0CD04BE2 		sub	sp, fp, #12
+ 1807 01b4 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1808 01b8 1EFF2FE1 		bx	lr
+ 1809              	.L11:
+ 1810              		.align	2
+ 1811              	.L10:
+ 1812 01bc 00000000 		.word	OSMemFreeList
+ 1813              		.cfi_endproc
+ 1814              	.LFE0:
+ 1816              		.align	2
+ 1817              		.global	OSMemGet
+ 1819              	OSMemGet:
+ 1820              	.LFB1:
+ 102:../os_core/os_mem.c **** /*$PAGE*/
+ 103:../os_core/os_mem.c **** /*
+ 104:../os_core/os_mem.c **** ***************************************************************************************************
+ 105:../os_core/os_mem.c **** *                                          GET A MEMORY BLOCK
+ 106:../os_core/os_mem.c **** *
+ 107:../os_core/os_mem.c **** * Description : Get a memory block from a partition
+ 108:../os_core/os_mem.c **** *
+ 109:../os_core/os_mem.c **** * Arguments   : pmem    is a pointer to the memory partition control block
+ 110:../os_core/os_mem.c **** *
+ 111:../os_core/os_mem.c **** *               err     is a pointer to a variable containing an error message which will be set by
+ 112:../os_core/os_mem.c **** *                       function to either:
+ 113:../os_core/os_mem.c **** *
+ 114:../os_core/os_mem.c **** *                       OS_NO_ERR           if the memory partition has been created correctly.
+ 115:../os_core/os_mem.c **** *                       OS_MEM_NO_FREE_BLKS if there are no more free memory blocks to allocate to 
+ 116:../os_core/os_mem.c **** *                       OS_MEM_INVALID_PMEM if you passed a NULL pointer for 'pmem'
+ 117:../os_core/os_mem.c **** *
+ 118:../os_core/os_mem.c **** * Returns     : A pointer to a memory block if no error is detected
+ 119:../os_core/os_mem.c **** *               A pointer to NULL if an error is detected
+ 120:../os_core/os_mem.c **** ***************************************************************************************************
+ 121:../os_core/os_mem.c **** */
+ 122:../os_core/os_mem.c **** 
+ 123:../os_core/os_mem.c **** void  *OSMemGet (OS_MEM *pmem, INT8U *err)
+ 124:../os_core/os_mem.c **** {
+ 1821              		.loc 1 124 0
+ 1822              		.cfi_startproc
+ 1823              		@ Function supports interworking.
+ 1824              		@ args = 0, pretend = 0, frame = 16
+ 1825              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1826 01c0 0DC0A0E1 		mov	ip, sp
+ 1827              	.LCFI2:
+ 1828              		.cfi_def_cfa_register 12
+ 1829 01c4 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1830 01c8 04B04CE2 		sub	fp, ip, #4
+ 1831              		.cfi_offset 14, -8
+ 1832              		.cfi_offset 13, -12
+ 1833              		.cfi_offset 11, -16
+ 1834              	.LCFI3:
+ 1835              		.cfi_def_cfa 11, 4
+ 1836 01cc 10D04DE2 		sub	sp, sp, #16
+ 1837 01d0 18000BE5 		str	r0, [fp, #-24]
+ 1838 01d4 1C100BE5 		str	r1, [fp, #-28]
+ 125:../os_core/os_mem.c ****     void      *pblk;
+ 126:../os_core/os_mem.c **** #if OS_CRITICAL_METHOD == 3                           /* Allocate storage for CPU status register  
+ 127:../os_core/os_mem.c ****     OS_CPU_SR  cpu_sr;
+ 128:../os_core/os_mem.c **** 
+ 129:../os_core/os_mem.c **** 
+ 130:../os_core/os_mem.c **** 
+ 131:../os_core/os_mem.c ****     cpu_sr = 0;                                       /* Prevent compiler warning                  
+ 132:../os_core/os_mem.c **** #endif    
+ 133:../os_core/os_mem.c **** #if OS_ARG_CHK_EN > 0
+ 134:../os_core/os_mem.c ****     if (pmem == (OS_MEM *)0) {                        /* Must point to a valid memory partition    
+ 1839              		.loc 1 134 0
+ 1840 01d8 18301BE5 		ldr	r3, [fp, #-24]
+ 1841 01dc 000053E3 		cmp	r3, #0
+ 1842 01e0 0400001A 		bne	.L13
+ 135:../os_core/os_mem.c ****         *err = OS_MEM_INVALID_PMEM;
+ 1843              		.loc 1 135 0
+ 1844 01e4 1C301BE5 		ldr	r3, [fp, #-28]
+ 1845 01e8 7420A0E3 		mov	r2, #116
+ 1846 01ec 0020C3E5 		strb	r2, [r3, #0]
+ 136:../os_core/os_mem.c ****         return ((OS_MEM *)0);
+ 1847              		.loc 1 136 0
+ 1848 01f0 0030A0E3 		mov	r3, #0
+ 1849 01f4 200000EA 		b	.L14
+ 1850              	.L13:
+ 137:../os_core/os_mem.c ****     }
+ 138:../os_core/os_mem.c **** #endif
+ 139:../os_core/os_mem.c ****     OS_ENTER_CRITICAL();
+ 1851              		.loc 1 139 0
+ 1852              	@ 139 "../os_core/os_mem.c" 1
+ 1853 01f8 00000FE1 		mrs   r0, cpsr              
+ 1854 01fc 04002DE5 	stmfd sp!, {r0}             
+ 1855 0200 C00080E3 	orr   r0, r0, #0b11000000   
+ 1856 0204 00F021E1 	msr   cpsr_c, r0              
+ 1857              	@ 0 "" 2
+ 140:../os_core/os_mem.c ****     if (pmem->OSMemNFree > 0) {                       /* See if there are any free memory blocks   
+ 1858              		.loc 1 140 0
+ 1859 0208 18301BE5 		ldr	r3, [fp, #-24]
+ 1860 020c 103093E5 		ldr	r3, [r3, #16]
+ 1861 0210 000053E3 		cmp	r3, #0
+ 1862 0214 1200000A 		beq	.L15
+ 141:../os_core/os_mem.c ****         pblk                = pmem->OSMemFreeList;    /* Yes, point to next free memory block      
+ 1863              		.loc 1 141 0
+ 1864 0218 18301BE5 		ldr	r3, [fp, #-24]
+ 1865 021c 043093E5 		ldr	r3, [r3, #4]
+ 1866 0220 10300BE5 		str	r3, [fp, #-16]
+ 142:../os_core/os_mem.c ****         pmem->OSMemFreeList = *(void **)pblk;         /*      Adjust pointer to new free list      
+ 1867              		.loc 1 142 0
+ 1868 0224 10301BE5 		ldr	r3, [fp, #-16]
+ 1869 0228 002093E5 		ldr	r2, [r3, #0]
+ 1870 022c 18301BE5 		ldr	r3, [fp, #-24]
+ 1871 0230 042083E5 		str	r2, [r3, #4]
+ 143:../os_core/os_mem.c ****         pmem->OSMemNFree--;                           /*      One less memory block in this partiti
+ 1872              		.loc 1 143 0
+ 1873 0234 18301BE5 		ldr	r3, [fp, #-24]
+ 1874 0238 103093E5 		ldr	r3, [r3, #16]
+ 1875 023c 012043E2 		sub	r2, r3, #1
+ 1876 0240 18301BE5 		ldr	r3, [fp, #-24]
+ 1877 0244 102083E5 		str	r2, [r3, #16]
+ 144:../os_core/os_mem.c ****         OS_EXIT_CRITICAL();
+ 1878              		.loc 1 144 0
+ 1879              	@ 144 "../os_core/os_mem.c" 1
+ 1880 0248 04009DE4 		ldmfd sp!, {r0}             
+ 1881 024c 00F021E1 	msr   cpsr_c, r0              
+ 1882              	@ 0 "" 2
+ 145:../os_core/os_mem.c ****         *err = OS_NO_ERR;                             /*      No error                             
+ 1883              		.loc 1 145 0
+ 1884 0250 1C301BE5 		ldr	r3, [fp, #-28]
+ 1885 0254 0020A0E3 		mov	r2, #0
+ 1886 0258 0020C3E5 		strb	r2, [r3, #0]
+ 146:../os_core/os_mem.c ****         return (pblk);                                /*      Return memory block to caller        
+ 1887              		.loc 1 146 0
+ 1888 025c 10301BE5 		ldr	r3, [fp, #-16]
+ 1889 0260 050000EA 		b	.L14
+ 1890              	.L15:
+ 147:../os_core/os_mem.c ****     }
+ 148:../os_core/os_mem.c ****     OS_EXIT_CRITICAL();
+ 1891              		.loc 1 148 0
+ 1892              	@ 148 "../os_core/os_mem.c" 1
+ 1893 0264 04009DE4 		ldmfd sp!, {r0}             
+ 1894 0268 00F021E1 	msr   cpsr_c, r0              
+ 1895              	@ 0 "" 2
+ 149:../os_core/os_mem.c ****     *err = OS_MEM_NO_FREE_BLKS;                       /* No,  Notify caller of empty memory partiti
+ 1896              		.loc 1 149 0
+ 1897 026c 1C301BE5 		ldr	r3, [fp, #-28]
+ 1898 0270 7120A0E3 		mov	r2, #113
+ 1899 0274 0020C3E5 		strb	r2, [r3, #0]
+ 150:../os_core/os_mem.c ****     return ((void *)0);                               /*      Return NULL pointer to caller        
+ 1900              		.loc 1 150 0
+ 1901 0278 0030A0E3 		mov	r3, #0
+ 1902              	.L14:
+ 151:../os_core/os_mem.c **** }
+ 1903              		.loc 1 151 0
+ 1904 027c 0300A0E1 		mov	r0, r3
+ 1905 0280 0CD04BE2 		sub	sp, fp, #12
+ 1906 0284 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1907 0288 1EFF2FE1 		bx	lr
+ 1908              		.cfi_endproc
+ 1909              	.LFE1:
+ 1911              		.align	2
+ 1912              		.global	OSMemNameGet
+ 1914              	OSMemNameGet:
+ 1915              	.LFB2:
+ 152:../os_core/os_mem.c **** /*$PAGE*/
+ 153:../os_core/os_mem.c **** /*
+ 154:../os_core/os_mem.c **** ***************************************************************************************************
+ 155:../os_core/os_mem.c **** *                                   GET THE NAME OF A MEMORY PARTITION
+ 156:../os_core/os_mem.c **** *
+ 157:../os_core/os_mem.c **** * Description: This function is used to obtain the name assigned to a memory partition.
+ 158:../os_core/os_mem.c **** *
+ 159:../os_core/os_mem.c **** * Arguments  : pmem      is a pointer to the memory partition
+ 160:../os_core/os_mem.c **** *
+ 161:../os_core/os_mem.c **** *              pname     is a pointer to an ASCII string that will receive the name of the memory p
+ 162:../os_core/os_mem.c **** *
+ 163:../os_core/os_mem.c **** *              err       is a pointer to an error code that can contain one of the following values
+ 164:../os_core/os_mem.c **** *
+ 165:../os_core/os_mem.c **** *                        OS_NO_ERR                  if the name was copied to 'pname'
+ 166:../os_core/os_mem.c **** *                        OS_MEM_INVALID_PMEM        if you passed a NULL pointer for 'pmem'
+ 167:../os_core/os_mem.c **** *                        OS_ERR_PNAME_NULL          You passed a NULL pointer for 'pname'
+ 168:../os_core/os_mem.c **** *
+ 169:../os_core/os_mem.c **** * Returns    : The length of the string or 0 if 'pmem' is a NULL pointer.
+ 170:../os_core/os_mem.c **** ***************************************************************************************************
+ 171:../os_core/os_mem.c **** */
+ 172:../os_core/os_mem.c **** 
+ 173:../os_core/os_mem.c **** #if OS_MEM_NAME_SIZE > 1
+ 174:../os_core/os_mem.c **** INT8U  OSMemNameGet (OS_MEM *pmem, char *pname, INT8U *err)
+ 175:../os_core/os_mem.c **** {
+ 1916              		.loc 1 175 0
+ 1917              		.cfi_startproc
+ 1918              		@ Function supports interworking.
+ 1919              		@ args = 0, pretend = 0, frame = 24
+ 1920              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1921 028c 0DC0A0E1 		mov	ip, sp
+ 1922              	.LCFI4:
+ 1923              		.cfi_def_cfa_register 12
+ 1924 0290 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1925 0294 04B04CE2 		sub	fp, ip, #4
+ 1926              		.cfi_offset 14, -8
+ 1927              		.cfi_offset 13, -12
+ 1928              		.cfi_offset 11, -16
+ 1929              	.LCFI5:
+ 1930              		.cfi_def_cfa 11, 4
+ 1931 0298 18D04DE2 		sub	sp, sp, #24
+ 1932 029c 18000BE5 		str	r0, [fp, #-24]
+ 1933 02a0 1C100BE5 		str	r1, [fp, #-28]
+ 1934 02a4 20200BE5 		str	r2, [fp, #-32]
+ 176:../os_core/os_mem.c ****     INT8U      len;
+ 177:../os_core/os_mem.c **** #if OS_CRITICAL_METHOD == 3                      /* Allocate storage for CPU status register       
+ 178:../os_core/os_mem.c ****     OS_CPU_SR  cpu_sr;
+ 179:../os_core/os_mem.c **** 
+ 180:../os_core/os_mem.c **** 
+ 181:../os_core/os_mem.c **** 
+ 182:../os_core/os_mem.c ****     cpu_sr = 0;                                  /* Prevent compiler warning                       
+ 183:../os_core/os_mem.c **** #endif    
+ 184:../os_core/os_mem.c ****     OS_ENTER_CRITICAL();
+ 1935              		.loc 1 184 0
+ 1936              	@ 184 "../os_core/os_mem.c" 1
+ 1937 02a8 00000FE1 		mrs   r0, cpsr              
+ 1938 02ac 04002DE5 	stmfd sp!, {r0}             
+ 1939 02b0 C00080E3 	orr   r0, r0, #0b11000000   
+ 1940 02b4 00F021E1 	msr   cpsr_c, r0              
+ 1941              	@ 0 "" 2
+ 185:../os_core/os_mem.c **** #if OS_ARG_CHK_EN > 0
+ 186:../os_core/os_mem.c ****     if (pmem == (OS_MEM *)0) {                   /* Is 'pmem' a NULL pointer?                      
+ 1942              		.loc 1 186 0
+ 1943 02b8 18301BE5 		ldr	r3, [fp, #-24]
+ 1944 02bc 000053E3 		cmp	r3, #0
+ 1945 02c0 0600001A 		bne	.L17
+ 187:../os_core/os_mem.c ****         OS_EXIT_CRITICAL();                      /* Yes                                            
+ 1946              		.loc 1 187 0
+ 1947              	@ 187 "../os_core/os_mem.c" 1
+ 1948 02c4 04009DE4 		ldmfd sp!, {r0}             
+ 1949 02c8 00F021E1 	msr   cpsr_c, r0              
+ 1950              	@ 0 "" 2
+ 188:../os_core/os_mem.c ****         *err = OS_MEM_INVALID_PMEM;
+ 1951              		.loc 1 188 0
+ 1952 02cc 20301BE5 		ldr	r3, [fp, #-32]
+ 1953 02d0 7420A0E3 		mov	r2, #116
+ 1954 02d4 0020C3E5 		strb	r2, [r3, #0]
+ 189:../os_core/os_mem.c ****         return (0);
+ 1955              		.loc 1 189 0
+ 1956 02d8 0030A0E3 		mov	r3, #0
+ 1957 02dc 160000EA 		b	.L18
+ 1958              	.L17:
+ 190:../os_core/os_mem.c ****     }
+ 191:../os_core/os_mem.c ****     if (pname == (char *)0) {                    /* Is 'pname' a NULL pointer?                     
+ 1959              		.loc 1 191 0
+ 1960 02e0 1C301BE5 		ldr	r3, [fp, #-28]
+ 1961 02e4 000053E3 		cmp	r3, #0
+ 1962 02e8 0600001A 		bne	.L19
+ 192:../os_core/os_mem.c ****         OS_EXIT_CRITICAL();                      /* Yes                                            
+ 1963              		.loc 1 192 0
+ 1964              	@ 192 "../os_core/os_mem.c" 1
+ 1965 02ec 04009DE4 		ldmfd sp!, {r0}             
+ 1966 02f0 00F021E1 	msr   cpsr_c, r0              
+ 1967              	@ 0 "" 2
+ 193:../os_core/os_mem.c ****         *err = OS_ERR_PNAME_NULL;
+ 1968              		.loc 1 193 0
+ 1969 02f4 20301BE5 		ldr	r3, [fp, #-32]
+ 1970 02f8 0F20A0E3 		mov	r2, #15
+ 1971 02fc 0020C3E5 		strb	r2, [r3, #0]
+ 194:../os_core/os_mem.c ****         return (0);
+ 1972              		.loc 1 194 0
+ 1973 0300 0030A0E3 		mov	r3, #0
+ 1974 0304 0C0000EA 		b	.L18
+ 1975              	.L19:
+ 195:../os_core/os_mem.c ****     }
+ 196:../os_core/os_mem.c **** #endif
+ 197:../os_core/os_mem.c ****     len  = OS_StrCopy(pname, pmem->OSMemName);   /* Copy name from OS_MEM                          
+ 1976              		.loc 1 197 0
+ 1977 0308 18301BE5 		ldr	r3, [fp, #-24]
+ 1978 030c 143083E2 		add	r3, r3, #20
+ 1979 0310 1C001BE5 		ldr	r0, [fp, #-28]
+ 1980 0314 0310A0E1 		mov	r1, r3
+ 1981 0318 FEFFFFEB 		bl	OS_StrCopy
+ 1982 031c 0030A0E1 		mov	r3, r0
+ 1983 0320 0D304BE5 		strb	r3, [fp, #-13]
+ 198:../os_core/os_mem.c ****     OS_EXIT_CRITICAL();
+ 1984              		.loc 1 198 0
+ 1985              	@ 198 "../os_core/os_mem.c" 1
+ 1986 0324 04009DE4 		ldmfd sp!, {r0}             
+ 1987 0328 00F021E1 	msr   cpsr_c, r0              
+ 1988              	@ 0 "" 2
+ 199:../os_core/os_mem.c ****     *err = OS_NO_ERR;
+ 1989              		.loc 1 199 0
+ 1990 032c 20301BE5 		ldr	r3, [fp, #-32]
+ 1991 0330 0020A0E3 		mov	r2, #0
+ 1992 0334 0020C3E5 		strb	r2, [r3, #0]
+ 200:../os_core/os_mem.c ****     return (len);
+ 1993              		.loc 1 200 0
+ 1994 0338 0D305BE5 		ldrb	r3, [fp, #-13]	@ zero_extendqisi2
+ 1995              	.L18:
+ 201:../os_core/os_mem.c **** }
+ 1996              		.loc 1 201 0
+ 1997 033c 0300A0E1 		mov	r0, r3
+ 1998 0340 0CD04BE2 		sub	sp, fp, #12
+ 1999 0344 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 2000 0348 1EFF2FE1 		bx	lr
+ 2001              		.cfi_endproc
+ 2002              	.LFE2:
+ 2004              		.align	2
+ 2005              		.global	OSMemNameSet
+ 2007              	OSMemNameSet:
+ 2008              	.LFB3:
+ 202:../os_core/os_mem.c **** #endif
+ 203:../os_core/os_mem.c **** 
+ 204:../os_core/os_mem.c **** /*$PAGE*/
+ 205:../os_core/os_mem.c **** /*
+ 206:../os_core/os_mem.c **** ***************************************************************************************************
+ 207:../os_core/os_mem.c **** *                                 ASSIGN A NAME TO A MEMORY PARTITION
+ 208:../os_core/os_mem.c **** *
+ 209:../os_core/os_mem.c **** * Description: This function assigns a name to a memory partition.
+ 210:../os_core/os_mem.c **** *
+ 211:../os_core/os_mem.c **** * Arguments  : pmem      is a pointer to the memory partition
+ 212:../os_core/os_mem.c **** *
+ 213:../os_core/os_mem.c **** *              pname     is a pointer to an ASCII string that contains the name of the memory parti
+ 214:../os_core/os_mem.c **** *
+ 215:../os_core/os_mem.c **** *              err       is a pointer to an error code that can contain one of the following values
+ 216:../os_core/os_mem.c **** *
+ 217:../os_core/os_mem.c **** *                        OS_NO_ERR                  if the name was copied to 'pname'
+ 218:../os_core/os_mem.c **** *                        OS_MEM_INVALID_PMEM        if you passed a NULL pointer for 'pmem'
+ 219:../os_core/os_mem.c **** *                        OS_ERR_PNAME_NULL          You passed a NULL pointer for 'pname'
+ 220:../os_core/os_mem.c **** *						 OS_MEM_NAME_TOO_LONG       if the name doesn't fit in the storage area
+ 221:../os_core/os_mem.c **** *
+ 222:../os_core/os_mem.c **** * Returns    : None
+ 223:../os_core/os_mem.c **** ***************************************************************************************************
+ 224:../os_core/os_mem.c **** */
+ 225:../os_core/os_mem.c **** 
+ 226:../os_core/os_mem.c **** #if OS_MEM_NAME_SIZE > 1
+ 227:../os_core/os_mem.c **** void  OSMemNameSet (OS_MEM *pmem, char *pname, INT8U *err)
+ 228:../os_core/os_mem.c **** {
+ 2009              		.loc 1 228 0
+ 2010              		.cfi_startproc
+ 2011              		@ Function supports interworking.
+ 2012              		@ args = 0, pretend = 0, frame = 24
+ 2013              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2014 034c 0DC0A0E1 		mov	ip, sp
+ 2015              	.LCFI6:
+ 2016              		.cfi_def_cfa_register 12
+ 2017 0350 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2018 0354 04B04CE2 		sub	fp, ip, #4
+ 2019              		.cfi_offset 14, -8
+ 2020              		.cfi_offset 13, -12
+ 2021              		.cfi_offset 11, -16
+ 2022              	.LCFI7:
+ 2023              		.cfi_def_cfa 11, 4
+ 2024 0358 18D04DE2 		sub	sp, sp, #24
+ 2025 035c 18000BE5 		str	r0, [fp, #-24]
+ 2026 0360 1C100BE5 		str	r1, [fp, #-28]
+ 2027 0364 20200BE5 		str	r2, [fp, #-32]
+ 229:../os_core/os_mem.c ****     INT8U      len;
+ 230:../os_core/os_mem.c **** #if OS_CRITICAL_METHOD == 3                      /* Allocate storage for CPU status register       
+ 231:../os_core/os_mem.c ****     OS_CPU_SR  cpu_sr;
+ 232:../os_core/os_mem.c **** 
+ 233:../os_core/os_mem.c **** 
+ 234:../os_core/os_mem.c **** 
+ 235:../os_core/os_mem.c ****     cpu_sr = 0;                                  /* Prevent compiler warning                       
+ 236:../os_core/os_mem.c **** #endif    
+ 237:../os_core/os_mem.c ****     OS_ENTER_CRITICAL();
+ 2028              		.loc 1 237 0
+ 2029              	@ 237 "../os_core/os_mem.c" 1
+ 2030 0368 00000FE1 		mrs   r0, cpsr              
+ 2031 036c 04002DE5 	stmfd sp!, {r0}             
+ 2032 0370 C00080E3 	orr   r0, r0, #0b11000000   
+ 2033 0374 00F021E1 	msr   cpsr_c, r0              
+ 2034              	@ 0 "" 2
+ 238:../os_core/os_mem.c **** #if OS_ARG_CHK_EN > 0
+ 239:../os_core/os_mem.c ****     if (pmem == (OS_MEM *)0) {                   /* Is 'pmem' a NULL pointer?                      
+ 2035              		.loc 1 239 0
+ 2036 0378 18301BE5 		ldr	r3, [fp, #-24]
+ 2037 037c 000053E3 		cmp	r3, #0
+ 2038 0380 0500001A 		bne	.L21
+ 240:../os_core/os_mem.c ****         OS_EXIT_CRITICAL();                      /* Yes                                            
+ 2039              		.loc 1 240 0
+ 2040              	@ 240 "../os_core/os_mem.c" 1
+ 2041 0384 04009DE4 		ldmfd sp!, {r0}             
+ 2042 0388 00F021E1 	msr   cpsr_c, r0              
+ 2043              	@ 0 "" 2
+ 241:../os_core/os_mem.c ****         *err = OS_MEM_INVALID_PMEM;
+ 2044              		.loc 1 241 0
+ 2045 038c 20301BE5 		ldr	r3, [fp, #-32]
+ 2046 0390 7420A0E3 		mov	r2, #116
+ 2047 0394 0020C3E5 		strb	r2, [r3, #0]
+ 242:../os_core/os_mem.c ****         return;
+ 2048              		.loc 1 242 0
+ 2049 0398 1F0000EA 		b	.L20
+ 2050              	.L21:
+ 243:../os_core/os_mem.c ****     }
+ 244:../os_core/os_mem.c ****     if (pname == (char *)0) {                    /* Is 'pname' a NULL pointer?                     
+ 2051              		.loc 1 244 0
+ 2052 039c 1C301BE5 		ldr	r3, [fp, #-28]
+ 2053 03a0 000053E3 		cmp	r3, #0
+ 2054 03a4 0500001A 		bne	.L23
+ 245:../os_core/os_mem.c ****         OS_EXIT_CRITICAL();                      /* Yes                                            
+ 2055              		.loc 1 245 0
+ 2056              	@ 245 "../os_core/os_mem.c" 1
+ 2057 03a8 04009DE4 		ldmfd sp!, {r0}             
+ 2058 03ac 00F021E1 	msr   cpsr_c, r0              
+ 2059              	@ 0 "" 2
+ 246:../os_core/os_mem.c ****         *err = OS_ERR_PNAME_NULL;
+ 2060              		.loc 1 246 0
+ 2061 03b0 20301BE5 		ldr	r3, [fp, #-32]
+ 2062 03b4 0F20A0E3 		mov	r2, #15
+ 2063 03b8 0020C3E5 		strb	r2, [r3, #0]
+ 247:../os_core/os_mem.c ****         return;
+ 2064              		.loc 1 247 0
+ 2065 03bc 160000EA 		b	.L20
+ 2066              	.L23:
+ 248:../os_core/os_mem.c ****     }
+ 249:../os_core/os_mem.c **** #endif
+ 250:../os_core/os_mem.c ****     len = OS_StrLen(pname);                      /* Can we fit the string in the storage area?     
+ 2067              		.loc 1 250 0
+ 2068 03c0 1C001BE5 		ldr	r0, [fp, #-28]
+ 2069 03c4 FEFFFFEB 		bl	OS_StrLen
+ 2070 03c8 0030A0E1 		mov	r3, r0
+ 2071 03cc 0D304BE5 		strb	r3, [fp, #-13]
+ 251:../os_core/os_mem.c ****     if (len > (OS_MEM_NAME_SIZE - 1)) {          /* No                                             
+ 2072              		.loc 1 251 0
+ 2073 03d0 0D305BE5 		ldrb	r3, [fp, #-13]	@ zero_extendqisi2
+ 2074 03d4 1F0053E3 		cmp	r3, #31
+ 2075 03d8 0500009A 		bls	.L24
+ 252:../os_core/os_mem.c ****         OS_EXIT_CRITICAL();
+ 2076              		.loc 1 252 0
+ 2077              	@ 252 "../os_core/os_mem.c" 1
+ 2078 03dc 04009DE4 		ldmfd sp!, {r0}             
+ 2079 03e0 00F021E1 	msr   cpsr_c, r0              
+ 2080              	@ 0 "" 2
+ 253:../os_core/os_mem.c ****         *err = OS_MEM_NAME_TOO_LONG;
+ 2081              		.loc 1 253 0
+ 2082 03e4 20301BE5 		ldr	r3, [fp, #-32]
+ 2083 03e8 7720A0E3 		mov	r2, #119
+ 2084 03ec 0020C3E5 		strb	r2, [r3, #0]
+ 254:../os_core/os_mem.c ****         return;
+ 2085              		.loc 1 254 0
+ 2086 03f0 090000EA 		b	.L20
+ 2087              	.L24:
+ 255:../os_core/os_mem.c ****     } 
+ 256:../os_core/os_mem.c ****     (void)OS_StrCopy(pmem->OSMemName, pname);    /* Yes, copy name to the memory partition header  
+ 2088              		.loc 1 256 0
+ 2089 03f4 18301BE5 		ldr	r3, [fp, #-24]
+ 2090 03f8 143083E2 		add	r3, r3, #20
+ 2091 03fc 0300A0E1 		mov	r0, r3
+ 2092 0400 1C101BE5 		ldr	r1, [fp, #-28]
+ 2093 0404 FEFFFFEB 		bl	OS_StrCopy
+ 257:../os_core/os_mem.c ****     OS_EXIT_CRITICAL();
+ 2094              		.loc 1 257 0
+ 2095              	@ 257 "../os_core/os_mem.c" 1
+ 2096 0408 04009DE4 		ldmfd sp!, {r0}             
+ 2097 040c 00F021E1 	msr   cpsr_c, r0              
+ 2098              	@ 0 "" 2
+ 258:../os_core/os_mem.c ****     *err = OS_NO_ERR;
+ 2099              		.loc 1 258 0
+ 2100 0410 20301BE5 		ldr	r3, [fp, #-32]
+ 2101 0414 0020A0E3 		mov	r2, #0
+ 2102 0418 0020C3E5 		strb	r2, [r3, #0]
+ 2103              	.L20:
+ 259:../os_core/os_mem.c **** }
+ 2104              		.loc 1 259 0
+ 2105 041c 0CD04BE2 		sub	sp, fp, #12
+ 2106 0420 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 2107 0424 1EFF2FE1 		bx	lr
+ 2108              		.cfi_endproc
+ 2109              	.LFE3:
+ 2111              		.align	2
+ 2112              		.global	OSMemPut
+ 2114              	OSMemPut:
+ 2115              	.LFB4:
+ 260:../os_core/os_mem.c **** #endif
+ 261:../os_core/os_mem.c **** 
+ 262:../os_core/os_mem.c **** /*$PAGE*/
+ 263:../os_core/os_mem.c **** /*
+ 264:../os_core/os_mem.c **** ***************************************************************************************************
+ 265:../os_core/os_mem.c **** *                                         RELEASE A MEMORY BLOCK
+ 266:../os_core/os_mem.c **** *
+ 267:../os_core/os_mem.c **** * Description : Returns a memory block to a partition
+ 268:../os_core/os_mem.c **** *
+ 269:../os_core/os_mem.c **** * Arguments   : pmem    is a pointer to the memory partition control block
+ 270:../os_core/os_mem.c **** *
+ 271:../os_core/os_mem.c **** *               pblk    is a pointer to the memory block being released.
+ 272:../os_core/os_mem.c **** *
+ 273:../os_core/os_mem.c **** * Returns     : OS_NO_ERR            if the memory block was inserted into the partition
+ 274:../os_core/os_mem.c **** *               OS_MEM_FULL          if you are returning a memory block to an already FULL memory 
+ 275:../os_core/os_mem.c **** *                                    partition (You freed more blocks than you allocated!)
+ 276:../os_core/os_mem.c **** *               OS_MEM_INVALID_PMEM  if you passed a NULL pointer for 'pmem'
+ 277:../os_core/os_mem.c **** *               OS_MEM_INVALID_PBLK  if you passed a NULL pointer for the block to release.
+ 278:../os_core/os_mem.c **** ***************************************************************************************************
+ 279:../os_core/os_mem.c **** */
+ 280:../os_core/os_mem.c **** 
+ 281:../os_core/os_mem.c **** INT8U  OSMemPut (OS_MEM *pmem, void *pblk)
+ 282:../os_core/os_mem.c **** {
+ 2116              		.loc 1 282 0
+ 2117              		.cfi_startproc
+ 2118              		@ Function supports interworking.
+ 2119              		@ args = 0, pretend = 0, frame = 8
+ 2120              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2121 0428 0DC0A0E1 		mov	ip, sp
+ 2122              	.LCFI8:
+ 2123              		.cfi_def_cfa_register 12
+ 2124 042c 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2125 0430 04B04CE2 		sub	fp, ip, #4
+ 2126              		.cfi_offset 14, -8
+ 2127              		.cfi_offset 13, -12
+ 2128              		.cfi_offset 11, -16
+ 2129              	.LCFI9:
+ 2130              		.cfi_def_cfa 11, 4
+ 2131 0434 08D04DE2 		sub	sp, sp, #8
+ 2132 0438 10000BE5 		str	r0, [fp, #-16]
+ 2133 043c 14100BE5 		str	r1, [fp, #-20]
+ 283:../os_core/os_mem.c **** #if OS_CRITICAL_METHOD == 3                      /* Allocate storage for CPU status register       
+ 284:../os_core/os_mem.c ****     OS_CPU_SR  cpu_sr;
+ 285:../os_core/os_mem.c ****     
+ 286:../os_core/os_mem.c ****     
+ 287:../os_core/os_mem.c **** 
+ 288:../os_core/os_mem.c ****     cpu_sr = 0;                                  /* Prevent compiler warning                       
+ 289:../os_core/os_mem.c **** #endif    
+ 290:../os_core/os_mem.c **** #if OS_ARG_CHK_EN > 0
+ 291:../os_core/os_mem.c ****     if (pmem == (OS_MEM *)0) {                   /* Must point to a valid memory partition         
+ 2134              		.loc 1 291 0
+ 2135 0440 10301BE5 		ldr	r3, [fp, #-16]
+ 2136 0444 000053E3 		cmp	r3, #0
+ 2137 0448 0100001A 		bne	.L26
+ 292:../os_core/os_mem.c ****         return (OS_MEM_INVALID_PMEM);
+ 2138              		.loc 1 292 0
+ 2139 044c 7430A0E3 		mov	r3, #116
+ 2140 0450 210000EA 		b	.L27
+ 2141              	.L26:
+ 293:../os_core/os_mem.c ****     }
+ 294:../os_core/os_mem.c ****     if (pblk == (void *)0) {                     /* Must release a valid block                     
+ 2142              		.loc 1 294 0
+ 2143 0454 14301BE5 		ldr	r3, [fp, #-20]
+ 2144 0458 000053E3 		cmp	r3, #0
+ 2145 045c 0100001A 		bne	.L28
+ 295:../os_core/os_mem.c ****         return (OS_MEM_INVALID_PBLK);
+ 2146              		.loc 1 295 0
+ 2147 0460 7330A0E3 		mov	r3, #115
+ 2148 0464 1C0000EA 		b	.L27
+ 2149              	.L28:
+ 296:../os_core/os_mem.c ****     }
+ 297:../os_core/os_mem.c **** #endif
+ 298:../os_core/os_mem.c ****     OS_ENTER_CRITICAL();
+ 2150              		.loc 1 298 0
+ 2151              	@ 298 "../os_core/os_mem.c" 1
+ 2152 0468 00000FE1 		mrs   r0, cpsr              
+ 2153 046c 04002DE5 	stmfd sp!, {r0}             
+ 2154 0470 C00080E3 	orr   r0, r0, #0b11000000   
+ 2155 0474 00F021E1 	msr   cpsr_c, r0              
+ 2156              	@ 0 "" 2
+ 299:../os_core/os_mem.c ****     if (pmem->OSMemNFree >= pmem->OSMemNBlks) {  /* Make sure all blocks not already returned      
+ 2157              		.loc 1 299 0
+ 2158 0478 10301BE5 		ldr	r3, [fp, #-16]
+ 2159 047c 102093E5 		ldr	r2, [r3, #16]
+ 2160 0480 10301BE5 		ldr	r3, [fp, #-16]
+ 2161 0484 0C3093E5 		ldr	r3, [r3, #12]
+ 2162 0488 030052E1 		cmp	r2, r3
+ 2163 048c 0300003A 		bcc	.L29
+ 300:../os_core/os_mem.c ****         OS_EXIT_CRITICAL();
+ 2164              		.loc 1 300 0
+ 2165              	@ 300 "../os_core/os_mem.c" 1
+ 2166 0490 04009DE4 		ldmfd sp!, {r0}             
+ 2167 0494 00F021E1 	msr   cpsr_c, r0              
+ 2168              	@ 0 "" 2
+ 301:../os_core/os_mem.c ****         return (OS_MEM_FULL);
+ 2169              		.loc 1 301 0
+ 2170 0498 7230A0E3 		mov	r3, #114
+ 2171 049c 0E0000EA 		b	.L27
+ 2172              	.L29:
+ 302:../os_core/os_mem.c ****     }
+ 303:../os_core/os_mem.c ****     *(void **)pblk      = pmem->OSMemFreeList;   /* Insert released block into free block list     
+ 2173              		.loc 1 303 0
+ 2174 04a0 14301BE5 		ldr	r3, [fp, #-20]
+ 2175 04a4 10201BE5 		ldr	r2, [fp, #-16]
+ 2176 04a8 042092E5 		ldr	r2, [r2, #4]
+ 2177 04ac 002083E5 		str	r2, [r3, #0]
+ 304:../os_core/os_mem.c ****     pmem->OSMemFreeList = pblk;
+ 2178              		.loc 1 304 0
+ 2179 04b0 10301BE5 		ldr	r3, [fp, #-16]
+ 2180 04b4 14201BE5 		ldr	r2, [fp, #-20]
+ 2181 04b8 042083E5 		str	r2, [r3, #4]
+ 305:../os_core/os_mem.c ****     pmem->OSMemNFree++;                          /* One more memory block in this partition        
+ 2182              		.loc 1 305 0
+ 2183 04bc 10301BE5 		ldr	r3, [fp, #-16]
+ 2184 04c0 103093E5 		ldr	r3, [r3, #16]
+ 2185 04c4 012083E2 		add	r2, r3, #1
+ 2186 04c8 10301BE5 		ldr	r3, [fp, #-16]
+ 2187 04cc 102083E5 		str	r2, [r3, #16]
+ 306:../os_core/os_mem.c ****     OS_EXIT_CRITICAL();
+ 2188              		.loc 1 306 0
+ 2189              	@ 306 "../os_core/os_mem.c" 1
+ 2190 04d0 04009DE4 		ldmfd sp!, {r0}             
+ 2191 04d4 00F021E1 	msr   cpsr_c, r0              
+ 2192              	@ 0 "" 2
+ 307:../os_core/os_mem.c ****     return (OS_NO_ERR);                          /* Notify caller that memory block was released   
+ 2193              		.loc 1 307 0
+ 2194 04d8 0030A0E3 		mov	r3, #0
+ 2195              	.L27:
+ 308:../os_core/os_mem.c **** }
+ 2196              		.loc 1 308 0
+ 2197 04dc 0300A0E1 		mov	r0, r3
+ 2198 04e0 0CD04BE2 		sub	sp, fp, #12
+ 2199 04e4 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 2200 04e8 1EFF2FE1 		bx	lr
+ 2201              		.cfi_endproc
+ 2202              	.LFE4:
+ 2204              		.align	2
+ 2205              		.global	OSMemQuery
+ 2207              	OSMemQuery:
+ 2208              	.LFB5:
+ 309:../os_core/os_mem.c **** /*$PAGE*/
+ 310:../os_core/os_mem.c **** /*
+ 311:../os_core/os_mem.c **** ***************************************************************************************************
+ 312:../os_core/os_mem.c **** *                                          QUERY MEMORY PARTITION
+ 313:../os_core/os_mem.c **** *
+ 314:../os_core/os_mem.c **** * Description : This function is used to determine the number of free memory blocks and the number 
+ 315:../os_core/os_mem.c **** *               used memory blocks from a memory partition.
+ 316:../os_core/os_mem.c **** *
+ 317:../os_core/os_mem.c **** * Arguments   : pmem        is a pointer to the memory partition control block
+ 318:../os_core/os_mem.c **** *
+ 319:../os_core/os_mem.c **** *               p_mem_data  is a pointer to a structure that will contain information about the mem
+ 320:../os_core/os_mem.c **** *                           partition.
+ 321:../os_core/os_mem.c **** *
+ 322:../os_core/os_mem.c **** * Returns     : OS_NO_ERR            If no errors were found.
+ 323:../os_core/os_mem.c **** *               OS_MEM_INVALID_PMEM  if you passed a NULL pointer for 'pmem'
+ 324:../os_core/os_mem.c **** *               OS_MEM_INVALID_PDATA if you passed a NULL pointer to the data recipient.
+ 325:../os_core/os_mem.c **** ***************************************************************************************************
+ 326:../os_core/os_mem.c **** */
+ 327:../os_core/os_mem.c **** 
+ 328:../os_core/os_mem.c **** #if OS_MEM_QUERY_EN > 0
+ 329:../os_core/os_mem.c **** INT8U  OSMemQuery (OS_MEM *pmem, OS_MEM_DATA *p_mem_data)
+ 330:../os_core/os_mem.c **** {
+ 2209              		.loc 1 330 0
+ 2210              		.cfi_startproc
+ 2211              		@ Function supports interworking.
+ 2212              		@ args = 0, pretend = 0, frame = 8
+ 2213              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2214 04ec 0DC0A0E1 		mov	ip, sp
+ 2215              	.LCFI10:
+ 2216              		.cfi_def_cfa_register 12
+ 2217 04f0 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2218 04f4 04B04CE2 		sub	fp, ip, #4
+ 2219              		.cfi_offset 14, -8
+ 2220              		.cfi_offset 13, -12
+ 2221              		.cfi_offset 11, -16
+ 2222              	.LCFI11:
+ 2223              		.cfi_def_cfa 11, 4
+ 2224 04f8 08D04DE2 		sub	sp, sp, #8
+ 2225 04fc 10000BE5 		str	r0, [fp, #-16]
+ 2226 0500 14100BE5 		str	r1, [fp, #-20]
+ 331:../os_core/os_mem.c **** #if OS_CRITICAL_METHOD == 3                      /* Allocate storage for CPU status register       
+ 332:../os_core/os_mem.c ****     OS_CPU_SR  cpu_sr;
+ 333:../os_core/os_mem.c ****     
+ 334:../os_core/os_mem.c ****     
+ 335:../os_core/os_mem.c **** 
+ 336:../os_core/os_mem.c ****     cpu_sr = 0;                                  /* Prevent compiler warning                       
+ 337:../os_core/os_mem.c **** #endif    
+ 338:../os_core/os_mem.c **** #if OS_ARG_CHK_EN > 0
+ 339:../os_core/os_mem.c ****     if (pmem == (OS_MEM *)0) {                   /* Must point to a valid memory partition         
+ 2227              		.loc 1 339 0
+ 2228 0504 10301BE5 		ldr	r3, [fp, #-16]
+ 2229 0508 000053E3 		cmp	r3, #0
+ 2230 050c 0100001A 		bne	.L31
+ 340:../os_core/os_mem.c ****         return (OS_MEM_INVALID_PMEM);
+ 2231              		.loc 1 340 0
+ 2232 0510 7430A0E3 		mov	r3, #116
+ 2233 0514 260000EA 		b	.L32
+ 2234              	.L31:
+ 341:../os_core/os_mem.c ****     }
+ 342:../os_core/os_mem.c ****     if (p_mem_data == (OS_MEM_DATA *)0) {        /* Must release a valid storage area for the data 
+ 2235              		.loc 1 342 0
+ 2236 0518 14301BE5 		ldr	r3, [fp, #-20]
+ 2237 051c 000053E3 		cmp	r3, #0
+ 2238 0520 0100001A 		bne	.L33
+ 343:../os_core/os_mem.c ****         return (OS_MEM_INVALID_PDATA);
+ 2239              		.loc 1 343 0
+ 2240 0524 7530A0E3 		mov	r3, #117
+ 2241 0528 210000EA 		b	.L32
+ 2242              	.L33:
+ 344:../os_core/os_mem.c ****     }
+ 345:../os_core/os_mem.c **** #endif
+ 346:../os_core/os_mem.c ****     OS_ENTER_CRITICAL();
+ 2243              		.loc 1 346 0
+ 2244              	@ 346 "../os_core/os_mem.c" 1
+ 2245 052c 00000FE1 		mrs   r0, cpsr              
+ 2246 0530 04002DE5 	stmfd sp!, {r0}             
+ 2247 0534 C00080E3 	orr   r0, r0, #0b11000000   
+ 2248 0538 00F021E1 	msr   cpsr_c, r0              
+ 2249              	@ 0 "" 2
+ 347:../os_core/os_mem.c ****     p_mem_data->OSAddr     = pmem->OSMemAddr;
+ 2250              		.loc 1 347 0
+ 2251 053c 10301BE5 		ldr	r3, [fp, #-16]
+ 2252 0540 002093E5 		ldr	r2, [r3, #0]
+ 2253 0544 14301BE5 		ldr	r3, [fp, #-20]
+ 2254 0548 002083E5 		str	r2, [r3, #0]
+ 348:../os_core/os_mem.c ****     p_mem_data->OSFreeList = pmem->OSMemFreeList;
+ 2255              		.loc 1 348 0
+ 2256 054c 10301BE5 		ldr	r3, [fp, #-16]
+ 2257 0550 042093E5 		ldr	r2, [r3, #4]
+ 2258 0554 14301BE5 		ldr	r3, [fp, #-20]
+ 2259 0558 042083E5 		str	r2, [r3, #4]
+ 349:../os_core/os_mem.c ****     p_mem_data->OSBlkSize  = pmem->OSMemBlkSize;
+ 2260              		.loc 1 349 0
+ 2261 055c 10301BE5 		ldr	r3, [fp, #-16]
+ 2262 0560 082093E5 		ldr	r2, [r3, #8]
+ 2263 0564 14301BE5 		ldr	r3, [fp, #-20]
+ 2264 0568 082083E5 		str	r2, [r3, #8]
+ 350:../os_core/os_mem.c ****     p_mem_data->OSNBlks    = pmem->OSMemNBlks;
+ 2265              		.loc 1 350 0
+ 2266 056c 10301BE5 		ldr	r3, [fp, #-16]
+ 2267 0570 0C2093E5 		ldr	r2, [r3, #12]
+ 2268 0574 14301BE5 		ldr	r3, [fp, #-20]
+ 2269 0578 0C2083E5 		str	r2, [r3, #12]
+ 351:../os_core/os_mem.c ****     p_mem_data->OSNFree    = pmem->OSMemNFree;
+ 2270              		.loc 1 351 0
+ 2271 057c 10301BE5 		ldr	r3, [fp, #-16]
+ 2272 0580 102093E5 		ldr	r2, [r3, #16]
+ 2273 0584 14301BE5 		ldr	r3, [fp, #-20]
+ 2274 0588 102083E5 		str	r2, [r3, #16]
+ 352:../os_core/os_mem.c ****     OS_EXIT_CRITICAL();
+ 2275              		.loc 1 352 0
+ 2276              	@ 352 "../os_core/os_mem.c" 1
+ 2277 058c 04009DE4 		ldmfd sp!, {r0}             
+ 2278 0590 00F021E1 	msr   cpsr_c, r0              
+ 2279              	@ 0 "" 2
+ 353:../os_core/os_mem.c ****     p_mem_data->OSNUsed    = p_mem_data->OSNBlks - p_mem_data->OSNFree;
+ 2280              		.loc 1 353 0
+ 2281 0594 14301BE5 		ldr	r3, [fp, #-20]
+ 2282 0598 0C2093E5 		ldr	r2, [r3, #12]
+ 2283 059c 14301BE5 		ldr	r3, [fp, #-20]
+ 2284 05a0 103093E5 		ldr	r3, [r3, #16]
+ 2285 05a4 022063E0 		rsb	r2, r3, r2
+ 2286 05a8 14301BE5 		ldr	r3, [fp, #-20]
+ 2287 05ac 142083E5 		str	r2, [r3, #20]
+ 354:../os_core/os_mem.c ****     return (OS_NO_ERR);
+ 2288              		.loc 1 354 0
+ 2289 05b0 0030A0E3 		mov	r3, #0
+ 2290              	.L32:
+ 355:../os_core/os_mem.c **** }
+ 2291              		.loc 1 355 0
+ 2292 05b4 0300A0E1 		mov	r0, r3
+ 2293 05b8 0CD04BE2 		sub	sp, fp, #12
+ 2294 05bc 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 2295 05c0 1EFF2FE1 		bx	lr
+ 2296              		.cfi_endproc
+ 2297              	.LFE5:
+ 2299              		.align	2
+ 2300              		.global	OS_MemInit
+ 2302              	OS_MemInit:
+ 2303              	.LFB6:
+ 356:../os_core/os_mem.c **** #endif                                           /* OS_MEM_QUERY_EN                                
+ 357:../os_core/os_mem.c **** /*$PAGE*/
+ 358:../os_core/os_mem.c **** /*
+ 359:../os_core/os_mem.c **** ***************************************************************************************************
+ 360:../os_core/os_mem.c **** *                                    INITIALIZE MEMORY PARTITION MANAGER
+ 361:../os_core/os_mem.c **** *
+ 362:../os_core/os_mem.c **** * Description : This function is called by uC/OS-II to initialize the memory partition manager.  Yo
+ 363:../os_core/os_mem.c **** *               application MUST NOT call this function.
+ 364:../os_core/os_mem.c **** *
+ 365:../os_core/os_mem.c **** * Arguments   : none
+ 366:../os_core/os_mem.c **** *
+ 367:../os_core/os_mem.c **** * Returns     : none
+ 368:../os_core/os_mem.c **** *
+ 369:../os_core/os_mem.c **** * Note(s)    : This function is INTERNAL to uC/OS-II and your application should not call it.
+ 370:../os_core/os_mem.c **** ***************************************************************************************************
+ 371:../os_core/os_mem.c **** */
+ 372:../os_core/os_mem.c **** 
+ 373:../os_core/os_mem.c **** void  OS_MemInit (void)
+ 374:../os_core/os_mem.c **** {
+ 2304              		.loc 1 374 0
+ 2305              		.cfi_startproc
+ 2306              		@ Function supports interworking.
+ 2307              		@ args = 0, pretend = 0, frame = 8
+ 2308              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2309 05c4 0DC0A0E1 		mov	ip, sp
+ 2310              	.LCFI12:
+ 2311              		.cfi_def_cfa_register 12
+ 2312 05c8 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2313 05cc 04B04CE2 		sub	fp, ip, #4
+ 2314              		.cfi_offset 14, -8
+ 2315              		.cfi_offset 13, -12
+ 2316              		.cfi_offset 11, -16
+ 2317              	.LCFI13:
+ 2318              		.cfi_def_cfa 11, 4
+ 2319 05d0 08D04DE2 		sub	sp, sp, #8
+ 375:../os_core/os_mem.c **** #if OS_MAX_MEM_PART == 1
+ 376:../os_core/os_mem.c ****     OSMemFreeList = (OS_MEM *)&OSMemTbl[0];             /* Point to beginning of free list         
+ 377:../os_core/os_mem.c ****     OS_MemClr((INT8U *)&OSMemTbl[0], sizeof(OSMemTbl)); /* Clear the memory partition table        
+ 378:../os_core/os_mem.c **** #endif
+ 379:../os_core/os_mem.c **** 
+ 380:../os_core/os_mem.c **** #if OS_MAX_MEM_PART >= 2
+ 381:../os_core/os_mem.c ****     OS_MEM  *pmem;
+ 382:../os_core/os_mem.c ****     INT16U   i;
+ 383:../os_core/os_mem.c **** 
+ 384:../os_core/os_mem.c **** 
+ 385:../os_core/os_mem.c ****     OS_MemClr((INT8U *)&OSMemTbl[0], sizeof(OSMemTbl)); /* Clear the memory partition table        
+ 2320              		.loc 1 385 0
+ 2321 05d4 C8309FE5 		ldr	r3, .L37
+ 2322 05d8 0300A0E1 		mov	r0, r3
+ 2323 05dc 411FA0E3 		mov	r1, #260
+ 2324 05e0 FEFFFFEB 		bl	OS_MemClr
+ 386:../os_core/os_mem.c ****     pmem = (OS_MEM *)&OSMemTbl[0];                      /* Point to memory control block (MCB)     
+ 2325              		.loc 1 386 0
+ 2326 05e4 B8309FE5 		ldr	r3, .L37
+ 2327 05e8 10300BE5 		str	r3, [fp, #-16]
+ 387:../os_core/os_mem.c ****     for (i = 0; i < (OS_MAX_MEM_PART - 1); i++) {       /* Init. list of free memory partitions    
+ 2328              		.loc 1 387 0
+ 2329 05ec 0030A0E3 		mov	r3, #0
+ 2330 05f0 B2314BE1 		strh	r3, [fp, #-18]	@ movhi
+ 2331 05f4 180000EA 		b	.L35
+ 2332              	.L36:
+ 388:../os_core/os_mem.c ****         pmem->OSMemFreeList = (void *)&OSMemTbl[i+1];   /* Chain list of free partitions           
+ 2333              		.loc 1 388 0 discriminator 2
+ 2334 05f8 B2315BE1 		ldrh	r3, [fp, #-18]
+ 2335 05fc 012083E2 		add	r2, r3, #1
+ 2336 0600 0230A0E1 		mov	r3, r2
+ 2337 0604 8330A0E1 		mov	r3, r3, asl #1
+ 2338 0608 023083E0 		add	r3, r3, r2
+ 2339 060c 0331A0E1 		mov	r3, r3, asl #2
+ 2340 0610 023083E0 		add	r3, r3, r2
+ 2341 0614 0331A0E1 		mov	r3, r3, asl #2
+ 2342 0618 0320A0E1 		mov	r2, r3
+ 2343 061c 80309FE5 		ldr	r3, .L37
+ 2344 0620 032082E0 		add	r2, r2, r3
+ 2345 0624 10301BE5 		ldr	r3, [fp, #-16]
+ 2346 0628 042083E5 		str	r2, [r3, #4]
+ 389:../os_core/os_mem.c **** #if OS_MEM_NAME_SIZE > 1
+ 390:../os_core/os_mem.c ****         pmem->OSMemName[0]  = '?';                      /* Unknown name                            
+ 2347              		.loc 1 390 0 discriminator 2
+ 2348 062c 10301BE5 		ldr	r3, [fp, #-16]
+ 2349 0630 3F20A0E3 		mov	r2, #63
+ 2350 0634 1420C3E5 		strb	r2, [r3, #20]
+ 391:../os_core/os_mem.c ****         pmem->OSMemName[1]  = OS_ASCII_NUL;
+ 2351              		.loc 1 391 0 discriminator 2
+ 2352 0638 10301BE5 		ldr	r3, [fp, #-16]
+ 2353 063c 0020A0E3 		mov	r2, #0
+ 2354 0640 1520C3E5 		strb	r2, [r3, #21]
+ 392:../os_core/os_mem.c **** #endif
+ 393:../os_core/os_mem.c ****         pmem++;
+ 2355              		.loc 1 393 0 discriminator 2
+ 2356 0644 10301BE5 		ldr	r3, [fp, #-16]
+ 2357 0648 343083E2 		add	r3, r3, #52
+ 2358 064c 10300BE5 		str	r3, [fp, #-16]
+ 387:../os_core/os_mem.c ****     for (i = 0; i < (OS_MAX_MEM_PART - 1); i++) {       /* Init. list of free memory partitions    
+ 2359              		.loc 1 387 0 discriminator 2
+ 2360 0650 B2315BE1 		ldrh	r3, [fp, #-18]	@ movhi
+ 2361 0654 013083E2 		add	r3, r3, #1
+ 2362 0658 B2314BE1 		strh	r3, [fp, #-18]	@ movhi
+ 2363              	.L35:
+ 387:../os_core/os_mem.c ****     for (i = 0; i < (OS_MAX_MEM_PART - 1); i++) {       /* Init. list of free memory partitions    
+ 2364              		.loc 1 387 0 is_stmt 0 discriminator 1
+ 2365 065c B2315BE1 		ldrh	r3, [fp, #-18]
+ 2366 0660 030053E3 		cmp	r3, #3
+ 2367 0664 E3FFFF9A 		bls	.L36
+ 394:../os_core/os_mem.c ****     }
+ 395:../os_core/os_mem.c ****     pmem->OSMemFreeList = (void *)0;                    /* Initialize last node                    
+ 2368              		.loc 1 395 0 is_stmt 1
+ 2369 0668 10301BE5 		ldr	r3, [fp, #-16]
+ 2370 066c 0020A0E3 		mov	r2, #0
+ 2371 0670 042083E5 		str	r2, [r3, #4]
+ 396:../os_core/os_mem.c **** #if OS_MEM_NAME_SIZE > 1
+ 397:../os_core/os_mem.c ****     pmem->OSMemName[0]  = '?';                          /* Unknown name                            
+ 2372              		.loc 1 397 0
+ 2373 0674 10301BE5 		ldr	r3, [fp, #-16]
+ 2374 0678 3F20A0E3 		mov	r2, #63
+ 2375 067c 1420C3E5 		strb	r2, [r3, #20]
+ 398:../os_core/os_mem.c ****     pmem->OSMemName[1]  = OS_ASCII_NUL;
+ 2376              		.loc 1 398 0
+ 2377 0680 10301BE5 		ldr	r3, [fp, #-16]
+ 2378 0684 0020A0E3 		mov	r2, #0
+ 2379 0688 1520C3E5 		strb	r2, [r3, #21]
+ 399:../os_core/os_mem.c **** #endif
+ 400:../os_core/os_mem.c **** 
+ 401:../os_core/os_mem.c ****     OSMemFreeList       = (OS_MEM *)&OSMemTbl[0];       /* Point to beginning of free list         
+ 2380              		.loc 1 401 0
+ 2381 068c 14309FE5 		ldr	r3, .L37+4
+ 2382 0690 0C209FE5 		ldr	r2, .L37
+ 2383 0694 002083E5 		str	r2, [r3, #0]
+ 402:../os_core/os_mem.c **** #endif
+ 403:../os_core/os_mem.c **** }
+ 2384              		.loc 1 403 0
+ 2385 0698 0CD04BE2 		sub	sp, fp, #12
+ 2386 069c 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 2387 06a0 1EFF2FE1 		bx	lr
+ 2388              	.L38:
+ 2389              		.align	2
+ 2390              	.L37:
+ 2391 06a4 00000000 		.word	OSMemTbl
+ 2392 06a8 00000000 		.word	OSMemFreeList
+ 2393              		.cfi_endproc
+ 2394              	.LFE6:
+ 2396              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 os_mem.c
+C:\Users\USUARI~1\AppData\Local\Temp\ccPuXtyu.s:1635   .text:00000000 $a
+C:\Users\USUARI~1\AppData\Local\Temp\ccPuXtyu.s:1638   .text:00000000 OSMemCreate
+C:\Users\USUARI~1\AppData\Local\Temp\ccPuXtyu.s:1812   .text:000001bc $d
+C:\Users\USUARI~1\AppData\Local\Temp\ccPuXtyu.s:1816   .text:000001c0 $a
+C:\Users\USUARI~1\AppData\Local\Temp\ccPuXtyu.s:1819   .text:000001c0 OSMemGet
+C:\Users\USUARI~1\AppData\Local\Temp\ccPuXtyu.s:1914   .text:0000028c OSMemNameGet
+C:\Users\USUARI~1\AppData\Local\Temp\ccPuXtyu.s:2007   .text:0000034c OSMemNameSet
+C:\Users\USUARI~1\AppData\Local\Temp\ccPuXtyu.s:2114   .text:00000428 OSMemPut
+C:\Users\USUARI~1\AppData\Local\Temp\ccPuXtyu.s:2207   .text:000004ec OSMemQuery
+C:\Users\USUARI~1\AppData\Local\Temp\ccPuXtyu.s:2302   .text:000005c4 OS_MemInit
+C:\Users\USUARI~1\AppData\Local\Temp\ccPuXtyu.s:2391   .text:000006a4 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+OSMemFreeList
+OS_StrCopy
+OS_StrLen
+OS_MemClr
+OSMemTbl

@@ -1,0 +1,50 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"ucos_ii.c"
+  21              	.Ltext0:
+  22              		.file 1 "../os_core/ucos_ii.c"
+ 1673              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 ucos_ii.c
+                            *COM*:00000004 OSCtxSwCtr
+                            *COM*:00000004 OSEventFreeList
+                            *COM*:000001e0 OSEventTbl
+                            *COM*:000000dc OSFlagTbl
+                            *COM*:00000004 OSFlagFreeList
+                            *COM*:00000001 OSCPUUsage
+                            *COM*:00000004 OSIdleCtrMax
+                            *COM*:00000004 OSIdleCtrRun
+                            *COM*:00000001 OSStatRdy
+                            *COM*:00000800 OSTaskStatStk
+                            *COM*:00000001 OSIntNesting
+                            *COM*:00000001 OSLockNesting
+                            *COM*:00000001 OSPrioCur
+                            *COM*:00000001 OSPrioHighRdy
+                            *COM*:00000001 OSRdyGrp
+                            *COM*:00000008 OSRdyTbl
+                            *COM*:00000001 OSRunning
+                            *COM*:00000001 OSTaskCtr
+                            *COM*:00000004 OSIdleCtr
+                            *COM*:00000800 OSTaskIdleStk
+                            *COM*:00000004 OSTCBCur
+                            *COM*:00000004 OSTCBFreeList
+                            *COM*:00000004 OSTCBHighRdy
+                            *COM*:00000004 OSTCBList
+                            *COM*:00000100 OSTCBPrioTbl
+                            *COM*:000008f0 OSTCBTbl
+                            *COM*:00000001 OSTickStepState
+                            *COM*:00000004 OSMemFreeList
+                            *COM*:00000104 OSMemTbl
+                            *COM*:00000004 OSQFreeList
+                            *COM*:00000060 OSQTbl
+                            *COM*:00000004 OSTime
+
+NO UNDEFINED SYMBOLS

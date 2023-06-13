@@ -1,0 +1,1426 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"lab13.c"
+  21              	.Ltext0:
+  22              		.file 1 "../lab13.c"
+ 2146              		.align	2
+ 2147              	.LC0:
+ 2148 0000 0A0A2045 		.ascii	"\012\012 Ejecutando kernel de planificaci\363n no e"
+ 2148      6A656375 
+ 2148      74616E64 
+ 2148      6F206B65 
+ 2148      726E656C 
+ 2149 002a 7870726F 		.ascii	"xpropiativa\012\000"
+ 2149      70696174 
+ 2149      6976610A 
+ 2149      00
+ 2150 0037 00       		.align	2
+ 2151              	.LC1:
+ 2152 0038 202D2D2D 		.ascii	" --------------------------------------------------"
+ 2152      2D2D2D2D 
+ 2152      2D2D2D2D 
+ 2152      2D2D2D2D 
+ 2152      2D2D2D2D 
+ 2153 006b 0A0A00   		.ascii	"\012\012\000"
+ 2154              		.text
+ 2155              		.align	2
+ 2156              		.global	main
+ 2158              	main:
+ 2159              	.LFB0:
+   1:../lab13.c    **** /*-------------------------------------------------------------------
+   2:../lab13.c    **** **
+   3:../lab13.c    **** **  Fichero:
+   4:../lab13.c    **** **    lab13.c  12/1/2021
+   5:../lab13.c    **** **
+   6:../lab13.c    **** **    (c) J.M. Mendias
+   7:../lab13.c    **** **    Programación de Sistemas y Dispositivos
+   8:../lab13.c    **** **    Facultad de Informática. Universidad Complutense de Madrid
+   9:../lab13.c    **** **
+  10:../lab13.c    **** **  Propósito:
+  11:../lab13.c    **** **    Ejemplo de una aplicación bajo un kernel de planificación
+  12:../lab13.c    **** **    no expropiativa de tareas cooperativas multiestado
+  13:../lab13.c    **** **
+  14:../lab13.c    **** **  Notas de diseño:
+  15:../lab13.c    **** **
+  16:../lab13.c    **** **-----------------------------------------------------------------*/
+  17:../lab13.c    **** 
+  18:../lab13.c    **** #include "kernelcoop.h"
+  19:../lab13.c    **** 
+  20:../lab13.c    **** #include <s3c44b0x.h>
+  21:../lab13.c    **** #include <s3cev40.h>
+  22:../lab13.c    **** #include <common_types.h>
+  23:../lab13.c    **** #include <system.h>
+  24:../lab13.c    **** #include <leds.h>
+  25:../lab13.c    **** #include <segs.h>
+  26:../lab13.c    **** #include <uart.h>
+  27:../lab13.c    **** #include <pbs.h>
+  28:../lab13.c    **** #include <keypad.h>
+  29:../lab13.c    **** #include <timers.h>
+  30:../lab13.c    **** #include <rtc.h>
+  31:../lab13.c    **** //Incluimos lcd
+  32:../lab13.c    **** #include <lcd.h>
+  33:../lab13.c    **** 
+  34:../lab13.c    **** /* Declaración de recursos */
+  35:../lab13.c    **** 
+  36:../lab13.c    **** uint8 scancode;
+  37:../lab13.c    **** boolean flagTask5;
+  38:../lab13.c    **** boolean flagTask6;
+  39:../lab13.c    **** boolean flagTask8;
+  40:../lab13.c    **** 
+  41:../lab13.c    **** volatile boolean flagPb;
+  42:../lab13.c    **** volatile boolean flagKeypad;
+  43:../lab13.c    **** 
+  44:../lab13.c    **** /* Declaración de tareas */
+  45:../lab13.c    **** 
+  46:../lab13.c    **** void Task1( void );
+  47:../lab13.c    **** void Task2( void );
+  48:../lab13.c    **** void Task3( void );
+  49:../lab13.c    **** void Task4( void );
+  50:../lab13.c    **** void Task5( void );
+  51:../lab13.c    **** void Task6( void );
+  52:../lab13.c    **** void Task7( void );
+  53:../lab13.c    **** void Task8( void ); // Task añadido
+  54:../lab13.c    **** void Task9( void );  // Task añadido
+  55:../lab13.c    **** 
+  56:../lab13.c    **** /* Declaración de RTI */
+  57:../lab13.c    **** 
+  58:../lab13.c    **** void isr_pb( void ) __attribute__ ((interrupt ("IRQ")));
+  59:../lab13.c    **** void isr_keypad( void ) __attribute__ ((interrupt ("IRQ")));
+  60:../lab13.c    **** 
+  61:../lab13.c    **** /*******************************************************************/
+  62:../lab13.c    **** 
+  63:../lab13.c    **** void main( void )
+  64:../lab13.c    **** {
+ 2160              		.loc 1 64 0
+ 2161              		.cfi_startproc
+ 2162              		@ Function supports interworking.
+ 2163              		@ args = 0, pretend = 0, frame = 0
+ 2164              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2165 0000 0DC0A0E1 		mov	ip, sp
+ 2166              	.LCFI0:
+ 2167              		.cfi_def_cfa_register 12
+ 2168 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2169 0008 04B04CE2 		sub	fp, ip, #4
+ 2170              		.cfi_offset 14, -8
+ 2171              		.cfi_offset 13, -12
+ 2172              		.cfi_offset 11, -16
+ 2173              	.LCFI1:
+ 2174              		.cfi_def_cfa 11, 4
+  65:../lab13.c    ****     sys_init();      /* Inicializa el sistema */
+ 2175              		.loc 1 65 0
+ 2176 000c FEFFFFEB 		bl	sys_init
+  66:../lab13.c    ****     timers_init();
+ 2177              		.loc 1 66 0
+ 2178 0010 FEFFFFEB 		bl	timers_init
+  67:../lab13.c    ****     uart0_init();
+ 2179              		.loc 1 67 0
+ 2180 0014 FEFFFFEB 		bl	uart0_init
+  68:../lab13.c    ****     leds_init();
+ 2181              		.loc 1 68 0
+ 2182 0018 FEFFFFEB 		bl	leds_init
+  69:../lab13.c    ****     segs_init();
+ 2183              		.loc 1 69 0
+ 2184 001c FEFFFFEB 		bl	segs_init
+  70:../lab13.c    ****     rtc_init();
+ 2185              		.loc 1 70 0
+ 2186 0020 FEFFFFEB 		bl	rtc_init
+  71:../lab13.c    ****     pbs_init();
+ 2187              		.loc 1 71 0
+ 2188 0024 FEFFFFEB 		bl	pbs_init
+  72:../lab13.c    ****     keypad_init();
+ 2189              		.loc 1 72 0
+ 2190 0028 FEFFFFEB 		bl	keypad_init
+  73:../lab13.c    ****     lcd_init();
+ 2191              		.loc 1 73 0
+ 2192 002c FEFFFFEB 		bl	lcd_init
+  74:../lab13.c    **** 
+  75:../lab13.c    ****     //Limpiamos y encendemos el lcd
+  76:../lab13.c    ****     lcd_clear();
+ 2193              		.loc 1 76 0
+ 2194 0030 FEFFFFEB 		bl	lcd_clear
+  77:../lab13.c    ****     lcd_on();
+ 2195              		.loc 1 77 0
+ 2196 0034 FEFFFFEB 		bl	lcd_on
+  78:../lab13.c    **** 
+  79:../lab13.c    ****     uart0_puts( "\n\n Ejecutando kernel de planificación no expropiativa\n" );
+ 2197              		.loc 1 79 0
+ 2198 0038 C8009FE5 		ldr	r0, .L3
+ 2199 003c FEFFFFEB 		bl	uart0_puts
+  80:../lab13.c    ****     uart0_puts( " --------------------------------------------------\n\n" ) ;
+ 2200              		.loc 1 80 0
+ 2201 0040 C4009FE5 		ldr	r0, .L3+4
+ 2202 0044 FEFFFFEB 		bl	uart0_puts
+  81:../lab13.c    **** 
+  82:../lab13.c    ****     flagTask5  = FALSE;               /* Inicializa flags */
+ 2203              		.loc 1 82 0
+ 2204 0048 C0309FE5 		ldr	r3, .L3+8
+ 2205 004c 0020A0E3 		mov	r2, #0
+ 2206 0050 0020C3E5 		strb	r2, [r3, #0]
+  83:../lab13.c    ****     flagTask6  = FALSE;
+ 2207              		.loc 1 83 0
+ 2208 0054 B8309FE5 		ldr	r3, .L3+12
+ 2209 0058 0020A0E3 		mov	r2, #0
+ 2210 005c 0020C3E5 		strb	r2, [r3, #0]
+  84:../lab13.c    ****     flagTask8  = FALSE;
+ 2211              		.loc 1 84 0
+ 2212 0060 B0309FE5 		ldr	r3, .L3+16
+ 2213 0064 0020A0E3 		mov	r2, #0
+ 2214 0068 0020C3E5 		strb	r2, [r3, #0]
+  85:../lab13.c    ****     flagPb     = FALSE;
+ 2215              		.loc 1 85 0
+ 2216 006c A8309FE5 		ldr	r3, .L3+20
+ 2217 0070 0020A0E3 		mov	r2, #0
+ 2218 0074 0020C3E5 		strb	r2, [r3, #0]
+  86:../lab13.c    **** 
+  87:../lab13.c    ****     scheduler_init();                 /* Inicializa el kernel */
+ 2219              		.loc 1 87 0
+ 2220 0078 FEFFFFEB 		bl	scheduler_init
+  88:../lab13.c    **** 
+  89:../lab13.c    ****     create_task( Task2, 5 );          /* Crea las tareas de la aplicación... */
+ 2221              		.loc 1 89 0
+ 2222 007c 9C009FE5 		ldr	r0, .L3+24
+ 2223 0080 0510A0E3 		mov	r1, #5
+ 2224 0084 FEFFFFEB 		bl	create_task
+  90:../lab13.c    ****     create_task( Task7, 5 );          /* ... el kernel asigna la prioridad según orden de creación:
+ 2225              		.loc 1 90 0
+ 2226 0088 94009FE5 		ldr	r0, .L3+28
+ 2227 008c 0510A0E3 		mov	r1, #5
+ 2228 0090 FEFFFFEB 		bl	create_task
+  91:../lab13.c    ****     create_task( Task5, 10 );         /* ... las tareas más frecuentes tienen mayor prioridad (crit
+ 2229              		.loc 1 91 0
+ 2230 0094 8C009FE5 		ldr	r0, .L3+32
+ 2231 0098 0A10A0E3 		mov	r1, #10
+ 2232 009c FEFFFFEB 		bl	create_task
+  92:../lab13.c    ****     create_task( Task6, 10 );
+ 2233              		.loc 1 92 0
+ 2234 00a0 84009FE5 		ldr	r0, .L3+36
+ 2235 00a4 0A10A0E3 		mov	r1, #10
+ 2236 00a8 FEFFFFEB 		bl	create_task
+  93:../lab13.c    ****     create_task( Task8, 10 ); // Task añadido
+ 2237              		.loc 1 93 0
+ 2238 00ac 7C009FE5 		ldr	r0, .L3+40
+ 2239 00b0 0A10A0E3 		mov	r1, #10
+ 2240 00b4 FEFFFFEB 		bl	create_task
+  94:../lab13.c    ****     create_task( Task1, 50 );
+ 2241              		.loc 1 94 0
+ 2242 00b8 74009FE5 		ldr	r0, .L3+44
+ 2243 00bc 3210A0E3 		mov	r1, #50
+ 2244 00c0 FEFFFFEB 		bl	create_task
+  95:../lab13.c    ****     create_task( Task3, 100 );
+ 2245              		.loc 1 95 0
+ 2246 00c4 6C009FE5 		ldr	r0, .L3+48
+ 2247 00c8 6410A0E3 		mov	r1, #100
+ 2248 00cc FEFFFFEB 		bl	create_task
+  96:../lab13.c    ****     create_task( Task9, 100 ); // Task añadido
+ 2249              		.loc 1 96 0
+ 2250 00d0 64009FE5 		ldr	r0, .L3+52
+ 2251 00d4 6410A0E3 		mov	r1, #100
+ 2252 00d8 FEFFFFEB 		bl	create_task
+  97:../lab13.c    ****     create_task( Task4, 1000 );
+ 2253              		.loc 1 97 0
+ 2254 00dc 5C009FE5 		ldr	r0, .L3+56
+ 2255 00e0 FA1FA0E3 		mov	r1, #1000
+ 2256 00e4 FEFFFFEB 		bl	create_task
+  98:../lab13.c    **** 
+  99:../lab13.c    ****     timer0_open_tick( scheduler, TICKS_PER_SEC );  /* Instala scheduler como RTI del timer0  */
+ 2257              		.loc 1 99 0
+ 2258 00e8 54009FE5 		ldr	r0, .L3+60
+ 2259 00ec 6410A0E3 		mov	r1, #100
+ 2260 00f0 FEFFFFEB 		bl	timer0_open_tick
+ 100:../lab13.c    ****     pbs_open( isr_pb );                            /* Instala isr_pb como RTI por presión de pulsad
+ 2261              		.loc 1 100 0
+ 2262 00f4 4C009FE5 		ldr	r0, .L3+64
+ 2263 00f8 FEFFFFEB 		bl	pbs_open
+ 2264              	.L2:
+ 101:../lab13.c    **** 
+ 102:../lab13.c    ****     while( 1 )
+ 103:../lab13.c    ****     {
+ 104:../lab13.c    ****         sleep();                /* Entra en estado IDLE, sale por interrupción */
+ 2265              		.loc 1 104 0 discriminator 1
+ 2266 00fc FEFFFFEB 		bl	sleep
+ 105:../lab13.c    ****         dispacher();            /* Las tareas preparadas se ejecutan en esta hebra (background) en 
+ 2267              		.loc 1 105 0 discriminator 1
+ 2268 0100 FEFFFFEB 		bl	dispacher
+ 106:../lab13.c    ****     }
+ 2269              		.loc 1 106 0 discriminator 1
+ 2270 0104 FCFFFFEA 		b	.L2
+ 2271              	.L4:
+ 2272              		.align	2
+ 2273              	.L3:
+ 2274 0108 00000000 		.word	.LC0
+ 2275 010c 38000000 		.word	.LC1
+ 2276 0110 00000000 		.word	flagTask5
+ 2277 0114 00000000 		.word	flagTask6
+ 2278 0118 00000000 		.word	flagTask8
+ 2279 011c 00000000 		.word	flagPb
+ 2280 0120 00000000 		.word	Task2
+ 2281 0124 00000000 		.word	Task7
+ 2282 0128 00000000 		.word	Task5
+ 2283 012c 00000000 		.word	Task6
+ 2284 0130 00000000 		.word	Task8
+ 2285 0134 00000000 		.word	Task1
+ 2286 0138 00000000 		.word	Task3
+ 2287 013c 00000000 		.word	Task9
+ 2288 0140 00000000 		.word	Task4
+ 2289 0144 00000000 		.word	scheduler
+ 2290 0148 00000000 		.word	isr_pb
+ 2291              		.cfi_endproc
+ 2292              	.LFE0:
+ 2294              		.section	.rodata
+ 2295 006e 0000     		.align	2
+ 2296              	.LC2:
+ 2297 0070 20546173 		.ascii	" Task 1: iniciada.\012\000"
+ 2297      6B20313A 
+ 2297      20696E69 
+ 2297      63696164 
+ 2297      612E0A00 
+ 2298              		.text
+ 2299              		.align	2
+ 2300              		.global	Task1
+ 2302              	Task1:
+ 2303              	.LFB1:
+ 107:../lab13.c    **** 
+ 108:../lab13.c    **** }
+ 109:../lab13.c    **** 
+ 110:../lab13.c    **** /*******************************************************************/
+ 111:../lab13.c    **** 
+ 112:../lab13.c    **** void Task1( void )  /* Cada 0,5 segundos (50 ticks) alterna el led que se enciende */
+ 113:../lab13.c    **** {
+ 2304              		.loc 1 113 0
+ 2305              		.cfi_startproc
+ 2306              		@ Function supports interworking.
+ 2307              		@ args = 0, pretend = 0, frame = 0
+ 2308              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2309 014c 0DC0A0E1 		mov	ip, sp
+ 2310              	.LCFI2:
+ 2311              		.cfi_def_cfa_register 12
+ 2312 0150 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2313 0154 04B04CE2 		sub	fp, ip, #4
+ 2314              		.cfi_offset 14, -8
+ 2315              		.cfi_offset 13, -12
+ 2316              		.cfi_offset 11, -16
+ 2317              	.LCFI3:
+ 2318              		.cfi_def_cfa 11, 4
+ 114:../lab13.c    ****     static boolean init = TRUE;
+ 115:../lab13.c    **** 
+ 116:../lab13.c    ****     if( init )
+ 2319              		.loc 1 116 0
+ 2320 0158 4C309FE5 		ldr	r3, .L8
+ 2321 015c 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 2322 0160 000053E3 		cmp	r3, #0
+ 2323 0164 0900000A 		beq	.L6
+ 117:../lab13.c    ****     {
+ 118:../lab13.c    ****         init = FALSE;
+ 2324              		.loc 1 118 0
+ 2325 0168 3C309FE5 		ldr	r3, .L8
+ 2326 016c 0020A0E3 		mov	r2, #0
+ 2327 0170 0020C3E5 		strb	r2, [r3, #0]
+ 119:../lab13.c    ****         uart0_puts( " Task 1: iniciada.\n" );  /* Muestra un mensaje inicial en la UART0 (no es nec
+ 2328              		.loc 1 119 0
+ 2329 0174 34009FE5 		ldr	r0, .L8+4
+ 2330 0178 FEFFFFEB 		bl	uart0_puts
+ 120:../lab13.c    ****         led_on( LEFT_LED );
+ 2331              		.loc 1 120 0
+ 2332 017c 0100A0E3 		mov	r0, #1
+ 2333 0180 FEFFFFEB 		bl	led_on
+ 121:../lab13.c    ****         led_off( RIGHT_LED );
+ 2334              		.loc 1 121 0
+ 2335 0184 0200A0E3 		mov	r0, #2
+ 2336 0188 FEFFFFEB 		bl	led_off
+ 2337 018c 030000EA 		b	.L5
+ 2338              	.L6:
+ 122:../lab13.c    ****     }
+ 123:../lab13.c    ****     else
+ 124:../lab13.c    ****     {
+ 125:../lab13.c    ****         led_toggle( LEFT_LED );
+ 2339              		.loc 1 125 0
+ 2340 0190 0100A0E3 		mov	r0, #1
+ 2341 0194 FEFFFFEB 		bl	led_toggle
+ 126:../lab13.c    ****         led_toggle( RIGHT_LED );
+ 2342              		.loc 1 126 0
+ 2343 0198 0200A0E3 		mov	r0, #2
+ 2344 019c FEFFFFEB 		bl	led_toggle
+ 2345              	.L5:
+ 127:../lab13.c    ****     }
+ 128:../lab13.c    **** }
+ 2346              		.loc 1 128 0
+ 2347 01a0 0CD04BE2 		sub	sp, fp, #12
+ 2348 01a4 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 2349 01a8 1EFF2FE1 		bx	lr
+ 2350              	.L9:
+ 2351              		.align	2
+ 2352              	.L8:
+ 2353 01ac 08000000 		.word	init.4188
+ 2354 01b0 70000000 		.word	.LC2
+ 2355              		.cfi_endproc
+ 2356              	.LFE1:
+ 2358              		.section	.rodata
+ 2359              		.align	2
+ 2360              	.LC3:
+ 2361 0084 20546173 		.ascii	" Task 2: iniciada.\012\000"
+ 2361      6B20323A 
+ 2361      20696E69 
+ 2361      63696164 
+ 2361      612E0A00 
+ 2362              		.text
+ 2363              		.align	2
+ 2364              		.global	Task2
+ 2366              	Task2:
+ 2367              	.LFB2:
+ 129:../lab13.c    **** 
+ 130:../lab13.c    **** void Task2( void )  /* Cada 50 ms (5 ticks) muestrea el keypad y envía el scancode a otras tareas *
+ 131:../lab13.c    **** {
+ 2368              		.loc 1 131 0
+ 2369              		.cfi_startproc
+ 2370              		@ Function supports interworking.
+ 2371              		@ args = 0, pretend = 0, frame = 0
+ 2372              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2373 01b4 0DC0A0E1 		mov	ip, sp
+ 2374              	.LCFI4:
+ 2375              		.cfi_def_cfa_register 12
+ 2376 01b8 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2377 01bc 04B04CE2 		sub	fp, ip, #4
+ 2378              		.cfi_offset 14, -8
+ 2379              		.cfi_offset 13, -12
+ 2380              		.cfi_offset 11, -16
+ 2381              	.LCFI5:
+ 2382              		.cfi_def_cfa 11, 4
+ 132:../lab13.c    ****     static boolean init = TRUE;
+ 133:../lab13.c    ****     static enum { wait_keydown, scan, wait_keyup } state;
+ 134:../lab13.c    **** 
+ 135:../lab13.c    ****     if( init )
+ 2383              		.loc 1 135 0
+ 2384 01c0 FC309FE5 		ldr	r3, .L21
+ 2385 01c4 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 2386 01c8 000053E3 		cmp	r3, #0
+ 2387 01cc 0800000A 		beq	.L11
+ 136:../lab13.c    ****     {
+ 137:../lab13.c    ****         init  = FALSE;
+ 2388              		.loc 1 137 0
+ 2389 01d0 EC309FE5 		ldr	r3, .L21
+ 2390 01d4 0020A0E3 		mov	r2, #0
+ 2391 01d8 0020C3E5 		strb	r2, [r3, #0]
+ 138:../lab13.c    ****         uart0_puts( " Task 2: iniciada.\n" );  /* Muestra un mensaje inicial en la UART0 (no es nec
+ 2392              		.loc 1 138 0
+ 2393 01dc E4009FE5 		ldr	r0, .L21+4
+ 2394 01e0 FEFFFFEB 		bl	uart0_puts
+ 139:../lab13.c    ****         state = wait_keydown;
+ 2395              		.loc 1 139 0
+ 2396 01e4 E0309FE5 		ldr	r3, .L21+8
+ 2397 01e8 0020A0E3 		mov	r2, #0
+ 2398 01ec 0020C3E5 		strb	r2, [r3, #0]
+ 2399 01f0 300000EA 		b	.L10
+ 2400              	.L11:
+ 140:../lab13.c    ****     }
+ 141:../lab13.c    ****     else switch( state )
+ 2401              		.loc 1 141 0
+ 2402 01f4 D0309FE5 		ldr	r3, .L21+8
+ 2403 01f8 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 2404 01fc 010053E3 		cmp	r3, #1
+ 2405 0200 0B00000A 		beq	.L14
+ 2406 0204 020053E3 		cmp	r3, #2
+ 2407 0208 1F00000A 		beq	.L15
+ 2408 020c 000053E3 		cmp	r3, #0
+ 2409 0210 2800001A 		bne	.L10
+ 2410              	.L13:
+ 142:../lab13.c    ****     {
+ 143:../lab13.c    ****         case wait_keydown:
+ 144:../lab13.c    ****             if( keypad_pressed() )
+ 2411              		.loc 1 144 0
+ 2412 0214 FEFFFFEB 		bl	keypad_pressed
+ 2413 0218 0030A0E1 		mov	r3, r0
+ 2414 021c 000053E3 		cmp	r3, #0
+ 2415 0220 2100000A 		beq	.L19
+ 145:../lab13.c    ****                 state = scan;
+ 2416              		.loc 1 145 0
+ 2417 0224 A0309FE5 		ldr	r3, .L21+8
+ 2418 0228 0120A0E3 		mov	r2, #1
+ 2419 022c 0020C3E5 		strb	r2, [r3, #0]
+ 146:../lab13.c    ****             break;
+ 2420              		.loc 1 146 0
+ 2421 0230 200000EA 		b	.L10
+ 2422              	.L14:
+ 147:../lab13.c    ****         case scan:
+ 148:../lab13.c    ****             scancode = keypad_scan();
+ 2423              		.loc 1 148 0
+ 2424 0234 FEFFFFEB 		bl	keypad_scan
+ 2425 0238 0030A0E1 		mov	r3, r0
+ 2426 023c 0320A0E1 		mov	r2, r3
+ 2427 0240 88309FE5 		ldr	r3, .L21+12
+ 2428 0244 0020C3E5 		strb	r2, [r3, #0]
+ 149:../lab13.c    ****             if( scancode != KEYPAD_FAILURE )
+ 2429              		.loc 1 149 0
+ 2430 0248 80309FE5 		ldr	r3, .L21+12
+ 2431 024c 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 2432 0250 FF0053E3 		cmp	r3, #255
+ 2433 0254 0800000A 		beq	.L17
+ 150:../lab13.c    ****             {
+ 151:../lab13.c    ****                 flagTask5 = TRUE;
+ 2434              		.loc 1 151 0
+ 2435 0258 74309FE5 		ldr	r3, .L21+16
+ 2436 025c 0120A0E3 		mov	r2, #1
+ 2437 0260 0020C3E5 		strb	r2, [r3, #0]
+ 152:../lab13.c    ****                 flagTask6 = TRUE;
+ 2438              		.loc 1 152 0
+ 2439 0264 6C309FE5 		ldr	r3, .L21+20
+ 2440 0268 0120A0E3 		mov	r2, #1
+ 2441 026c 0020C3E5 		strb	r2, [r3, #0]
+ 153:../lab13.c    ****                 flagTask8 = TRUE;
+ 2442              		.loc 1 153 0
+ 2443 0270 64309FE5 		ldr	r3, .L21+24
+ 2444 0274 0120A0E3 		mov	r2, #1
+ 2445 0278 0020C3E5 		strb	r2, [r3, #0]
+ 2446              	.L17:
+ 154:../lab13.c    ****             }
+ 155:../lab13.c    ****             state = wait_keyup;
+ 2447              		.loc 1 155 0
+ 2448 027c 48309FE5 		ldr	r3, .L21+8
+ 2449 0280 0220A0E3 		mov	r2, #2
+ 2450 0284 0020C3E5 		strb	r2, [r3, #0]
+ 156:../lab13.c    ****             break;
+ 2451              		.loc 1 156 0
+ 2452 0288 0A0000EA 		b	.L10
+ 2453              	.L15:
+ 157:../lab13.c    ****         case wait_keyup:
+ 158:../lab13.c    ****             if( !keypad_pressed() )
+ 2454              		.loc 1 158 0
+ 2455 028c FEFFFFEB 		bl	keypad_pressed
+ 2456 0290 0030A0E1 		mov	r3, r0
+ 2457 0294 000053E3 		cmp	r3, #0
+ 2458 0298 0500001A 		bne	.L20
+ 159:../lab13.c    ****                 state = wait_keydown;
+ 2459              		.loc 1 159 0
+ 2460 029c 28309FE5 		ldr	r3, .L21+8
+ 2461 02a0 0020A0E3 		mov	r2, #0
+ 2462 02a4 0020C3E5 		strb	r2, [r3, #0]
+ 160:../lab13.c    ****             break;
+ 2463              		.loc 1 160 0
+ 2464 02a8 020000EA 		b	.L10
+ 2465              	.L19:
+ 146:../lab13.c    ****             break;
+ 2466              		.loc 1 146 0
+ 2467 02ac 0000A0E1 		mov	r0, r0	@ nop
+ 2468 02b0 000000EA 		b	.L10
+ 2469              	.L20:
+ 2470              		.loc 1 160 0
+ 2471 02b4 0000A0E1 		mov	r0, r0	@ nop
+ 2472              	.L10:
+ 161:../lab13.c    ****     }
+ 162:../lab13.c    **** }
+ 2473              		.loc 1 162 0
+ 2474 02b8 0CD04BE2 		sub	sp, fp, #12
+ 2475 02bc 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 2476 02c0 1EFF2FE1 		bx	lr
+ 2477              	.L22:
+ 2478              		.align	2
+ 2479              	.L21:
+ 2480 02c4 07000000 		.word	init.4192
+ 2481 02c8 84000000 		.word	.LC3
+ 2482 02cc 04000000 		.word	state.4197
+ 2483 02d0 00000000 		.word	scancode
+ 2484 02d4 00000000 		.word	flagTask5
+ 2485 02d8 00000000 		.word	flagTask6
+ 2486 02dc 00000000 		.word	flagTask8
+ 2487              		.cfi_endproc
+ 2488              	.LFE2:
+ 2490              		.section	.rodata
+ 2491              		.align	2
+ 2492              	.LC4:
+ 2493 0098 20546173 		.ascii	" Task 3: iniciada.\012\000"
+ 2493      6B20333A 
+ 2493      20696E69 
+ 2493      63696164 
+ 2493      612E0A00 
+ 2494              		.align	2
+ 2495              	.LC5:
+ 2496 00ac 20202854 		.ascii	"  (Task 3) Hora: \000"
+ 2496      61736B20 
+ 2496      33292048 
+ 2496      6F72613A 
+ 2496      2000
+ 2497 00be 0000     		.align	2
+ 2498              	.LC6:
+ 2499 00c0 0A00     		.ascii	"\012\000"
+ 2500              		.text
+ 2501              		.align	2
+ 2502              		.global	Task3
+ 2504              	Task3:
+ 2505              	.LFB3:
+ 163:../lab13.c    **** 
+ 164:../lab13.c    **** void Task3( void  )  /* Cada segundo (100 ticks) muestra por la UART0 la hora del RTC */
+ 165:../lab13.c    **** {
+ 2506              		.loc 1 165 0
+ 2507              		.cfi_startproc
+ 2508              		@ Function supports interworking.
+ 2509              		@ args = 0, pretend = 0, frame = 8
+ 2510              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2511 02e0 0DC0A0E1 		mov	ip, sp
+ 2512              	.LCFI6:
+ 2513              		.cfi_def_cfa_register 12
+ 2514 02e4 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2515 02e8 04B04CE2 		sub	fp, ip, #4
+ 2516              		.cfi_offset 14, -8
+ 2517              		.cfi_offset 13, -12
+ 2518              		.cfi_offset 11, -16
+ 2519              	.LCFI7:
+ 2520              		.cfi_def_cfa 11, 4
+ 2521 02ec 08D04DE2 		sub	sp, sp, #8
+ 166:../lab13.c    ****     static boolean init = TRUE;
+ 167:../lab13.c    ****     rtc_time_t rtc_time;
+ 168:../lab13.c    **** 
+ 169:../lab13.c    ****     if( init )
+ 2522              		.loc 1 169 0
+ 2523 02f0 7C309FE5 		ldr	r3, .L26
+ 2524 02f4 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 2525 02f8 000053E3 		cmp	r3, #0
+ 2526 02fc 0500000A 		beq	.L24
+ 170:../lab13.c    ****     {
+ 171:../lab13.c    ****         init = FALSE;
+ 2527              		.loc 1 171 0
+ 2528 0300 6C309FE5 		ldr	r3, .L26
+ 2529 0304 0020A0E3 		mov	r2, #0
+ 2530 0308 0020C3E5 		strb	r2, [r3, #0]
+ 172:../lab13.c    ****         uart0_puts( " Task 3: iniciada.\n" );  /* Muestra un mensaje inicial en la UART0 (no es nec
+ 2531              		.loc 1 172 0
+ 2532 030c 64009FE5 		ldr	r0, .L26+4
+ 2533 0310 FEFFFFEB 		bl	uart0_puts
+ 2534 0314 130000EA 		b	.L23
+ 2535              	.L24:
+ 173:../lab13.c    ****     }
+ 174:../lab13.c    ****     else
+ 175:../lab13.c    ****     {
+ 176:../lab13.c    ****         rtc_gettime( &rtc_time );
+ 2536              		.loc 1 176 0
+ 2537 0318 14304BE2 		sub	r3, fp, #20
+ 2538 031c 0300A0E1 		mov	r0, r3
+ 2539 0320 FEFFFFEB 		bl	rtc_gettime
+ 177:../lab13.c    ****         uart0_puts( "  (Task 3) Hora: " );
+ 2540              		.loc 1 177 0
+ 2541 0324 50009FE5 		ldr	r0, .L26+8
+ 2542 0328 FEFFFFEB 		bl	uart0_puts
+ 178:../lab13.c    ****         uart0_putint( rtc_time.hour );
+ 2543              		.loc 1 178 0
+ 2544 032c 12305BE5 		ldrb	r3, [fp, #-18]	@ zero_extendqisi2
+ 2545 0330 0300A0E1 		mov	r0, r3
+ 2546 0334 FEFFFFEB 		bl	uart0_putint
+ 179:../lab13.c    ****         uart0_putchar( ':' );
+ 2547              		.loc 1 179 0
+ 2548 0338 3A00A0E3 		mov	r0, #58
+ 2549 033c FEFFFFEB 		bl	uart0_putchar
+ 180:../lab13.c    ****         uart0_putint( rtc_time.min );
+ 2550              		.loc 1 180 0
+ 2551 0340 13305BE5 		ldrb	r3, [fp, #-19]	@ zero_extendqisi2
+ 2552 0344 0300A0E1 		mov	r0, r3
+ 2553 0348 FEFFFFEB 		bl	uart0_putint
+ 181:../lab13.c    ****         uart0_putchar( ':' );
+ 2554              		.loc 1 181 0
+ 2555 034c 3A00A0E3 		mov	r0, #58
+ 2556 0350 FEFFFFEB 		bl	uart0_putchar
+ 182:../lab13.c    ****         uart0_putint( rtc_time.sec );
+ 2557              		.loc 1 182 0
+ 2558 0354 14305BE5 		ldrb	r3, [fp, #-20]	@ zero_extendqisi2
+ 2559 0358 0300A0E1 		mov	r0, r3
+ 2560 035c FEFFFFEB 		bl	uart0_putint
+ 183:../lab13.c    ****         uart0_puts( "\n" );
+ 2561              		.loc 1 183 0
+ 2562 0360 18009FE5 		ldr	r0, .L26+12
+ 2563 0364 FEFFFFEB 		bl	uart0_puts
+ 2564              	.L23:
+ 184:../lab13.c    ****     }
+ 185:../lab13.c    **** }
+ 2565              		.loc 1 185 0
+ 2566 0368 0CD04BE2 		sub	sp, fp, #12
+ 2567 036c 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 2568 0370 1EFF2FE1 		bx	lr
+ 2569              	.L27:
+ 2570              		.align	2
+ 2571              	.L26:
+ 2572 0374 06000000 		.word	init.4205
+ 2573 0378 98000000 		.word	.LC4
+ 2574 037c AC000000 		.word	.LC5
+ 2575 0380 C0000000 		.word	.LC6
+ 2576              		.cfi_endproc
+ 2577              	.LFE3:
+ 2579              		.section	.rodata
+ 2580 00c2 0000     		.align	2
+ 2581              	.LC7:
+ 2582 00c4 20546173 		.ascii	" Task 4: iniciada.\012\000"
+ 2582      6B20343A 
+ 2582      20696E69 
+ 2582      63696164 
+ 2582      612E0A00 
+ 2583              		.align	2
+ 2584              	.LC8:
+ 2585 00d8 20202854 		.ascii	"  (Task 4) Ticks: \000"
+ 2585      61736B20 
+ 2585      34292054 
+ 2585      69636B73 
+ 2585      3A2000
+ 2586              		.text
+ 2587              		.align	2
+ 2588              		.global	Task4
+ 2590              	Task4:
+ 2591              	.LFB4:
+ 186:../lab13.c    **** 
+ 187:../lab13.c    **** void Task4( void )  /* Cada 10 segundos (1000 ticks) muestra por la UART0 los ticks transcurridos *
+ 188:../lab13.c    **** {
+ 2592              		.loc 1 188 0
+ 2593              		.cfi_startproc
+ 2594              		@ Function supports interworking.
+ 2595              		@ args = 0, pretend = 0, frame = 0
+ 2596              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2597 0384 0DC0A0E1 		mov	ip, sp
+ 2598              	.LCFI8:
+ 2599              		.cfi_def_cfa_register 12
+ 2600 0388 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2601 038c 04B04CE2 		sub	fp, ip, #4
+ 2602              		.cfi_offset 14, -8
+ 2603              		.cfi_offset 13, -12
+ 2604              		.cfi_offset 11, -16
+ 2605              	.LCFI9:
+ 2606              		.cfi_def_cfa 11, 4
+ 189:../lab13.c    ****     static boolean init = TRUE;
+ 190:../lab13.c    ****     static uint32 ticks;
+ 191:../lab13.c    **** 
+ 192:../lab13.c    ****     if( init )
+ 2607              		.loc 1 192 0
+ 2608 0390 6C309FE5 		ldr	r3, .L31
+ 2609 0394 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 2610 0398 000053E3 		cmp	r3, #0
+ 2611 039c 0800000A 		beq	.L29
+ 193:../lab13.c    ****     {
+ 194:../lab13.c    ****         init = FALSE;
+ 2612              		.loc 1 194 0
+ 2613 03a0 5C309FE5 		ldr	r3, .L31
+ 2614 03a4 0020A0E3 		mov	r2, #0
+ 2615 03a8 0020C3E5 		strb	r2, [r3, #0]
+ 195:../lab13.c    ****         uart0_puts( " Task 4: iniciada.\n" );  /* Muestra un mensaje inicial en la UART0 (no es nec
+ 2616              		.loc 1 195 0
+ 2617 03ac 54009FE5 		ldr	r0, .L31+4
+ 2618 03b0 FEFFFFEB 		bl	uart0_puts
+ 196:../lab13.c    ****         ticks = 0;
+ 2619              		.loc 1 196 0
+ 2620 03b4 50309FE5 		ldr	r3, .L31+8
+ 2621 03b8 0020A0E3 		mov	r2, #0
+ 2622 03bc 002083E5 		str	r2, [r3, #0]
+ 2623 03c0 0C0000EA 		b	.L28
+ 2624              	.L29:
+ 197:../lab13.c    ****     }
+ 198:../lab13.c    ****     else
+ 199:../lab13.c    ****     {
+ 200:../lab13.c    ****         ticks += TICKS_PER_SEC * 10;
+ 2625              		.loc 1 200 0
+ 2626 03c4 40309FE5 		ldr	r3, .L31+8
+ 2627 03c8 003093E5 		ldr	r3, [r3, #0]
+ 2628 03cc FA2F83E2 		add	r2, r3, #1000
+ 2629 03d0 34309FE5 		ldr	r3, .L31+8
+ 2630 03d4 002083E5 		str	r2, [r3, #0]
+ 201:../lab13.c    ****         uart0_puts( "  (Task 4) Ticks: " );
+ 2631              		.loc 1 201 0
+ 2632 03d8 30009FE5 		ldr	r0, .L31+12
+ 2633 03dc FEFFFFEB 		bl	uart0_puts
+ 202:../lab13.c    ****         uart0_putint( ticks );
+ 2634              		.loc 1 202 0
+ 2635 03e0 24309FE5 		ldr	r3, .L31+8
+ 2636 03e4 003093E5 		ldr	r3, [r3, #0]
+ 2637 03e8 0300A0E1 		mov	r0, r3
+ 2638 03ec FEFFFFEB 		bl	uart0_putint
+ 203:../lab13.c    ****         uart0_puts( "\n" );
+ 2639              		.loc 1 203 0
+ 2640 03f0 1C009FE5 		ldr	r0, .L31+16
+ 2641 03f4 FEFFFFEB 		bl	uart0_puts
+ 2642              	.L28:
+ 204:../lab13.c    ****     }
+ 205:../lab13.c    **** }
+ 2643              		.loc 1 205 0
+ 2644 03f8 0CD04BE2 		sub	sp, fp, #12
+ 2645 03fc 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 2646 0400 1EFF2FE1 		bx	lr
+ 2647              	.L32:
+ 2648              		.align	2
+ 2649              	.L31:
+ 2650 0404 05000000 		.word	init.4210
+ 2651 0408 C4000000 		.word	.LC7
+ 2652 040c 00000000 		.word	ticks.4211
+ 2653 0410 D8000000 		.word	.LC8
+ 2654 0414 C0000000 		.word	.LC6
+ 2655              		.cfi_endproc
+ 2656              	.LFE4:
+ 2658              		.section	.rodata
+ 2659 00eb 00       		.align	2
+ 2660              	.LC9:
+ 2661 00ec 20546173 		.ascii	" Task 5: iniciada.\012\000"
+ 2661      6B20353A 
+ 2661      20696E69 
+ 2661      63696164 
+ 2661      612E0A00 
+ 2662              		.align	2
+ 2663              	.LC10:
+ 2664 0100 20202854 		.ascii	"  (Task 5) Tecla pulsada: \000"
+ 2664      61736B20 
+ 2664      35292054 
+ 2664      65636C61 
+ 2664      2070756C 
+ 2665              		.text
+ 2666              		.align	2
+ 2667              		.global	Task5
+ 2669              	Task5:
+ 2670              	.LFB5:
+ 206:../lab13.c    **** 
+ 207:../lab13.c    **** void Task5( void )  /* Cada vez que reciba un scancode lo muestra por la UART0 */
+ 208:../lab13.c    **** {
+ 2671              		.loc 1 208 0
+ 2672              		.cfi_startproc
+ 2673              		@ Function supports interworking.
+ 2674              		@ args = 0, pretend = 0, frame = 0
+ 2675              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2676 0418 0DC0A0E1 		mov	ip, sp
+ 2677              	.LCFI10:
+ 2678              		.cfi_def_cfa_register 12
+ 2679 041c 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2680 0420 04B04CE2 		sub	fp, ip, #4
+ 2681              		.cfi_offset 14, -8
+ 2682              		.cfi_offset 13, -12
+ 2683              		.cfi_offset 11, -16
+ 2684              	.LCFI11:
+ 2685              		.cfi_def_cfa 11, 4
+ 209:../lab13.c    ****     static boolean init = TRUE;
+ 210:../lab13.c    **** 
+ 211:../lab13.c    ****     if( init )
+ 2686              		.loc 1 211 0
+ 2687 0424 68309FE5 		ldr	r3, .L36
+ 2688 0428 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 2689 042c 000053E3 		cmp	r3, #0
+ 2690 0430 0500000A 		beq	.L34
+ 212:../lab13.c    ****     {
+ 213:../lab13.c    ****         init = FALSE;
+ 2691              		.loc 1 213 0
+ 2692 0434 58309FE5 		ldr	r3, .L36
+ 2693 0438 0020A0E3 		mov	r2, #0
+ 2694 043c 0020C3E5 		strb	r2, [r3, #0]
+ 214:../lab13.c    ****         uart0_puts( " Task 5: iniciada.\n" );  /* Muestra un mensaje inicial en la UART0 (no es nec
+ 2695              		.loc 1 214 0
+ 2696 0440 50009FE5 		ldr	r0, .L36+4
+ 2697 0444 FEFFFFEB 		bl	uart0_puts
+ 2698 0448 0E0000EA 		b	.L33
+ 2699              	.L34:
+ 215:../lab13.c    ****     }
+ 216:../lab13.c    ****     else if( flagTask5 )
+ 2700              		.loc 1 216 0
+ 2701 044c 48309FE5 		ldr	r3, .L36+8
+ 2702 0450 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 2703 0454 000053E3 		cmp	r3, #0
+ 2704 0458 0A00000A 		beq	.L33
+ 217:../lab13.c    ****     {
+ 218:../lab13.c    ****         flagTask5 = FALSE;
+ 2705              		.loc 1 218 0
+ 2706 045c 38309FE5 		ldr	r3, .L36+8
+ 2707 0460 0020A0E3 		mov	r2, #0
+ 2708 0464 0020C3E5 		strb	r2, [r3, #0]
+ 219:../lab13.c    ****         uart0_puts( "  (Task 5) Tecla pulsada: " );
+ 2709              		.loc 1 219 0
+ 2710 0468 30009FE5 		ldr	r0, .L36+12
+ 2711 046c FEFFFFEB 		bl	uart0_puts
+ 220:../lab13.c    ****         uart0_puthex( scancode );
+ 2712              		.loc 1 220 0
+ 2713 0470 2C309FE5 		ldr	r3, .L36+16
+ 2714 0474 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 2715 0478 0300A0E1 		mov	r0, r3
+ 2716 047c FEFFFFEB 		bl	uart0_puthex
+ 221:../lab13.c    ****         uart0_puts( "\n" );
+ 2717              		.loc 1 221 0
+ 2718 0480 20009FE5 		ldr	r0, .L36+20
+ 2719 0484 FEFFFFEB 		bl	uart0_puts
+ 2720              	.L33:
+ 222:../lab13.c    ****     }
+ 223:../lab13.c    **** }
+ 2721              		.loc 1 223 0
+ 2722 0488 0CD04BE2 		sub	sp, fp, #12
+ 2723 048c 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 2724 0490 1EFF2FE1 		bx	lr
+ 2725              	.L37:
+ 2726              		.align	2
+ 2727              	.L36:
+ 2728 0494 04000000 		.word	init.4215
+ 2729 0498 EC000000 		.word	.LC9
+ 2730 049c 00000000 		.word	flagTask5
+ 2731 04a0 00010000 		.word	.LC10
+ 2732 04a4 00000000 		.word	scancode
+ 2733 04a8 C0000000 		.word	.LC6
+ 2734              		.cfi_endproc
+ 2735              	.LFE5:
+ 2737              		.section	.rodata
+ 2738 011b 00       		.align	2
+ 2739              	.LC11:
+ 2740 011c 20546173 		.ascii	" Task 6: iniciada.\012\000"
+ 2740      6B20363A 
+ 2740      20696E69 
+ 2740      63696164 
+ 2740      612E0A00 
+ 2741              		.text
+ 2742              		.align	2
+ 2743              		.global	Task6
+ 2745              	Task6:
+ 2746              	.LFB6:
+ 224:../lab13.c    **** 
+ 225:../lab13.c    **** void Task6( void )  /* Cada vez que reciba un scancode lo muestra por los 7 segmentos */
+ 226:../lab13.c    **** {
+ 2747              		.loc 1 226 0
+ 2748              		.cfi_startproc
+ 2749              		@ Function supports interworking.
+ 2750              		@ args = 0, pretend = 0, frame = 0
+ 2751              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2752 04ac 0DC0A0E1 		mov	ip, sp
+ 2753              	.LCFI12:
+ 2754              		.cfi_def_cfa_register 12
+ 2755 04b0 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2756 04b4 04B04CE2 		sub	fp, ip, #4
+ 2757              		.cfi_offset 14, -8
+ 2758              		.cfi_offset 13, -12
+ 2759              		.cfi_offset 11, -16
+ 2760              	.LCFI13:
+ 2761              		.cfi_def_cfa 11, 4
+ 227:../lab13.c    ****     static boolean init = TRUE;
+ 228:../lab13.c    **** 
+ 229:../lab13.c    ****     if( init )
+ 2762              		.loc 1 229 0
+ 2763 04b8 58309FE5 		ldr	r3, .L41
+ 2764 04bc 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 2765 04c0 000053E3 		cmp	r3, #0
+ 2766 04c4 0500000A 		beq	.L39
+ 230:../lab13.c    ****     {
+ 231:../lab13.c    ****         init = FALSE;
+ 2767              		.loc 1 231 0
+ 2768 04c8 48309FE5 		ldr	r3, .L41
+ 2769 04cc 0020A0E3 		mov	r2, #0
+ 2770 04d0 0020C3E5 		strb	r2, [r3, #0]
+ 232:../lab13.c    ****         uart0_puts( " Task 6: iniciada.\n" );  /* Muestra un mensaje inicial en la UART0 (no es nec
+ 2771              		.loc 1 232 0
+ 2772 04d4 40009FE5 		ldr	r0, .L41+4
+ 2773 04d8 FEFFFFEB 		bl	uart0_puts
+ 2774 04dc 0A0000EA 		b	.L38
+ 2775              	.L39:
+ 233:../lab13.c    ****     }
+ 234:../lab13.c    ****     else if( flagTask6 )
+ 2776              		.loc 1 234 0
+ 2777 04e0 38309FE5 		ldr	r3, .L41+8
+ 2778 04e4 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 2779 04e8 000053E3 		cmp	r3, #0
+ 2780 04ec 0600000A 		beq	.L38
+ 235:../lab13.c    ****     {
+ 236:../lab13.c    ****         flagTask6 = FALSE;
+ 2781              		.loc 1 236 0
+ 2782 04f0 28309FE5 		ldr	r3, .L41+8
+ 2783 04f4 0020A0E3 		mov	r2, #0
+ 2784 04f8 0020C3E5 		strb	r2, [r3, #0]
+ 237:../lab13.c    ****         segs_putchar( scancode );
+ 2785              		.loc 1 237 0
+ 2786 04fc 20309FE5 		ldr	r3, .L41+12
+ 2787 0500 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 2788 0504 0300A0E1 		mov	r0, r3
+ 2789 0508 FEFFFFEB 		bl	segs_putchar
+ 2790              	.L38:
+ 238:../lab13.c    ****     }
+ 239:../lab13.c    **** }
+ 2791              		.loc 1 239 0
+ 2792 050c 0CD04BE2 		sub	sp, fp, #12
+ 2793 0510 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 2794 0514 1EFF2FE1 		bx	lr
+ 2795              	.L42:
+ 2796              		.align	2
+ 2797              	.L41:
+ 2798 0518 03000000 		.word	init.4219
+ 2799 051c 1C010000 		.word	.LC11
+ 2800 0520 00000000 		.word	flagTask6
+ 2801 0524 00000000 		.word	scancode
+ 2802              		.cfi_endproc
+ 2803              	.LFE6:
+ 2805              		.section	.rodata
+ 2806              		.align	2
+ 2807              	.LC12:
+ 2808 0130 20546173 		.ascii	" Task 7: iniciada.\012\000"
+ 2808      6B20373A 
+ 2808      20696E69 
+ 2808      63696164 
+ 2808      612E0A00 
+ 2809              		.align	2
+ 2810              	.LC13:
+ 2811 0144 20202854 		.ascii	"  (Task 7) Se ha pulsado alg\372n pushbutton...\012"
+ 2811      61736B20 
+ 2811      37292053 
+ 2811      65206861 
+ 2811      2070756C 
+ 2812 0171 00       		.ascii	"\000"
+ 2813              		.text
+ 2814              		.align	2
+ 2815              		.global	Task7
+ 2817              	Task7:
+ 2818              	.LFB7:
+ 240:../lab13.c    **** 
+ 241:../lab13.c    **** void Task7( void )  /* Cada vez que se presione un pulsador lo avisa por la UART0 */
+ 242:../lab13.c    **** {
+ 2819              		.loc 1 242 0
+ 2820              		.cfi_startproc
+ 2821              		@ Function supports interworking.
+ 2822              		@ args = 0, pretend = 0, frame = 0
+ 2823              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2824 0528 0DC0A0E1 		mov	ip, sp
+ 2825              	.LCFI14:
+ 2826              		.cfi_def_cfa_register 12
+ 2827 052c 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2828 0530 04B04CE2 		sub	fp, ip, #4
+ 2829              		.cfi_offset 14, -8
+ 2830              		.cfi_offset 13, -12
+ 2831              		.cfi_offset 11, -16
+ 2832              	.LCFI15:
+ 2833              		.cfi_def_cfa 11, 4
+ 243:../lab13.c    ****     static boolean init = TRUE;
+ 244:../lab13.c    **** 
+ 245:../lab13.c    ****     if( init )
+ 2834              		.loc 1 245 0
+ 2835 0534 54309FE5 		ldr	r3, .L46
+ 2836 0538 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 2837 053c 000053E3 		cmp	r3, #0
+ 2838 0540 0500000A 		beq	.L44
+ 246:../lab13.c    ****     {
+ 247:../lab13.c    ****         init = FALSE;
+ 2839              		.loc 1 247 0
+ 2840 0544 44309FE5 		ldr	r3, .L46
+ 2841 0548 0020A0E3 		mov	r2, #0
+ 2842 054c 0020C3E5 		strb	r2, [r3, #0]
+ 248:../lab13.c    ****         uart0_puts( " Task 7: iniciada.\n" );  /* Muestra un mensaje inicial en la UART0 (no es nec
+ 2843              		.loc 1 248 0
+ 2844 0550 3C009FE5 		ldr	r0, .L46+4
+ 2845 0554 FEFFFFEB 		bl	uart0_puts
+ 2846 0558 090000EA 		b	.L43
+ 2847              	.L44:
+ 249:../lab13.c    ****     }
+ 250:../lab13.c    ****     else if( flagPb )
+ 2848              		.loc 1 250 0
+ 2849 055c 34309FE5 		ldr	r3, .L46+8
+ 2850 0560 0030D3E5 		ldrb	r3, [r3, #0]
+ 2851 0564 FF3003E2 		and	r3, r3, #255
+ 2852 0568 000053E3 		cmp	r3, #0
+ 2853 056c 0400000A 		beq	.L43
+ 251:../lab13.c    ****     {   
+ 252:../lab13.c    ****         flagPb = FALSE;
+ 2854              		.loc 1 252 0
+ 2855 0570 20309FE5 		ldr	r3, .L46+8
+ 2856 0574 0020A0E3 		mov	r2, #0
+ 2857 0578 0020C3E5 		strb	r2, [r3, #0]
+ 253:../lab13.c    ****         uart0_puts( "  (Task 7) Se ha pulsado algún pushbutton...\n" );
+ 2858              		.loc 1 253 0
+ 2859 057c 18009FE5 		ldr	r0, .L46+12
+ 2860 0580 FEFFFFEB 		bl	uart0_puts
+ 2861              	.L43:
+ 254:../lab13.c    ****     }
+ 255:../lab13.c    **** }
+ 2862              		.loc 1 255 0
+ 2863 0584 0CD04BE2 		sub	sp, fp, #12
+ 2864 0588 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 2865 058c 1EFF2FE1 		bx	lr
+ 2866              	.L47:
+ 2867              		.align	2
+ 2868              	.L46:
+ 2869 0590 02000000 		.word	init.4223
+ 2870 0594 30010000 		.word	.LC12
+ 2871 0598 00000000 		.word	flagPb
+ 2872 059c 44010000 		.word	.LC13
+ 2873              		.cfi_endproc
+ 2874              	.LFE7:
+ 2876              		.section	.rodata
+ 2877 0172 0000     		.align	2
+ 2878              	.LC14:
+ 2879 0174 20546173 		.ascii	" Task 8: iniciada.\012\000"
+ 2879      6B20383A 
+ 2879      20696E69 
+ 2879      63696164 
+ 2879      612E0A00 
+ 2880              		.align	2
+ 2881              	.LC15:
+ 2882 0188 2D204C61 		.ascii	"- La tecla 0x\000"
+ 2882      20746563 
+ 2882      6C612030 
+ 2882      7800
+ 2883 0196 0000     		.align	2
+ 2884              	.LC16:
+ 2885 0198 20686120 		.ascii	" ha sido presionada\012\000"
+ 2885      7369646F 
+ 2885      20707265 
+ 2885      73696F6E 
+ 2885      6164610A 
+ 2886              		.text
+ 2887              		.align	2
+ 2888              		.global	Task8
+ 2890              	Task8:
+ 2891              	.LFB8:
+ 256:../lab13.c    **** 
+ 257:../lab13.c    **** void Task8(void){
+ 2892              		.loc 1 257 0
+ 2893              		.cfi_startproc
+ 2894              		@ Function supports interworking.
+ 2895              		@ args = 0, pretend = 0, frame = 0
+ 2896              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2897 05a0 0DC0A0E1 		mov	ip, sp
+ 2898              	.LCFI16:
+ 2899              		.cfi_def_cfa_register 12
+ 2900 05a4 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2901 05a8 04B04CE2 		sub	fp, ip, #4
+ 2902              		.cfi_offset 14, -8
+ 2903              		.cfi_offset 13, -12
+ 2904              		.cfi_offset 11, -16
+ 2905              	.LCFI17:
+ 2906              		.cfi_def_cfa 11, 4
+ 258:../lab13.c    ****     static boolean init = TRUE;
+ 259:../lab13.c    **** 
+ 260:../lab13.c    ****     if( init )
+ 2907              		.loc 1 260 0
+ 2908 05ac 88309FE5 		ldr	r3, .L51
+ 2909 05b0 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 2910 05b4 000053E3 		cmp	r3, #0
+ 2911 05b8 0500000A 		beq	.L49
+ 261:../lab13.c    ****     {
+ 262:../lab13.c    ****         init = FALSE;
+ 2912              		.loc 1 262 0
+ 2913 05bc 78309FE5 		ldr	r3, .L51
+ 2914 05c0 0020A0E3 		mov	r2, #0
+ 2915 05c4 0020C3E5 		strb	r2, [r3, #0]
+ 263:../lab13.c    ****         uart0_puts( " Task 8: iniciada.\n" );  /* Muestra un mensaje inicial en la UART0 (no es nec
+ 2916              		.loc 1 263 0
+ 2917 05c8 70009FE5 		ldr	r0, .L51+4
+ 2918 05cc FEFFFFEB 		bl	uart0_puts
+ 2919 05d0 160000EA 		b	.L48
+ 2920              	.L49:
+ 264:../lab13.c    ****     }
+ 265:../lab13.c    ****     else if (flagTask8)
+ 2921              		.loc 1 265 0
+ 2922 05d4 68309FE5 		ldr	r3, .L51+8
+ 2923 05d8 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 2924 05dc 000053E3 		cmp	r3, #0
+ 2925 05e0 1200000A 		beq	.L48
+ 266:../lab13.c    ****     {
+ 267:../lab13.c    ****     	flagTask8 = FALSE;
+ 2926              		.loc 1 267 0
+ 2927 05e4 58309FE5 		ldr	r3, .L51+8
+ 2928 05e8 0020A0E3 		mov	r2, #0
+ 2929 05ec 0020C3E5 		strb	r2, [r3, #0]
+ 268:../lab13.c    ****     	lcd_puts(15, 16, BLACK, "- La tecla 0x" );
+ 2930              		.loc 1 268 0
+ 2931 05f0 0F00A0E3 		mov	r0, #15
+ 2932 05f4 1010A0E3 		mov	r1, #16
+ 2933 05f8 0F20A0E3 		mov	r2, #15
+ 2934 05fc 44309FE5 		ldr	r3, .L51+12
+ 2935 0600 FEFFFFEB 		bl	lcd_puts
+ 269:../lab13.c    ****     	lcd_puthex(120, 16, BLACK, scancode );
+ 2936              		.loc 1 269 0
+ 2937 0604 40309FE5 		ldr	r3, .L51+16
+ 2938 0608 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 2939 060c 7800A0E3 		mov	r0, #120
+ 2940 0610 1010A0E3 		mov	r1, #16
+ 2941 0614 0F20A0E3 		mov	r2, #15
+ 2942 0618 FEFFFFEB 		bl	lcd_puthex
+ 270:../lab13.c    ****     	lcd_puts(129, 16, BLACK, " ha sido presionada\n" );
+ 2943              		.loc 1 270 0
+ 2944 061c 8100A0E3 		mov	r0, #129
+ 2945 0620 1010A0E3 		mov	r1, #16
+ 2946 0624 0F20A0E3 		mov	r2, #15
+ 2947 0628 20309FE5 		ldr	r3, .L51+20
+ 2948 062c FEFFFFEB 		bl	lcd_puts
+ 2949              	.L48:
+ 271:../lab13.c    ****     }
+ 272:../lab13.c    **** }
+ 2950              		.loc 1 272 0
+ 2951 0630 0CD04BE2 		sub	sp, fp, #12
+ 2952 0634 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 2953 0638 1EFF2FE1 		bx	lr
+ 2954              	.L52:
+ 2955              		.align	2
+ 2956              	.L51:
+ 2957 063c 01000000 		.word	init.4227
+ 2958 0640 74010000 		.word	.LC14
+ 2959 0644 00000000 		.word	flagTask8
+ 2960 0648 88010000 		.word	.LC15
+ 2961 064c 00000000 		.word	scancode
+ 2962 0650 98010000 		.word	.LC16
+ 2963              		.cfi_endproc
+ 2964              	.LFE8:
+ 2966              		.section	.rodata
+ 2967 01ad 000000   		.align	2
+ 2968              	.LC17:
+ 2969 01b0 20546173 		.ascii	" Task 9: iniciada.\012\000"
+ 2969      6B20393A 
+ 2969      20696E69 
+ 2969      63696164 
+ 2969      612E0A00 
+ 2970              		.align	2
+ 2971              	.LC18:
+ 2972 01c4 28546173 		.ascii	"(Task 9) Tiempo: \000"
+ 2972      6B203929 
+ 2972      20546965 
+ 2972      6D706F3A 
+ 2972      2000
+ 2973 01d6 0000     		.text
+ 2974              		.align	2
+ 2975              		.global	Task9
+ 2977              	Task9:
+ 2978              	.LFB9:
+ 273:../lab13.c    **** 
+ 274:../lab13.c    **** void Task9(void){
+ 2979              		.loc 1 274 0
+ 2980              		.cfi_startproc
+ 2981              		@ Function supports interworking.
+ 2982              		@ args = 0, pretend = 0, frame = 8
+ 2983              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2984 0654 0DC0A0E1 		mov	ip, sp
+ 2985              	.LCFI18:
+ 2986              		.cfi_def_cfa_register 12
+ 2987 0658 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 2988 065c 04B04CE2 		sub	fp, ip, #4
+ 2989              		.cfi_offset 14, -8
+ 2990              		.cfi_offset 13, -12
+ 2991              		.cfi_offset 11, -16
+ 2992              	.LCFI19:
+ 2993              		.cfi_def_cfa 11, 4
+ 2994 0660 08D04DE2 		sub	sp, sp, #8
+ 275:../lab13.c    ****     static boolean init = TRUE;
+ 276:../lab13.c    ****     rtc_time_t rtc_time;
+ 277:../lab13.c    **** 
+ 278:../lab13.c    ****     if( init )
+ 2995              		.loc 1 278 0
+ 2996 0664 60309FE5 		ldr	r3, .L56
+ 2997 0668 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 2998 066c 000053E3 		cmp	r3, #0
+ 2999 0670 0500000A 		beq	.L54
+ 279:../lab13.c    ****     {
+ 280:../lab13.c    ****         init = FALSE;
+ 3000              		.loc 1 280 0
+ 3001 0674 50309FE5 		ldr	r3, .L56
+ 3002 0678 0020A0E3 		mov	r2, #0
+ 3003 067c 0020C3E5 		strb	r2, [r3, #0]
+ 281:../lab13.c    ****         uart0_puts( " Task 9: iniciada.\n" );  /* Muestra un mensaje inicial en la UART0 (no es nec
+ 3004              		.loc 1 281 0
+ 3005 0680 48009FE5 		ldr	r0, .L56+4
+ 3006 0684 FEFFFFEB 		bl	uart0_puts
+ 3007 0688 0C0000EA 		b	.L53
+ 3008              	.L54:
+ 282:../lab13.c    ****     }
+ 283:../lab13.c    ****     else
+ 284:../lab13.c    ****     {
+ 285:../lab13.c    ****         rtc_gettime( &rtc_time );
+ 3009              		.loc 1 285 0
+ 3010 068c 14304BE2 		sub	r3, fp, #20
+ 3011 0690 0300A0E1 		mov	r0, r3
+ 3012 0694 FEFFFFEB 		bl	rtc_gettime
+ 286:../lab13.c    ****         lcd_puts( 20, 32, BLACK, "(Task 9) Tiempo: " );
+ 3013              		.loc 1 286 0
+ 3014 0698 1400A0E3 		mov	r0, #20
+ 3015 069c 2010A0E3 		mov	r1, #32
+ 3016 06a0 0F20A0E3 		mov	r2, #15
+ 3017 06a4 28309FE5 		ldr	r3, .L56+8
+ 3018 06a8 FEFFFFEB 		bl	lcd_puts
+ 287:../lab13.c    ****         lcd_putint(20, 48, BLACK, rtc_time.sec );
+ 3019              		.loc 1 287 0
+ 3020 06ac 14305BE5 		ldrb	r3, [fp, #-20]	@ zero_extendqisi2
+ 3021 06b0 1400A0E3 		mov	r0, #20
+ 3022 06b4 3010A0E3 		mov	r1, #48
+ 3023 06b8 0F20A0E3 		mov	r2, #15
+ 3024 06bc FEFFFFEB 		bl	lcd_putint
+ 3025              	.L53:
+ 288:../lab13.c    ****     }
+ 289:../lab13.c    **** }
+ 3026              		.loc 1 289 0
+ 3027 06c0 0CD04BE2 		sub	sp, fp, #12
+ 3028 06c4 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 3029 06c8 1EFF2FE1 		bx	lr
+ 3030              	.L57:
+ 3031              		.align	2
+ 3032              	.L56:
+ 3033 06cc 00000000 		.word	init.4231
+ 3034 06d0 B0010000 		.word	.LC17
+ 3035 06d4 C4010000 		.word	.LC18
+ 3036              		.cfi_endproc
+ 3037              	.LFE9:
+ 3039              		.align	2
+ 3040              		.global	isr_pb
+ 3042              	isr_pb:
+ 3043              	.LFB10:
+ 290:../lab13.c    **** 
+ 291:../lab13.c    **** /*******************************************************************/
+ 292:../lab13.c    **** 
+ 293:../lab13.c    **** 
+ 294:../lab13.c    **** void isr_pb( void )
+ 295:../lab13.c    **** {
+ 3044              		.loc 1 295 0
+ 3045              		.cfi_startproc
+ 3046              		@ Interrupt Service Routine.
+ 3047              		@ args = 0, pretend = 0, frame = 0
+ 3048              		@ frame_needed = 1, uses_anonymous_args = 0
+ 3049 06d8 04C02DE5 		str	ip, [sp, #-4]!
+ 3050 06dc 0DC0A0E1 		mov	ip, sp
+ 3051              	.LCFI20:
+ 3052              		.cfi_def_cfa_register 12
+ 3053 06e0 0CD82DE9 		stmfd	sp!, {r2, r3, fp, ip, lr, pc}
+ 3054 06e4 04B04CE2 		sub	fp, ip, #4
+ 3055              		.cfi_offset 14, -8
+ 3056              		.cfi_offset 13, -12
+ 3057              		.cfi_offset 11, -16
+ 3058              		.cfi_offset 3, -20
+ 3059              		.cfi_offset 2, -24
+ 3060              	.LCFI21:
+ 3061              		.cfi_def_cfa 11, 4
+ 296:../lab13.c    ****     flagPb = TRUE;
+ 3062              		.loc 1 296 0
+ 3063 06e8 2C309FE5 		ldr	r3, .L59
+ 3064 06ec 0120A0E3 		mov	r2, #1
+ 3065 06f0 0020C3E5 		strb	r2, [r3, #0]
+ 297:../lab13.c    ****     EXTINTPND = BIT_RIGHTPB | BIT_LEFTPB;
+ 3066              		.loc 1 297 0
+ 3067 06f4 24309FE5 		ldr	r3, .L59+4
+ 3068 06f8 0C20A0E3 		mov	r2, #12
+ 3069 06fc 002083E5 		str	r2, [r3, #0]
+ 298:../lab13.c    ****     I_ISPC = BIT_PB;
+ 3070              		.loc 1 298 0
+ 3071 0700 1C309FE5 		ldr	r3, .L59+8
+ 3072 0704 0226A0E3 		mov	r2, #2097152
+ 3073 0708 002083E5 		str	r2, [r3, #0]
+ 299:../lab13.c    **** }
+ 3074              		.loc 1 299 0
+ 3075 070c 14D04BE2 		sub	sp, fp, #20
+ 3076 0710 0C689DE8 		ldmfd	sp, {r2, r3, fp, sp, lr}
+ 3077 0714 04C09DE4 		ldmfd	sp!, {ip}
+ 3078 0718 04F05EE2 		subs	pc, lr, #4
+ 3079              	.L60:
+ 3080              		.align	2
+ 3081              	.L59:
+ 3082 071c 00000000 		.word	flagPb
+ 3083 0720 5400D201 		.word	30539860
+ 3084 0724 2400E001 		.word	31457316
+ 3085              		.cfi_endproc
+ 3086              	.LFE10:
+ 3088              		.data
+ 3091              	init.4231:
+ 3092 0000 01       		.byte	1
+ 3095              	init.4227:
+ 3096 0001 01       		.byte	1
+ 3099              	init.4223:
+ 3100 0002 01       		.byte	1
+ 3103              	init.4219:
+ 3104 0003 01       		.byte	1
+ 3107              	init.4215:
+ 3108 0004 01       		.byte	1
+ 3111              	init.4210:
+ 3112 0005 01       		.byte	1
+ 3113              		.bss
+ 3114              		.align	2
+ 3115              	ticks.4211:
+ 3116 0000 00000000 		.space	4
+ 3117              		.data
+ 3120              	init.4205:
+ 3121 0006 01       		.byte	1
+ 3124              	init.4192:
+ 3125 0007 01       		.byte	1
+ 3126              		.bss
+ 3127              	state.4197:
+ 3128 0004 00       		.space	1
+ 3129 0005 000000   		.data
+ 3132              	init.4188:
+ 3133 0008 01       		.byte	1
+ 3134              		.text
+ 3135              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 lab13.c
+                            *COM*:00000001 scancode
+                            *COM*:00000001 flagTask5
+                            *COM*:00000001 flagTask6
+                            *COM*:00000001 flagTask8
+                            *COM*:00000001 flagPb
+                            *COM*:00000001 flagKeypad
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2146   .rodata:00000000 $d
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2155   .text:00000000 $a
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2158   .text:00000000 main
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2274   .text:00000108 $d
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2366   .text:000001b4 Task2
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2817   .text:00000528 Task7
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2669   .text:00000418 Task5
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2745   .text:000004ac Task6
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2890   .text:000005a0 Task8
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2302   .text:0000014c Task1
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2504   .text:000002e0 Task3
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2977   .text:00000654 Task9
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2590   .text:00000384 Task4
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:3042   .text:000006d8 isr_pb
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2299   .text:0000014c $a
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2353   .text:000001ac $d
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:3132   .data:00000008 init.4188
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2363   .text:000001b4 $a
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2480   .text:000002c4 $d
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:3124   .data:00000007 init.4192
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:3127   .bss:00000004 state.4197
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2501   .text:000002e0 $a
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2572   .text:00000374 $d
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:3120   .data:00000006 init.4205
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2587   .text:00000384 $a
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2650   .text:00000404 $d
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:3111   .data:00000005 init.4210
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:3115   .bss:00000000 ticks.4211
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2666   .text:00000418 $a
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2728   .text:00000494 $d
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:3107   .data:00000004 init.4215
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2742   .text:000004ac $a
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2798   .text:00000518 $d
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:3103   .data:00000003 init.4219
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2814   .text:00000528 $a
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2869   .text:00000590 $d
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:3099   .data:00000002 init.4223
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2887   .text:000005a0 $a
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2957   .text:0000063c $d
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:3095   .data:00000001 init.4227
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:2974   .text:00000654 $a
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:3033   .text:000006cc $d
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:3091   .data:00000000 init.4231
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:3039   .text:000006d8 $a
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:3082   .text:0000071c $d
+C:\Users\USUARI~1\AppData\Local\Temp\ccmdvXAR.s:3114   .bss:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+sys_init
+timers_init
+uart0_init
+leds_init
+segs_init
+rtc_init
+pbs_init
+keypad_init
+lcd_init
+lcd_clear
+lcd_on
+uart0_puts
+scheduler_init
+create_task
+timer0_open_tick
+pbs_open
+sleep
+dispacher
+scheduler
+led_on
+led_off
+led_toggle
+keypad_pressed
+keypad_scan
+rtc_gettime
+uart0_putint
+uart0_putchar
+uart0_puthex
+segs_putchar
+lcd_puts
+lcd_puthex
+lcd_putint
