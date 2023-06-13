@@ -1,0 +1,477 @@
+Archive member included because of file (symbol)
+
+../../BSP/Debug\libBSP.a(keypad.o)
+                              ./proyecto.o (keypad_pressed)
+../../BSP/Debug\libBSP.a(lcd.o)
+                              ./proyecto.o (lcd_buffer)
+../../BSP/Debug\libBSP.a(power.o)
+                              ../../BSP/Debug\libBSP.a(keypad.o) (power_on)
+../../BSP/Debug\libBSP.a(segs.o)
+                              ./proyecto.o (segs_init)
+../../BSP/Debug\libBSP.a(system.o)
+                              ./proyecto.o (sys_init)
+../../BSP/Debug\libBSP.a(timers.o)
+                              ./proyecto.o (timers_init)
+../../BSP/Debug\libBSP.a(uart.o)
+                              ../../BSP/Debug\libBSP.a(system.o) (uart0_init)
+../../BSP/Debug\libBSP.a(font8x16.o)
+                              ../../BSP/Debug\libBSP.a(lcd.o) (font)
+c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivsi3.o)
+                              ../../BSP/Debug\libBSP.a(timers.o) (__aeabi_uidiv)
+c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_dvmd_tls.o)
+                              c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivsi3.o) (__aeabi_idiv0)
+c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_aeabi_uldivmod.o)
+                              ../../BSP/Debug\libBSP.a(timers.o) (__aeabi_uldivmod)
+c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(bpabi.o)
+                              c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_aeabi_uldivmod.o) (__gnu_uldivmod_helper)
+c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_divdi3.o)
+                              c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(bpabi.o) (__divdi3)
+c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivdi3.o)
+                              c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(bpabi.o) (__udivdi3)
+c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_clzsi2.o)
+                              c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_divdi3.o) (__clzsi2)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD ./proyecto.o
+LOAD ../../BSP/Debug\libBSP.a
+START GROUP
+LOAD c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a
+LOAD c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib\libc.a
+END GROUP
+                0x0c100000                . = 0xc100000
+                0x0c100000                _image_start = .
+                0x0c100000                _code_start = .
+
+.text           0x0c100000     0x9470
+ *(.text)
+ .text          0x0c100000     0x4428 ./proyecto.o
+                0x0c100000                main
+                0x0c102704                lcd_putBmp
+                0x0c1028a0                lcd_bmp2photo
+                0x0c102a00                test
+                0x0c102ad4                lcd_putColumn
+                0x0c102b7c                lcd_putRow
+                0x0c102c5c                lcd_putPhoto
+                0x0c102cfc                lcd_shift
+                0x0c102f1c                efectoNulo
+                0x0c102f4c                efectoEmpuje
+                0x0c1031dc                efectoBarrido
+                0x0c103344                efectoRevelado
+                0x0c103670                efectoCobertura
+                0x0c103a24                efectoDivisionEntrante
+                0x0c103b78                efectoDivisionSaliente
+                0x0c103cbc                efectoBarras
+                0x0c103dfc                efectoDesvanecer
+                0x0c103eac                efectoFlash
+                0x0c103f5c                lcd_putPixelColumn
+                0x0c104008                efectoCuadradoEntrante
+                0x0c1040fc                efectoCuadradoSaliente
+                0x0c1041fc                efectoPeine
+ .text          0x0c104428      0x590 ../../BSP/Debug\libBSP.a(keypad.o)
+                0x0c104428                keypad_scan
+                0x0c10464c                keypad_pressed
+                0x0c104688                keypad_getchartime
+                0x0c104730                keypad_timeout_getchar
+                0x0c104820                keypad_open
+                0x0c104878                keypad_close
+                0x0c1048bc                keypad_init
+                0x0c104944                keypad_getchar
+ .text          0x0c1049b8     0x13e4 ../../BSP/Debug\libBSP.a(lcd.o)
+                0x0c1049b8                lcd_init
+                0x0c104b68                lcd_on
+                0x0c104ba4                lcd_off
+                0x0c104be0                lcd_status
+                0x0c104c08                lcd_clear
+                0x0c104c68                lcd_putpixel
+                0x0c104d54                lcd_getpixel
+                0x0c104df0                lcd_draw_hline
+                0x0c104f48                lcd_draw_vline
+                0x0c1050a0                lcd_draw_box
+                0x0c105198                lcd_putchar
+                0x0c105414                lcd_puts
+                0x0c105488                lcd_putint
+                0x0c105604                lcd_puthex
+                0x0c1056e4                lcd_putchar_x2
+                0x0c105970                lcd_puts_x2
+                0x0c1059e4                lcd_putint_x2
+                0x0c105b60                lcd_puthex_x2
+                0x0c105c40                lcd_putWallpaper
+ .text          0x0c105d9c      0x214 ../../BSP/Debug\libBSP.a(power.o)
+                0x0c105d9c                power_on
+                0x0c105e7c                power_off
+                0x0c105f60                power_status
+ .text          0x0c105fb0       0xf4 ../../BSP/Debug\libBSP.a(segs.o)
+                0x0c105fb0                segs_init
+                0x0c105fec                segs_off
+                0x0c106024                segs_putchar
+                0x0c10607c                segs_status
+ .text          0x0c1060a4     0x1818 ../../BSP/Debug\libBSP.a(system.o)
+                0x0c1060a4                sys_init
+                0x0c106980                isr_SWI_dummy
+                0x0c1069c0                isr_UNDEF_dummy
+                0x0c106a00                isr_IRQ_dummy
+                0x0c106a48                isr_FIQ_dummy
+                0x0c106a90                isr_PABORT_dummy
+                0x0c106ad8                isr_DABORT_dummy
+                0x0c106b20                isr_ADC_dummy
+                0x0c106b68                isr_RTC_dummy
+                0x0c106bb0                isr_UTXD1_dummy
+                0x0c106bf8                isr_UTXD0_dummy
+                0x0c106c40                isr_SIO_dummy
+                0x0c106c88                isr_IIC_dummy
+                0x0c106cd0                isr_URXD1_dummy
+                0x0c106d18                isr_URXD0_dummy
+                0x0c106d60                isr_TIMER5_dummy
+                0x0c106da8                isr_TIMER4_dummy
+                0x0c106df0                isr_TIMER3_dummy
+                0x0c106e38                isr_TIMER2_dummy
+                0x0c106e80                isr_TIMER1_dummy
+                0x0c106ec8                isr_TIMER0_dummy
+                0x0c106f10                isr_UERR01_dummy
+                0x0c106f58                isr_WDT_dummy
+                0x0c106fa0                isr_BDMA1_dummy
+                0x0c106fe8                isr_BDMA0_dummy
+                0x0c107030                isr_ZDMA1_dummy
+                0x0c107078                isr_ZDMA0_dummy
+                0x0c1070c0                isr_TICK_dummy
+                0x0c107108                isr_PB_dummy
+                0x0c107150                isr_ETHERNET_dummy
+                0x0c107198                isr_TS_dummy
+                0x0c1071e0                isr_KEYPAD_dummy
+                0x0c107228                isr_USB_dummy
+                0x0c107718                getmem
+                0x0c107878                sleep
+ .text          0x0c1078bc      0xad4 ../../BSP/Debug\libBSP.a(timers.o)
+                0x0c1078bc                timers_init
+                0x0c107a84                timer3_delay_ms
+                0x0c107b84                sw_delay_ms
+                0x0c107bdc                timer3_delay_s
+                0x0c107cd8                sw_delay_s
+                0x0c107d30                timer3_start
+                0x0c107e0c                timer3_stop
+                0x0c107e60                timer3_start_timeout
+                0x0c107f44                timer3_timeout
+                0x0c107f80                timer0_open_tick
+                0x0c1081d8                timer0_open_ms
+                0x0c1082fc                timer0_close
+ .text          0x0c108390      0x5e8 ../../BSP/Debug\libBSP.a(uart.o)
+                0x0c108390                uart0_init
+                0x0c108430                uart0_putchar
+                0x0c108480                uart0_getchar
+                0x0c1084d0                uart0_puts
+                0x0c108520                uart0_putint
+                0x0c108674                uart0_puthex
+                0x0c10872c                uart0_gets
+                0x0c10878c                uart0_getint
+                0x0c108864                uart0_gethex
+ .text          0x0c108978        0x0 ../../BSP/Debug\libBSP.a(font8x16.o)
+ .text          0x0c108978      0x114 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivsi3.o)
+                0x0c108978                __aeabi_uidiv
+                0x0c108978                __udivsi3
+                0x0c108a6c                __aeabi_uidivmod
+ .text          0x0c108a8c        0x4 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_dvmd_tls.o)
+                0x0c108a8c                __aeabi_idiv0
+                0x0c108a8c                __aeabi_ldiv0
+ .text          0x0c108a90       0x3c c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_aeabi_uldivmod.o)
+                0x0c108a90                __aeabi_uldivmod
+ .text          0x0c108acc       0x80 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(bpabi.o)
+                0x0c108acc                __gnu_ldivmod_helper
+                0x0c108b0c                __gnu_uldivmod_helper
+ .text          0x0c108b4c      0x4a8 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_divdi3.o)
+                0x0c108b4c                __divdi3
+ .text          0x0c108ff4      0x434 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivdi3.o)
+                0x0c108ff4                __udivdi3
+ .text          0x0c109428       0x48 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_clzsi2.o)
+                0x0c109428                __clzsi2
+                0x0c109470                _code_end = .
+                0x00009470                _code_size = SIZEOF (.text)
+                0x0c109470                _data_start = .
+
+.glue_7         0x0c109470        0x0
+ .glue_7        0x00000000        0x0 linker stubs
+
+.glue_7t        0x0c109470        0x0
+ .glue_7t       0x00000000        0x0 linker stubs
+
+.vfp11_veneer   0x0c109470        0x0
+ .vfp11_veneer  0x00000000        0x0 linker stubs
+
+.v4_bx          0x0c109470        0x0
+ .v4_bx         0x00000000        0x0 linker stubs
+
+.rodata         0x0c109470     0x17c0
+ *(.rodata)
+ .rodata        0x0c109470       0xc8 ./proyecto.o
+ .rodata        0x0c109538       0x10 ../../BSP/Debug\libBSP.a(segs.o)
+ .rodata        0x0c109548      0x6e8 ../../BSP/Debug\libBSP.a(system.o)
+ .rodata        0x0c109c30     0x1000 ../../BSP/Debug\libBSP.a(font8x16.o)
+                0x0c109c30                font
+
+.ARM.extab      0x0c10ac30        0x0
+ .ARM.extab     0x0c10ac30        0x0 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_divdi3.o)
+ .ARM.extab     0x0c10ac30        0x0 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivdi3.o)
+
+.ARM.exidx      0x0c10ac30        0x8
+ .ARM.exidx     0x0c10ac30        0x8 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_divdi3.o)
+ .ARM.exidx     0x0c10ac38        0x0 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivdi3.o)
+                                  0x8 (size before relaxing)
+
+.data           0x0c10ac38       0x10
+ *(.data)
+ .data          0x0c10ac38        0x0 ./proyecto.o
+ .data          0x0c10ac38        0x0 ../../BSP/Debug\libBSP.a(keypad.o)
+ .data          0x0c10ac38        0x0 ../../BSP/Debug\libBSP.a(lcd.o)
+ .data          0x0c10ac38        0x0 ../../BSP/Debug\libBSP.a(power.o)
+ .data          0x0c10ac38        0x0 ../../BSP/Debug\libBSP.a(segs.o)
+ .data          0x0c10ac38       0x10 ../../BSP/Debug\libBSP.a(system.o)
+                0x0c10ac40                mclk
+ .data          0x0c10ac48        0x0 ../../BSP/Debug\libBSP.a(timers.o)
+ .data          0x0c10ac48        0x0 ../../BSP/Debug\libBSP.a(uart.o)
+ .data          0x0c10ac48        0x0 ../../BSP/Debug\libBSP.a(font8x16.o)
+ .data          0x0c10ac48        0x0 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivsi3.o)
+ .data          0x0c10ac48        0x0 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_dvmd_tls.o)
+ .data          0x0c10ac48        0x0 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_aeabi_uldivmod.o)
+ .data          0x0c10ac48        0x0 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(bpabi.o)
+ .data          0x0c10ac48        0x0 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_divdi3.o)
+ .data          0x0c10ac48        0x0 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivdi3.o)
+ .data          0x0c10ac48        0x0 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_clzsi2.o)
+
+.lcdbuffer      0x0c10ac48     0x9600
+ .lcdbuffer     0x0c10ac48     0x9600 ../../BSP/Debug\libBSP.a(lcd.o)
+                0x0c10ac48                lcd_buffer
+
+.bss            0x0c114248       0x40
+ *(.bss)
+ .bss           0x0c114248        0x0 ./proyecto.o
+ .bss           0x0c114248        0x0 ../../BSP/Debug\libBSP.a(keypad.o)
+ .bss           0x0c114248       0x34 ../../BSP/Debug\libBSP.a(lcd.o)
+ .bss           0x0c11427c        0x0 ../../BSP/Debug\libBSP.a(power.o)
+ .bss           0x0c11427c        0x1 ../../BSP/Debug\libBSP.a(segs.o)
+ .bss           0x0c11427d        0x0 ../../BSP/Debug\libBSP.a(system.o)
+ *fill*         0x0c11427d        0x3 00
+ .bss           0x0c114280        0x8 ../../BSP/Debug\libBSP.a(timers.o)
+ .bss           0x0c114288        0x0 ../../BSP/Debug\libBSP.a(uart.o)
+ .bss           0x0c114288        0x0 ../../BSP/Debug\libBSP.a(font8x16.o)
+ .bss           0x0c114288        0x0 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivsi3.o)
+ .bss           0x0c114288        0x0 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_dvmd_tls.o)
+ .bss           0x0c114288        0x0 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_aeabi_uldivmod.o)
+ .bss           0x0c114288        0x0 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(bpabi.o)
+ .bss           0x0c114288        0x0 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_divdi3.o)
+ .bss           0x0c114288        0x0 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivdi3.o)
+ .bss           0x0c114288        0x0 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_clzsi2.o)
+                0x0c114288                _data_end = .
+                0x00001810                _data_size = ((SIZEOF (.rodata) + SIZEOF (.data)) + SIZEOF (.bss))
+                0x0000ac80                _total_size = (_code_size + _data_size)
+                0x0c114288                _image_end = .
+                0x0c114288                end = .
+OUTPUT(proyecto.elf elf32-littlearm)
+
+.debug_abbrev   0x00000000      0x8b0
+ .debug_abbrev  0x00000000      0x13c ./proyecto.o
+ .debug_abbrev  0x0000013c       0xe9 ../../BSP/Debug\libBSP.a(keypad.o)
+ .debug_abbrev  0x00000225      0x16f ../../BSP/Debug\libBSP.a(lcd.o)
+ .debug_abbrev  0x00000394       0x76 ../../BSP/Debug\libBSP.a(power.o)
+ .debug_abbrev  0x0000040a       0xb3 ../../BSP/Debug\libBSP.a(segs.o)
+ .debug_abbrev  0x000004bd      0x186 ../../BSP/Debug\libBSP.a(system.o)
+ .debug_abbrev  0x00000643       0xee ../../BSP/Debug\libBSP.a(timers.o)
+ .debug_abbrev  0x00000731      0x11c ../../BSP/Debug\libBSP.a(uart.o)
+ .debug_abbrev  0x0000084d       0x63 ../../BSP/Debug\libBSP.a(font8x16.o)
+
+.debug_info     0x00000000     0x236a
+ .debug_info    0x00000000      0x963 ./proyecto.o
+ .debug_info    0x00000963      0x1c2 ../../BSP/Debug\libBSP.a(keypad.o)
+ .debug_info    0x00000b25      0x75d ../../BSP/Debug\libBSP.a(lcd.o)
+ .debug_info    0x00001282       0xf0 ../../BSP/Debug\libBSP.a(power.o)
+ .debug_info    0x00001372      0x118 ../../BSP/Debug\libBSP.a(segs.o)
+ .debug_info    0x0000148a      0x8d5 ../../BSP/Debug\libBSP.a(system.o)
+ .debug_info    0x00001d5f      0x2b7 ../../BSP/Debug\libBSP.a(timers.o)
+ .debug_info    0x00002016      0x2bf ../../BSP/Debug\libBSP.a(uart.o)
+ .debug_info    0x000022d5       0x95 ../../BSP/Debug\libBSP.a(font8x16.o)
+
+.debug_line     0x00000000     0x123c
+ .debug_line    0x00000000      0x754 ./proyecto.o
+ .debug_line    0x00000754      0x153 ../../BSP/Debug\libBSP.a(keypad.o)
+ .debug_line    0x000008a7      0x298 ../../BSP/Debug\libBSP.a(lcd.o)
+ .debug_line    0x00000b3f       0x99 ../../BSP/Debug\libBSP.a(power.o)
+ .debug_line    0x00000bd8       0xa0 ../../BSP/Debug\libBSP.a(segs.o)
+ .debug_line    0x00000c78      0x280 ../../BSP/Debug\libBSP.a(system.o)
+ .debug_line    0x00000ef8      0x194 ../../BSP/Debug\libBSP.a(timers.o)
+ .debug_line    0x0000108c      0x15a ../../BSP/Debug\libBSP.a(uart.o)
+ .debug_line    0x000011e6       0x56 ../../BSP/Debug\libBSP.a(font8x16.o)
+
+.debug_macinfo  0x00000000    0x28d5f
+ .debug_macinfo
+                0x00000000     0x4bc0 ./proyecto.o
+ .debug_macinfo
+                0x00004bc0     0x50a2 ../../BSP/Debug\libBSP.a(keypad.o)
+ .debug_macinfo
+                0x00009c62     0x44c8 ../../BSP/Debug\libBSP.a(lcd.o)
+ .debug_macinfo
+                0x0000e12a     0x4394 ../../BSP/Debug\libBSP.a(power.o)
+ .debug_macinfo
+                0x000124be     0x4d9a ../../BSP/Debug\libBSP.a(segs.o)
+ .debug_macinfo
+                0x00017258     0x567c ../../BSP/Debug\libBSP.a(system.o)
+ .debug_macinfo
+                0x0001c8d4     0x4db4 ../../BSP/Debug\libBSP.a(timers.o)
+ .debug_macinfo
+                0x00021688     0x539e ../../BSP/Debug\libBSP.a(uart.o)
+ .debug_macinfo
+                0x00026a26     0x2339 ../../BSP/Debug\libBSP.a(font8x16.o)
+
+.debug_loc      0x00000000     0x1448
+ .debug_loc     0x00000000      0x3c8 ./proyecto.o
+ .debug_loc     0x000003c8      0x160 ../../BSP/Debug\libBSP.a(keypad.o)
+ .debug_loc     0x00000528      0x344 ../../BSP/Debug\libBSP.a(lcd.o)
+ .debug_loc     0x0000086c       0x84 ../../BSP/Debug\libBSP.a(power.o)
+ .debug_loc     0x000008f0       0xb0 ../../BSP/Debug\libBSP.a(segs.o)
+ .debug_loc     0x000009a0      0x6e0 ../../BSP/Debug\libBSP.a(system.o)
+ .debug_loc     0x00001080      0x23c ../../BSP/Debug\libBSP.a(timers.o)
+ .debug_loc     0x000012bc      0x18c ../../BSP/Debug\libBSP.a(uart.o)
+
+.debug_pubnames
+                0x00000000      0x891
+ .debug_pubnames
+                0x00000000      0x1a7 ./proyecto.o
+ .debug_pubnames
+                0x000001a7       0xab ../../BSP/Debug\libBSP.a(keypad.o)
+ .debug_pubnames
+                0x00000252      0x152 ../../BSP/Debug\libBSP.a(lcd.o)
+ .debug_pubnames
+                0x000003a4       0x3e ../../BSP/Debug\libBSP.a(power.o)
+ .debug_pubnames
+                0x000003e2       0x4e ../../BSP/Debug\libBSP.a(segs.o)
+ .debug_pubnames
+                0x00000430      0x2b1 ../../BSP/Debug\libBSP.a(system.o)
+ .debug_pubnames
+                0x000006e1       0xee ../../BSP/Debug\libBSP.a(timers.o)
+ .debug_pubnames
+                0x000007cf       0xa7 ../../BSP/Debug\libBSP.a(uart.o)
+ .debug_pubnames
+                0x00000876       0x1b ../../BSP/Debug\libBSP.a(font8x16.o)
+
+.debug_pubtypes
+                0x00000000      0x1d5
+ .debug_pubtypes
+                0x00000000       0x5c ./proyecto.o
+ .debug_pubtypes
+                0x0000005c       0x32 ../../BSP/Debug\libBSP.a(keypad.o)
+ .debug_pubtypes
+                0x0000008e       0x3c ../../BSP/Debug\libBSP.a(lcd.o)
+ .debug_pubtypes
+                0x000000ca       0x27 ../../BSP/Debug\libBSP.a(power.o)
+ .debug_pubtypes
+                0x000000f1       0x27 ../../BSP/Debug\libBSP.a(segs.o)
+ .debug_pubtypes
+                0x00000118       0x27 ../../BSP/Debug\libBSP.a(system.o)
+ .debug_pubtypes
+                0x0000013f       0x3d ../../BSP/Debug\libBSP.a(timers.o)
+ .debug_pubtypes
+                0x0000017c       0x3d ../../BSP/Debug\libBSP.a(uart.o)
+ .debug_pubtypes
+                0x000001b9       0x1c ../../BSP/Debug\libBSP.a(font8x16.o)
+
+.debug_aranges  0x00000000      0x100
+ .debug_aranges
+                0x00000000       0x20 ./proyecto.o
+ .debug_aranges
+                0x00000020       0x20 ../../BSP/Debug\libBSP.a(keypad.o)
+ .debug_aranges
+                0x00000040       0x20 ../../BSP/Debug\libBSP.a(lcd.o)
+ .debug_aranges
+                0x00000060       0x20 ../../BSP/Debug\libBSP.a(power.o)
+ .debug_aranges
+                0x00000080       0x20 ../../BSP/Debug\libBSP.a(segs.o)
+ .debug_aranges
+                0x000000a0       0x20 ../../BSP/Debug\libBSP.a(system.o)
+ .debug_aranges
+                0x000000c0       0x20 ../../BSP/Debug\libBSP.a(timers.o)
+ .debug_aranges
+                0x000000e0       0x20 ../../BSP/Debug\libBSP.a(uart.o)
+
+.debug_str      0x00000000      0x9c5
+ .debug_str     0x00000000      0x2c5 ./proyecto.o
+                                0x2f4 (size before relaxing)
+ .debug_str     0x000002c5       0xe2 ../../BSP/Debug\libBSP.a(keypad.o)
+                                0x174 (size before relaxing)
+ .debug_str     0x000003a7      0x128 ../../BSP/Debug\libBSP.a(lcd.o)
+                                0x24e (size before relaxing)
+ .debug_str     0x000004cf       0x36 ../../BSP/Debug\libBSP.a(power.o)
+                                0x111 (size before relaxing)
+ .debug_str     0x00000505       0x43 ../../BSP/Debug\libBSP.a(segs.o)
+                                0x124 (size before relaxing)
+ .debug_str     0x00000548      0x304 ../../BSP/Debug\libBSP.a(system.o)
+                                0x3e9 (size before relaxing)
+ .debug_str     0x0000084c       0xe0 ../../BSP/Debug\libBSP.a(timers.o)
+                                0x1cc (size before relaxing)
+ .debug_str     0x0000092c       0x87 ../../BSP/Debug\libBSP.a(uart.o)
+                                0x16d (size before relaxing)
+ .debug_str     0x000009b3       0x12 ../../BSP/Debug\libBSP.a(font8x16.o)
+                                 0xeb (size before relaxing)
+
+.comment        0x00000000       0x2a
+ .comment       0x00000000       0x2a ./proyecto.o
+                                 0x2b (size before relaxing)
+ .comment       0x00000000       0x2b ../../BSP/Debug\libBSP.a(keypad.o)
+ .comment       0x00000000       0x2b ../../BSP/Debug\libBSP.a(lcd.o)
+ .comment       0x00000000       0x2b ../../BSP/Debug\libBSP.a(power.o)
+ .comment       0x00000000       0x2b ../../BSP/Debug\libBSP.a(segs.o)
+ .comment       0x00000000       0x2b ../../BSP/Debug\libBSP.a(system.o)
+ .comment       0x00000000       0x2b ../../BSP/Debug\libBSP.a(timers.o)
+ .comment       0x00000000       0x2b ../../BSP/Debug\libBSP.a(uart.o)
+ .comment       0x00000000       0x2b ../../BSP/Debug\libBSP.a(font8x16.o)
+
+.ARM.attributes
+                0x00000000       0x32
+ .ARM.attributes
+                0x00000000       0x32 ./proyecto.o
+ .ARM.attributes
+                0x00000032       0x32 ../../BSP/Debug\libBSP.a(keypad.o)
+ .ARM.attributes
+                0x00000064       0x32 ../../BSP/Debug\libBSP.a(lcd.o)
+ .ARM.attributes
+                0x00000096       0x32 ../../BSP/Debug\libBSP.a(power.o)
+ .ARM.attributes
+                0x000000c8       0x32 ../../BSP/Debug\libBSP.a(segs.o)
+ .ARM.attributes
+                0x000000fa       0x32 ../../BSP/Debug\libBSP.a(system.o)
+ .ARM.attributes
+                0x0000012c       0x32 ../../BSP/Debug\libBSP.a(timers.o)
+ .ARM.attributes
+                0x0000015e       0x32 ../../BSP/Debug\libBSP.a(uart.o)
+ .ARM.attributes
+                0x00000190       0x32 ../../BSP/Debug\libBSP.a(font8x16.o)
+ .ARM.attributes
+                0x000001c2       0x1a c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivsi3.o)
+ .ARM.attributes
+                0x000001dc       0x18 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_dvmd_tls.o)
+ .ARM.attributes
+                0x000001f4       0x1a c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_aeabi_uldivmod.o)
+ .ARM.attributes
+                0x0000020e       0x34 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(bpabi.o)
+ .ARM.attributes
+                0x00000242       0x34 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_divdi3.o)
+ .ARM.attributes
+                0x00000276       0x34 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivdi3.o)
+ .ARM.attributes
+                0x000002aa       0x1a c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_clzsi2.o)
+
+.debug_frame    0x00000000     0x1238
+ .debug_frame   0x00000000      0x2d4 ./proyecto.o
+ .debug_frame   0x000002d4      0x110 ../../BSP/Debug\libBSP.a(keypad.o)
+ .debug_frame   0x000003e4      0x270 ../../BSP/Debug\libBSP.a(lcd.o)
+ .debug_frame   0x00000654       0x70 ../../BSP/Debug\libBSP.a(power.o)
+ .debug_frame   0x000006c4       0x90 ../../BSP/Debug\libBSP.a(segs.o)
+ .debug_frame   0x00000754      0x714 ../../BSP/Debug\libBSP.a(system.o)
+ .debug_frame   0x00000e68      0x1b8 ../../BSP/Debug\libBSP.a(timers.o)
+ .debug_frame   0x00001020      0x130 ../../BSP/Debug\libBSP.a(uart.o)
+ .debug_frame   0x00001150       0x20 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivsi3.o)
+ .debug_frame   0x00001170       0x50 c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(bpabi.o)
+ .debug_frame   0x000011c0       0x3c c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_divdi3.o)
+ .debug_frame   0x000011fc       0x3c c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a(_udivdi3.o)
