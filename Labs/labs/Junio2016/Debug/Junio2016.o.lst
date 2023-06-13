@@ -1,0 +1,621 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"Junio2016.c"
+  21              	.Ltext0:
+  22              		.file 1 "../Junio2016.c"
+ 1750              		.align	2
+ 1751              	.LC0:
+ 1752 0000 48612074 		.ascii	"Ha transcurrido una hora.\012\000"
+ 1752      72616E73 
+ 1752      63757272 
+ 1752      69646F20 
+ 1752      756E6120 
+ 1753              		.text
+ 1754              		.align	2
+ 1755              		.global	main
+ 1757              	main:
+ 1758              	.LFB0:
+   1:../Junio2016.c **** /*
+   2:../Junio2016.c ****  * Junio2016.c
+   3:../Junio2016.c ****  *
+   4:../Junio2016.c ****  *  Created on: 18/01/2023
+   5:../Junio2016.c ****  *      Author: DOSTATIC
+   6:../Junio2016.c ****  */
+   7:../Junio2016.c **** 
+   8:../Junio2016.c **** #include <s3c44b0x.h>
+   9:../Junio2016.c **** #include <common_types.h>
+  10:../Junio2016.c **** #include <system.h>
+  11:../Junio2016.c **** #include <uart.h>
+  12:../Junio2016.c **** #include <rtc.h>
+  13:../Junio2016.c **** 
+  14:../Junio2016.c **** /*1. (1.5 puntos) Codificar en C una aplicación que envíe un texto de aviso por la UART-0 cada vez
+  15:../Junio2016.c **** que transcurra una hora. El microntrolador S3C44B0X deberá configurarse para que su RTC
+  16:../Junio2016.c **** interrumpa una vez por segundo. La aplicación constará de 2 hebras: una hebra en foreground
+  17:../Junio2016.c **** (isr_tick) encargada de actualizar los segundos transcurridos desde el último aviso; y una hebra
+  18:../Junio2016.c **** en background (main) encargada de inicializar el sistema, instalar la hebra en foreground como
+  19:../Junio2016.c **** RTI del RTC e indefinidamente enviar el mensaje de aviso cada hora. Ambas hebras usarán un
+  20:../Junio2016.c **** flag para sincronizarse. */
+  21:../Junio2016.c **** 
+  22:../Junio2016.c **** void isr_tick( void ) __attribute__ ((interrupt ("IRQ")));
+  23:../Junio2016.c **** 
+  24:../Junio2016.c **** volatile boolean flag;
+  25:../Junio2016.c **** 
+  26:../Junio2016.c **** void main( void )
+  27:../Junio2016.c **** {
+ 1759              		.loc 1 27 0
+ 1760              		.cfi_startproc
+ 1761              		@ Function supports interworking.
+ 1762              		@ args = 0, pretend = 0, frame = 0
+ 1763              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1764 0000 0DC0A0E1 		mov	ip, sp
+ 1765              	.LCFI0:
+ 1766              		.cfi_def_cfa_register 12
+ 1767 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1768 0008 04B04CE2 		sub	fp, ip, #4
+ 1769              		.cfi_offset 14, -8
+ 1770              		.cfi_offset 13, -12
+ 1771              		.cfi_offset 11, -16
+ 1772              	.LCFI1:
+ 1773              		.cfi_def_cfa 11, 4
+  28:../Junio2016.c ****     sys_init();
+ 1774              		.loc 1 28 0
+ 1775 000c FEFFFFEB 		bl	sys_init
+  29:../Junio2016.c ****     uart0_init();
+ 1776              		.loc 1 29 0
+ 1777 0010 FEFFFFEB 		bl	uart0_init
+  30:../Junio2016.c ****     rtc_init();
+ 1778              		.loc 1 30 0
+ 1779 0014 FEFFFFEB 		bl	rtc_init
+  31:../Junio2016.c **** 
+  32:../Junio2016.c ****     flag = FALSE;
+ 1780              		.loc 1 32 0
+ 1781 0018 44309FE5 		ldr	r3, .L5
+ 1782 001c 0020A0E3 		mov	r2, #0
+ 1783 0020 0020C3E5 		strb	r2, [r3, #0]
+  33:../Junio2016.c ****     rtc_open( isr_tick, 127 );
+ 1784              		.loc 1 33 0
+ 1785 0024 3C009FE5 		ldr	r0, .L5+4
+ 1786 0028 7F10A0E3 		mov	r1, #127
+ 1787 002c FEFFFFEB 		bl	rtc_open
+ 1788 0030 000000EA 		b	.L3
+ 1789              	.L4:
+  34:../Junio2016.c **** 
+  35:../Junio2016.c ****     while( 1 )
+  36:../Junio2016.c ****         if( flag )
+  37:../Junio2016.c ****         {
+  38:../Junio2016.c ****             uart0_puts( "Ha transcurrido una hora.\n" );
+  39:../Junio2016.c ****             flag = FALSE;
+  40:../Junio2016.c ****         }
+  41:../Junio2016.c **** }
+ 1790              		.loc 1 41 0
+ 1791 0034 0000A0E1 		mov	r0, r0	@ nop
+ 1792              	.L3:
+  36:../Junio2016.c ****         if( flag )
+ 1793              		.loc 1 36 0
+ 1794 0038 24309FE5 		ldr	r3, .L5
+ 1795 003c 0030D3E5 		ldrb	r3, [r3, #0]
+ 1796 0040 FF3003E2 		and	r3, r3, #255
+ 1797 0044 000053E3 		cmp	r3, #0
+ 1798 0048 F9FFFF0A 		beq	.L4
+  38:../Junio2016.c ****             uart0_puts( "Ha transcurrido una hora.\n" );
+ 1799              		.loc 1 38 0
+ 1800 004c 18009FE5 		ldr	r0, .L5+8
+ 1801 0050 FEFFFFEB 		bl	uart0_puts
+  39:../Junio2016.c ****             flag = FALSE;
+ 1802              		.loc 1 39 0
+ 1803 0054 08309FE5 		ldr	r3, .L5
+ 1804 0058 0020A0E3 		mov	r2, #0
+ 1805 005c 0020C3E5 		strb	r2, [r3, #0]
+ 1806              		.loc 1 41 0
+ 1807 0060 F4FFFFEA 		b	.L3
+ 1808              	.L6:
+ 1809              		.align	2
+ 1810              	.L5:
+ 1811 0064 00000000 		.word	flag
+ 1812 0068 00000000 		.word	isr_tick
+ 1813 006c 00000000 		.word	.LC0
+ 1814              		.cfi_endproc
+ 1815              	.LFE0:
+ 1817              		.align	2
+ 1818              		.global	isr_tick
+ 1820              	isr_tick:
+ 1821              	.LFB1:
+  42:../Junio2016.c **** 
+  43:../Junio2016.c **** void isr_tick( void )
+  44:../Junio2016.c **** {
+ 1822              		.loc 1 44 0
+ 1823              		.cfi_startproc
+ 1824              		@ Interrupt Service Routine.
+ 1825              		@ args = 0, pretend = 0, frame = 0
+ 1826              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1827 0070 04C02DE5 		str	ip, [sp, #-4]!
+ 1828 0074 0DC0A0E1 		mov	ip, sp
+ 1829              	.LCFI2:
+ 1830              		.cfi_def_cfa_register 12
+ 1831 0078 0CD82DE9 		stmfd	sp!, {r2, r3, fp, ip, lr, pc}
+ 1832 007c 04B04CE2 		sub	fp, ip, #4
+ 1833              		.cfi_offset 14, -8
+ 1834              		.cfi_offset 13, -12
+ 1835              		.cfi_offset 11, -16
+ 1836              		.cfi_offset 3, -20
+ 1837              		.cfi_offset 2, -24
+ 1838              	.LCFI3:
+ 1839              		.cfi_def_cfa 11, 4
+  45:../Junio2016.c ****     static uint16 numSecs = 0;
+  46:../Junio2016.c **** 
+  47:../Junio2016.c ****     if( ++numSecs == 3600 )
+ 1840              		.loc 1 47 0
+ 1841 0080 58309FE5 		ldr	r3, .L9
+ 1842 0084 B030D3E1 		ldrh	r3, [r3, #0]
+ 1843 0088 013083E2 		add	r3, r3, #1
+ 1844 008c 0338A0E1 		mov	r3, r3, asl #16
+ 1845 0090 2328A0E1 		mov	r2, r3, lsr #16
+ 1846 0094 44309FE5 		ldr	r3, .L9
+ 1847 0098 B020C3E1 		strh	r2, [r3, #0]	@ movhi
+ 1848 009c 3C309FE5 		ldr	r3, .L9
+ 1849 00a0 B030D3E1 		ldrh	r3, [r3, #0]
+ 1850 00a4 E10E53E3 		cmp	r3, #3600
+ 1851 00a8 0500001A 		bne	.L8
+  48:../Junio2016.c ****     {
+  49:../Junio2016.c ****         numSecs = 0;
+ 1852              		.loc 1 49 0
+ 1853 00ac 2C309FE5 		ldr	r3, .L9
+ 1854 00b0 0020A0E3 		mov	r2, #0
+ 1855 00b4 B020C3E1 		strh	r2, [r3, #0]	@ movhi
+  50:../Junio2016.c ****         flag = TRUE;
+ 1856              		.loc 1 50 0
+ 1857 00b8 24309FE5 		ldr	r3, .L9+4
+ 1858 00bc 0120A0E3 		mov	r2, #1
+ 1859 00c0 0020C3E5 		strb	r2, [r3, #0]
+ 1860              	.L8:
+  51:../Junio2016.c ****     }
+  52:../Junio2016.c **** 
+  53:../Junio2016.c ****     I_ISPC = BIT_TICK;
+ 1861              		.loc 1 53 0
+ 1862 00c4 1C309FE5 		ldr	r3, .L9+8
+ 1863 00c8 0126A0E3 		mov	r2, #1048576
+ 1864 00cc 002083E5 		str	r2, [r3, #0]
+  54:../Junio2016.c **** }
+ 1865              		.loc 1 54 0
+ 1866 00d0 14D04BE2 		sub	sp, fp, #20
+ 1867 00d4 0C689DE8 		ldmfd	sp, {r2, r3, fp, sp, lr}
+ 1868 00d8 04C09DE4 		ldmfd	sp!, {ip}
+ 1869 00dc 04F05EE2 		subs	pc, lr, #4
+ 1870              	.L10:
+ 1871              		.align	2
+ 1872              	.L9:
+ 1873 00e0 00000000 		.word	numSecs.3985
+ 1874 00e4 00000000 		.word	flag
+ 1875 00e8 2400E001 		.word	31457316
+ 1876              		.cfi_endproc
+ 1877              	.LFE1:
+ 1879              		.section	.rodata
+ 1880 001b 00       		.align	2
+ 1881              	.LC1:
+ 1882 001c 434F4E46 		.ascii	"CONFIGURACION DEL PUERTO A\012\000"
+ 1882      49475552 
+ 1882      4143494F 
+ 1882      4E204445 
+ 1882      4C205055 
+ 1883              		.align	2
+ 1884              	.LC2:
+ 1885 0038 50696E20 		.ascii	"Pin \000"
+ 1885      00
+ 1886 003d 000000   		.align	2
+ 1887              	.LC3:
+ 1888 0040 3A207361 		.ascii	": salida\012\000"
+ 1888      6C696461 
+ 1888      0A00
+ 1889 004a 0000     		.align	2
+ 1890              	.LC4:
+ 1891 004c 3A20696E 		.ascii	": interno\012\000"
+ 1891      7465726E 
+ 1891      6F0A00
+ 1892 0057 00       		.align	2
+ 1893              	.LC5:
+ 1894 0058 434F4E46 		.ascii	"CONFIGURACION DEL PUERTO C\012\000"
+ 1894      49475552 
+ 1894      4143494F 
+ 1894      4E204445 
+ 1894      4C205055 
+ 1895              		.align	2
+ 1896              	.LC6:
+ 1897 0074 3A20656E 		.ascii	": entrada\012\000"
+ 1897      74726164 
+ 1897      610A00
+ 1898 007f 00       		.align	2
+ 1899              	.LC7:
+ 1900 0080 44697265 		.ascii	"Direccion de puerto erronea\012\000"
+ 1900      6363696F 
+ 1900      6E206465 
+ 1900      20707565 
+ 1900      72746F20 
+ 1901 009d 000000   		.text
+ 1902              		.align	2
+ 1903              		.global	uart0_portDump
+ 1905              	uart0_portDump:
+ 1906              	.LFB2:
+  55:../Junio2016.c **** 
+  56:../Junio2016.c **** /*2.(0.5 puntos) Codificar en C una función que calcule en punto fijo con representación Q8.8 el
+  57:../Junio2016.c **** perímetro de una circunferencia dado su radio. Se supondrá que los valores del argumento y del
+  58:../Junio2016.c **** resultado se expresan en la misma unidad de medida. El prototipo de la función será: */
+  59:../Junio2016.c **** 
+  60:../Junio2016.c **** /*#include <fix_types.h>
+  61:../Junio2016.c **** 
+  62:../Junio2016.c **** #define QM 8
+  63:../Junio2016.c **** 
+  64:../Junio2016.c **** ufix16 circumference( ufix16 radius )
+  65:../Junio2016.c **** {
+  66:../Junio2016.c ****     const ufix16 doublePi = TOFIX( ufix16, 2*3.141592654, QM );
+  67:../Junio2016.c **** 
+  68:../Junio2016.c ****     return FMUL( doublePi, radius, QM );
+  69:../Junio2016.c **** }*/
+  70:../Junio2016.c **** 
+  71:../Junio2016.c **** /*3.(1 punto) Codificar en C una función que, dada la dirección del registro de configuración de un
+  72:../Junio2016.c **** de los puertos del controlador del pines de E/S del microntrolador S3C44B0X, envíe por la
+  73:../Junio2016.c **** UART-0 el modo (entrada, salida o interno) en que se haya configurado cada uno de los pines de
+  74:../Junio2016.c **** dicho puerto. El prototipo de la función será:
+  75:../Junio2016.c **** 
+  76:../Junio2016.c **** Visualizará en un terminal serie conectado a la UART-0 una información similar a la siguiente:
+  77:../Junio2016.c **** CONFIGURACION DEL PUERTO A:
+  78:../Junio2016.c **** Pin 0: salida
+  79:../Junio2016.c **** Pin 1: interno
+  80:../Junio2016.c **** Pin 2: interno
+  81:../Junio2016.c **** Pin 3: interno
+  82:../Junio2016.c **** Pin 4: interno
+  83:../Junio2016.c **** Pin 5: interno
+  84:../Junio2016.c **** Pin 6: interno
+  85:../Junio2016.c **** Pin 7: interno
+  86:../Junio2016.c **** Pin 8: salida
+  87:../Junio2016.c **** Pin 9: salida
+  88:../Junio2016.c **** No será necesario implementar al completo la función, bastará codificar la estructura general de
+  89:../Junio2016.c **** la misma así como el detalle del código necesario para la visualización de la configuración de los
+  90:../Junio2016.c **** puertos A y C. */
+  91:../Junio2016.c **** 
+  92:../Junio2016.c **** #include <s3c44b0x.h>
+  93:../Junio2016.c **** #include <common_types.h>
+  94:../Junio2016.c **** #include <uart.h>
+  95:../Junio2016.c **** 
+  96:../Junio2016.c **** void uart0_portDump( uint32 portConfAddr )
+  97:../Junio2016.c **** {
+ 1907              		.loc 1 97 0
+ 1908              		.cfi_startproc
+ 1909              		@ Function supports interworking.
+ 1910              		@ args = 0, pretend = 0, frame = 16
+ 1911              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1912 00ec 0DC0A0E1 		mov	ip, sp
+ 1913              	.LCFI4:
+ 1914              		.cfi_def_cfa_register 12
+ 1915 00f0 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1916 00f4 04B04CE2 		sub	fp, ip, #4
+ 1917              		.cfi_offset 14, -8
+ 1918              		.cfi_offset 13, -12
+ 1919              		.cfi_offset 11, -16
+ 1920              	.LCFI5:
+ 1921              		.cfi_def_cfa 11, 4
+ 1922 00f8 10D04DE2 		sub	sp, sp, #16
+ 1923 00fc 18000BE5 		str	r0, [fp, #-24]
+  98:../Junio2016.c ****     uint32 pConf;
+  99:../Junio2016.c ****     uint8 i;
+ 100:../Junio2016.c **** 
+ 101:../Junio2016.c ****     switch( portConfAddr )
+ 1924              		.loc 1 101 0
+ 1925 0100 18301BE5 		ldr	r3, [fp, #-24]
+ 1926 0104 FE3483E2 		add	r3, r3, #-33554432
+ 1927 0108 2E3883E2 		add	r3, r3, #3014656
+ 1928 010c 400053E3 		cmp	r3, #64
+ 1929 0110 03F19F97 		ldrls	pc, [pc, r3, asl #2]
+ 1930 0114 880000EA 		b	.L12
+ 1931              	.L20:
+ 1932 0118 1C020000 		.word	.L13
+ 1933 011c 3C030000 		.word	.L12
+ 1934 0120 3C030000 		.word	.L12
+ 1935 0124 3C030000 		.word	.L12
+ 1936 0128 3C030000 		.word	.L12
+ 1937 012c 3C030000 		.word	.L12
+ 1938 0130 3C030000 		.word	.L12
+ 1939 0134 3C030000 		.word	.L12
+ 1940 0138 4C030000 		.word	.L35
+ 1941 013c 3C030000 		.word	.L12
+ 1942 0140 3C030000 		.word	.L12
+ 1943 0144 3C030000 		.word	.L12
+ 1944 0148 3C030000 		.word	.L12
+ 1945 014c 3C030000 		.word	.L12
+ 1946 0150 3C030000 		.word	.L12
+ 1947 0154 3C030000 		.word	.L12
+ 1948 0158 A0020000 		.word	.L15
+ 1949 015c 3C030000 		.word	.L12
+ 1950 0160 3C030000 		.word	.L12
+ 1951 0164 3C030000 		.word	.L12
+ 1952 0168 3C030000 		.word	.L12
+ 1953 016c 3C030000 		.word	.L12
+ 1954 0170 3C030000 		.word	.L12
+ 1955 0174 3C030000 		.word	.L12
+ 1956 0178 3C030000 		.word	.L12
+ 1957 017c 3C030000 		.word	.L12
+ 1958 0180 3C030000 		.word	.L12
+ 1959 0184 3C030000 		.word	.L12
+ 1960 0188 4C030000 		.word	.L35
+ 1961 018c 3C030000 		.word	.L12
+ 1962 0190 3C030000 		.word	.L12
+ 1963 0194 3C030000 		.word	.L12
+ 1964 0198 3C030000 		.word	.L12
+ 1965 019c 3C030000 		.word	.L12
+ 1966 01a0 3C030000 		.word	.L12
+ 1967 01a4 3C030000 		.word	.L12
+ 1968 01a8 3C030000 		.word	.L12
+ 1969 01ac 3C030000 		.word	.L12
+ 1970 01b0 3C030000 		.word	.L12
+ 1971 01b4 3C030000 		.word	.L12
+ 1972 01b8 4C030000 		.word	.L35
+ 1973 01bc 3C030000 		.word	.L12
+ 1974 01c0 3C030000 		.word	.L12
+ 1975 01c4 3C030000 		.word	.L12
+ 1976 01c8 3C030000 		.word	.L12
+ 1977 01cc 3C030000 		.word	.L12
+ 1978 01d0 3C030000 		.word	.L12
+ 1979 01d4 3C030000 		.word	.L12
+ 1980 01d8 3C030000 		.word	.L12
+ 1981 01dc 3C030000 		.word	.L12
+ 1982 01e0 3C030000 		.word	.L12
+ 1983 01e4 3C030000 		.word	.L12
+ 1984 01e8 4C030000 		.word	.L35
+ 1985 01ec 3C030000 		.word	.L12
+ 1986 01f0 3C030000 		.word	.L12
+ 1987 01f4 3C030000 		.word	.L12
+ 1988 01f8 3C030000 		.word	.L12
+ 1989 01fc 3C030000 		.word	.L12
+ 1990 0200 3C030000 		.word	.L12
+ 1991 0204 3C030000 		.word	.L12
+ 1992 0208 3C030000 		.word	.L12
+ 1993 020c 3C030000 		.word	.L12
+ 1994 0210 3C030000 		.word	.L12
+ 1995 0214 3C030000 		.word	.L12
+ 1996 0218 4C030000 		.word	.L35
+ 1997              	.L13:
+ 102:../Junio2016.c ****     {
+ 103:../Junio2016.c ****         case (uint32)&PCONA:
+ 104:../Junio2016.c ****             uart0_puts( "CONFIGURACION DEL PUERTO A\n" );
+ 1998              		.loc 1 104 0
+ 1999 021c 38019FE5 		ldr	r0, .L36
+ 2000 0220 FEFFFFEB 		bl	uart0_puts
+ 105:../Junio2016.c ****             pConf = PCONA;
+ 2001              		.loc 1 105 0
+ 2002 0224 34319FE5 		ldr	r3, .L36+4
+ 2003 0228 003093E5 		ldr	r3, [r3, #0]
+ 2004 022c 10300BE5 		str	r3, [fp, #-16]
+ 106:../Junio2016.c ****             for( i=0; i<10; i++ )
+ 2005              		.loc 1 106 0
+ 2006 0230 0030A0E3 		mov	r3, #0
+ 2007 0234 11304BE5 		strb	r3, [fp, #-17]
+ 2008 0238 140000EA 		b	.L21
+ 2009              	.L25:
+ 107:../Junio2016.c ****             {
+ 108:../Junio2016.c ****                 uart0_puts( "Pin " );
+ 2010              		.loc 1 108 0
+ 2011 023c 20019FE5 		ldr	r0, .L36+8
+ 2012 0240 FEFFFFEB 		bl	uart0_puts
+ 109:../Junio2016.c ****                 uart0_putint( i );
+ 2013              		.loc 1 109 0
+ 2014 0244 11305BE5 		ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+ 2015 0248 0300A0E1 		mov	r0, r3
+ 2016 024c FEFFFFEB 		bl	uart0_putint
+ 110:../Junio2016.c ****                 switch( pConf & 0x1 )
+ 2017              		.loc 1 110 0
+ 2018 0250 10301BE5 		ldr	r3, [fp, #-16]
+ 2019 0254 013003E2 		and	r3, r3, #1
+ 2020 0258 000053E3 		cmp	r3, #0
+ 2021 025c 0200001A 		bne	.L33
+ 2022              	.L23:
+ 111:../Junio2016.c ****                 {
+ 112:../Junio2016.c ****                     case 0:
+ 113:../Junio2016.c ****                         uart0_puts( ": salida\n" );
+ 2023              		.loc 1 113 0
+ 2024 0260 00019FE5 		ldr	r0, .L36+12
+ 2025 0264 FEFFFFEB 		bl	uart0_puts
+ 114:../Junio2016.c ****                         break;
+ 2026              		.loc 1 114 0
+ 2027 0268 020000EA 		b	.L24
+ 2028              	.L33:
+ 115:../Junio2016.c ****                     default:
+ 116:../Junio2016.c ****                         uart0_puts( ": interno\n" );
+ 2029              		.loc 1 116 0
+ 2030 026c F8009FE5 		ldr	r0, .L36+16
+ 2031 0270 FEFFFFEB 		bl	uart0_puts
+ 117:../Junio2016.c ****                         break;
+ 2032              		.loc 1 117 0
+ 2033 0274 0000A0E1 		mov	r0, r0	@ nop
+ 2034              	.L24:
+ 118:../Junio2016.c ****                 }
+ 119:../Junio2016.c ****                 pConf >>= 1;
+ 2035              		.loc 1 119 0
+ 2036 0278 10301BE5 		ldr	r3, [fp, #-16]
+ 2037 027c A330A0E1 		mov	r3, r3, lsr #1
+ 2038 0280 10300BE5 		str	r3, [fp, #-16]
+ 106:../Junio2016.c ****             for( i=0; i<10; i++ )
+ 2039              		.loc 1 106 0
+ 2040 0284 11305BE5 		ldrb	r3, [fp, #-17]
+ 2041 0288 013083E2 		add	r3, r3, #1
+ 2042 028c 11304BE5 		strb	r3, [fp, #-17]
+ 2043              	.L21:
+ 106:../Junio2016.c ****             for( i=0; i<10; i++ )
+ 2044              		.loc 1 106 0 is_stmt 0 discriminator 1
+ 2045 0290 11305BE5 		ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+ 2046 0294 090053E3 		cmp	r3, #9
+ 2047 0298 E7FFFF9A 		bls	.L25
+ 120:../Junio2016.c ****             }
+ 121:../Junio2016.c ****             break;
+ 2048              		.loc 1 121 0 is_stmt 1
+ 2049 029c 2B0000EA 		b	.L11
+ 2050              	.L15:
+ 122:../Junio2016.c ****         case (uint32)&PCONB:
+ 123:../Junio2016.c ****             break;
+ 124:../Junio2016.c ****         case (uint32)&PCONC:
+ 125:../Junio2016.c ****             uart0_puts( "CONFIGURACION DEL PUERTO C\n" );
+ 2051              		.loc 1 125 0
+ 2052 02a0 C8009FE5 		ldr	r0, .L36+20
+ 2053 02a4 FEFFFFEB 		bl	uart0_puts
+ 126:../Junio2016.c ****             pConf = PCONC;
+ 2054              		.loc 1 126 0
+ 2055 02a8 C4309FE5 		ldr	r3, .L36+24
+ 2056 02ac 003093E5 		ldr	r3, [r3, #0]
+ 2057 02b0 10300BE5 		str	r3, [fp, #-16]
+ 127:../Junio2016.c ****             for( i=0; i<16; i++ )
+ 2058              		.loc 1 127 0
+ 2059 02b4 0030A0E3 		mov	r3, #0
+ 2060 02b8 11304BE5 		strb	r3, [fp, #-17]
+ 2061 02bc 1A0000EA 		b	.L27
+ 2062              	.L32:
+ 128:../Junio2016.c ****             {
+ 129:../Junio2016.c ****                 uart0_puts( "Pin " );
+ 2063              		.loc 1 129 0
+ 2064 02c0 9C009FE5 		ldr	r0, .L36+8
+ 2065 02c4 FEFFFFEB 		bl	uart0_puts
+ 130:../Junio2016.c ****                 uart0_putint( i );
+ 2066              		.loc 1 130 0
+ 2067 02c8 11305BE5 		ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+ 2068 02cc 0300A0E1 		mov	r0, r3
+ 2069 02d0 FEFFFFEB 		bl	uart0_putint
+ 131:../Junio2016.c ****                 switch( pConf & 0x3 )
+ 2070              		.loc 1 131 0
+ 2071 02d4 10301BE5 		ldr	r3, [fp, #-16]
+ 2072 02d8 033003E2 		and	r3, r3, #3
+ 2073 02dc 000053E3 		cmp	r3, #0
+ 2074 02e0 0200000A 		beq	.L29
+ 2075 02e4 010053E3 		cmp	r3, #1
+ 2076 02e8 0300000A 		beq	.L30
+ 2077 02ec 050000EA 		b	.L34
+ 2078              	.L29:
+ 132:../Junio2016.c ****                 {
+ 133:../Junio2016.c ****                     case 0:
+ 134:../Junio2016.c ****                         uart0_puts( ": entrada\n" );
+ 2079              		.loc 1 134 0
+ 2080 02f0 80009FE5 		ldr	r0, .L36+28
+ 2081 02f4 FEFFFFEB 		bl	uart0_puts
+ 135:../Junio2016.c ****                         break;
+ 2082              		.loc 1 135 0
+ 2083 02f8 050000EA 		b	.L31
+ 2084              	.L30:
+ 136:../Junio2016.c ****                     case 1:
+ 137:../Junio2016.c ****                         uart0_puts( ": salida\n" );
+ 2085              		.loc 1 137 0
+ 2086 02fc 64009FE5 		ldr	r0, .L36+12
+ 2087 0300 FEFFFFEB 		bl	uart0_puts
+ 138:../Junio2016.c ****                         break;
+ 2088              		.loc 1 138 0
+ 2089 0304 020000EA 		b	.L31
+ 2090              	.L34:
+ 139:../Junio2016.c ****                     default:
+ 140:../Junio2016.c ****                         uart0_puts( ": interno\n" );
+ 2091              		.loc 1 140 0
+ 2092 0308 5C009FE5 		ldr	r0, .L36+16
+ 2093 030c FEFFFFEB 		bl	uart0_puts
+ 141:../Junio2016.c ****                         break;
+ 2094              		.loc 1 141 0
+ 2095 0310 0000A0E1 		mov	r0, r0	@ nop
+ 2096              	.L31:
+ 142:../Junio2016.c ****                 }
+ 143:../Junio2016.c ****                 pConf >>= 2;
+ 2097              		.loc 1 143 0
+ 2098 0314 10301BE5 		ldr	r3, [fp, #-16]
+ 2099 0318 2331A0E1 		mov	r3, r3, lsr #2
+ 2100 031c 10300BE5 		str	r3, [fp, #-16]
+ 127:../Junio2016.c ****             for( i=0; i<16; i++ )
+ 2101              		.loc 1 127 0
+ 2102 0320 11305BE5 		ldrb	r3, [fp, #-17]
+ 2103 0324 013083E2 		add	r3, r3, #1
+ 2104 0328 11304BE5 		strb	r3, [fp, #-17]
+ 2105              	.L27:
+ 127:../Junio2016.c ****             for( i=0; i<16; i++ )
+ 2106              		.loc 1 127 0 is_stmt 0 discriminator 1
+ 2107 032c 11305BE5 		ldrb	r3, [fp, #-17]	@ zero_extendqisi2
+ 2108 0330 0F0053E3 		cmp	r3, #15
+ 2109 0334 E1FFFF9A 		bls	.L32
+ 144:../Junio2016.c ****             }
+ 145:../Junio2016.c ****             break;
+ 2110              		.loc 1 145 0 is_stmt 1
+ 2111 0338 040000EA 		b	.L11
+ 2112              	.L12:
+ 146:../Junio2016.c ****         case (uint32)&PCOND:
+ 147:../Junio2016.c ****             break;
+ 148:../Junio2016.c ****         case (uint32)&PCONE:
+ 149:../Junio2016.c ****             break;
+ 150:../Junio2016.c ****         case (uint32)&PCONF:
+ 151:../Junio2016.c ****             break;
+ 152:../Junio2016.c ****         case (uint32)&PCONG:
+ 153:../Junio2016.c ****             break;
+ 154:../Junio2016.c ****         default:
+ 155:../Junio2016.c ****                uart0_puts( "Direccion de puerto erronea\n" );
+ 2113              		.loc 1 155 0
+ 2114 033c 38009FE5 		ldr	r0, .L36+32
+ 2115 0340 FEFFFFEB 		bl	uart0_puts
+ 156:../Junio2016.c ****             break;
+ 2116              		.loc 1 156 0
+ 2117 0344 0000A0E1 		mov	r0, r0	@ nop
+ 2118 0348 000000EA 		b	.L11
+ 2119              	.L35:
+ 123:../Junio2016.c ****             break;
+ 2120              		.loc 1 123 0
+ 2121 034c 0000A0E1 		mov	r0, r0	@ nop
+ 2122              	.L11:
+ 157:../Junio2016.c ****     }
+ 158:../Junio2016.c **** 
+ 159:../Junio2016.c **** }
+ 2123              		.loc 1 159 0
+ 2124 0350 0CD04BE2 		sub	sp, fp, #12
+ 2125 0354 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 2126 0358 1EFF2FE1 		bx	lr
+ 2127              	.L37:
+ 2128              		.align	2
+ 2129              	.L36:
+ 2130 035c 1C000000 		.word	.LC1
+ 2131 0360 0000D201 		.word	30539776
+ 2132 0364 38000000 		.word	.LC2
+ 2133 0368 40000000 		.word	.LC3
+ 2134 036c 4C000000 		.word	.LC4
+ 2135 0370 58000000 		.word	.LC5
+ 2136 0374 1000D201 		.word	30539792
+ 2137 0378 74000000 		.word	.LC6
+ 2138 037c 80000000 		.word	.LC7
+ 2139              		.cfi_endproc
+ 2140              	.LFE2:
+ 2142              		.bss
+ 2143              		.align	1
+ 2144              	numSecs.3985:
+ 2145 0000 0000     		.space	2
+ 2146              		.text
+ 2147              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 Junio2016.c
+                            *COM*:00000001 flag
+C:\Users\DOSTATIC\AppData\Local\Temp\cc3fAlkH.s:1750   .rodata:00000000 $d
+C:\Users\DOSTATIC\AppData\Local\Temp\cc3fAlkH.s:1754   .text:00000000 $a
+C:\Users\DOSTATIC\AppData\Local\Temp\cc3fAlkH.s:1757   .text:00000000 main
+C:\Users\DOSTATIC\AppData\Local\Temp\cc3fAlkH.s:1811   .text:00000064 $d
+C:\Users\DOSTATIC\AppData\Local\Temp\cc3fAlkH.s:1820   .text:00000070 isr_tick
+C:\Users\DOSTATIC\AppData\Local\Temp\cc3fAlkH.s:1817   .text:00000070 $a
+C:\Users\DOSTATIC\AppData\Local\Temp\cc3fAlkH.s:1873   .text:000000e0 $d
+C:\Users\DOSTATIC\AppData\Local\Temp\cc3fAlkH.s:2144   .bss:00000000 numSecs.3985
+C:\Users\DOSTATIC\AppData\Local\Temp\cc3fAlkH.s:1902   .text:000000ec $a
+C:\Users\DOSTATIC\AppData\Local\Temp\cc3fAlkH.s:1905   .text:000000ec uart0_portDump
+C:\Users\DOSTATIC\AppData\Local\Temp\cc3fAlkH.s:1932   .text:00000118 $d
+C:\Users\DOSTATIC\AppData\Local\Temp\cc3fAlkH.s:1999   .text:0000021c $a
+C:\Users\DOSTATIC\AppData\Local\Temp\cc3fAlkH.s:2130   .text:0000035c $d
+C:\Users\DOSTATIC\AppData\Local\Temp\cc3fAlkH.s:2143   .bss:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+sys_init
+uart0_init
+rtc_init
+rtc_open
+uart0_puts
+uart0_putint

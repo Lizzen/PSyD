@@ -1,0 +1,501 @@
+Archive member included because of file (symbol)
+
+D:\PSyD\labs\BSP\Debug\libBSP.a(rtc.o)
+                              ./Junio2016.o (rtc_init)
+D:\PSyD\labs\BSP\Debug\libBSP.a(system.o)
+                              ./Junio2016.o (sys_init)
+D:\PSyD\labs\BSP\Debug\libBSP.a(uart.o)
+                              ./Junio2016.o (uart0_init)
+D:\PSyD\labs\BSP\Debug\libBSP.a(segs.o)
+                              D:\PSyD\labs\BSP\Debug\libBSP.a(system.o) (segs_init)
+
+Allocating common symbols
+Common symbol       size              file
+
+flag                0x1               ./Junio2016.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD ./Junio2016.o
+LOAD D:\PSyD\labs\BSP\Debug\libBSP.a
+START GROUP
+LOAD c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2\libgcc.a
+LOAD c:/users/dostatic/documents/eclipsearm/sourcery-g++-lite-arm-2011.03/bin/../lib/gcc/arm-none-eabi/4.5.2/../../../../arm-none-eabi/lib\libc.a
+END GROUP
+                0x00008000                PROVIDE (__executable_start, 0x8000)
+                0x00008000                . = 0x8000
+
+.interp
+ *(.interp)
+
+.note.gnu.build-id
+ *(.note.gnu.build-id)
+
+.hash
+ *(.hash)
+
+.gnu.hash
+ *(.gnu.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.dyn        0x00008000        0x0
+ *(.rel.init)
+ *(.rel.text .rel.text.* .rel.gnu.linkonce.t.*)
+ *(.rel.fini)
+ *(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*)
+ *(.rel.data.rel.ro* .rel.gnu.linkonce.d.rel.ro.*)
+ *(.rel.data .rel.data.* .rel.gnu.linkonce.d.*)
+ *(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*)
+ *(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*)
+ *(.rel.ctors)
+ *(.rel.dtors)
+ *(.rel.got)
+ *(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*)
+                0x00008000                PROVIDE (__rel_iplt_start, .)
+ *(.rel.iplt)
+                0x00008000                PROVIDE (__rel_iplt_end, .)
+                0x00008000                PROVIDE (__rela_iplt_start, .)
+                0x00008000                PROVIDE (__rela_iplt_end, .)
+
+.rela.dyn       0x00008000        0x0
+ *(.rela.init)
+ *(.rela.text .rela.text.* .rela.gnu.linkonce.t.*)
+ *(.rela.fini)
+ *(.rela.rodata .rela.rodata.* .rela.gnu.linkonce.r.*)
+ *(.rela.data .rela.data.* .rela.gnu.linkonce.d.*)
+ *(.rela.tdata .rela.tdata.* .rela.gnu.linkonce.td.*)
+ *(.rela.tbss .rela.tbss.* .rela.gnu.linkonce.tb.*)
+ *(.rela.ctors)
+ *(.rela.dtors)
+ *(.rela.got)
+ *(.rela.bss .rela.bss.* .rela.gnu.linkonce.b.*)
+                0x00008000                PROVIDE (__rel_iplt_start, .)
+                0x00008000                PROVIDE (__rel_iplt_end, .)
+                0x00008000                PROVIDE (__rela_iplt_start, .)
+ *(.rela.iplt)
+                0x00008000                PROVIDE (__rela_iplt_end, .)
+
+.rel.plt
+ *(.rel.plt)
+
+.rela.plt
+ *(.rela.plt)
+
+.init
+ *(.init)
+
+.plt
+ *(.plt)
+
+.iplt
+ *(.iplt)
+
+.text           0x00008000     0x2078
+ *(.text.unlikely .text.*_unlikely)
+ *(.text .stub .text.* .gnu.linkonce.t.*)
+ .text          0x00008000      0x380 ./Junio2016.o
+                0x00008000                main
+                0x00008070                isr_tick
+                0x000080ec                uart0_portDump
+ .text          0x00008380      0x92c D:\PSyD\labs\BSP\Debug\libBSP.a(rtc.o)
+                0x00008380                rtc_init
+                0x000084bc                rtc_puttime
+                0x00008774                rtc_gettime
+                0x00008bdc                rtc_open
+                0x00008c58                rtc_close
+ .text          0x00008cac      0xd68 D:\PSyD\labs\BSP\Debug\libBSP.a(system.o)
+                0x00008cac                sys_init
+                0x00009220                isr_SWI_dummy
+                0x0000924c                isr_UNDEF_dummy
+                0x00009278                isr_IRQ_dummy
+                0x000092a4                isr_FIQ_dummy
+                0x000092d0                isr_PABORT_dummy
+                0x000092fc                isr_DABORT_dummy
+                0x00009328                isr_ADC_dummy
+                0x00009354                isr_RTC_dummy
+                0x00009380                isr_UTXD1_dummy
+                0x000093ac                isr_UTXD0_dummy
+                0x000093d8                isr_SIO_dummy
+                0x00009404                isr_IIC_dummy
+                0x00009430                isr_URXD1_dummy
+                0x0000945c                isr_URXD0_dummy
+                0x00009488                isr_TIMER5_dummy
+                0x000094b4                isr_TIMER4_dummy
+                0x000094e0                isr_TIMER3_dummy
+                0x0000950c                isr_TIMER2_dummy
+                0x00009538                isr_TIMER1_dummy
+                0x00009564                isr_TIMER0_dummy
+                0x00009590                isr_UERR01_dummy
+                0x000095bc                isr_WDT_dummy
+                0x000095e8                isr_BDMA1_dummy
+                0x00009614                isr_BDMA0_dummy
+                0x00009640                isr_ZDMA1_dummy
+                0x0000966c                isr_ZDMA0_dummy
+                0x00009698                isr_TICK_dummy
+                0x000096c4                isr_PB_dummy
+                0x000096f0                isr_ETHERNET_dummy
+                0x0000971c                isr_TS_dummy
+                0x00009748                isr_KEYPAD_dummy
+                0x00009774                isr_USB_dummy
+                0x000097c4                sleep
+ .text          0x00009a14      0x590 D:\PSyD\labs\BSP\Debug\libBSP.a(uart.o)
+                0x00009a14                uart0_init
+                0x00009a78                uart0_putchar
+                0x00009ac8                uart0_getchar
+                0x00009b10                uart0_puts
+                0x00009b60                uart0_putint
+                0x00009c6c                uart0_puthex
+                0x00009d24                uart0_gets
+                0x00009d90                uart0_getint
+                0x00009e64                uart0_gethex
+ .text          0x00009fa4       0xd4 D:\PSyD\labs\BSP\Debug\libBSP.a(segs.o)
+                0x00009fa4                segs_init
+                0x00009fc0                segs_off
+                0x00009ff8                segs_putchar
+                0x0000a050                segs_status
+ *(.gnu.warning)
+ *(.glue_7t)
+ .glue_7t       0x00000000        0x0 linker stubs
+ *(.glue_7)
+ .glue_7        0x00000000        0x0 linker stubs
+ *(.vfp11_veneer)
+ .vfp11_veneer  0x00000000        0x0 linker stubs
+ *(.v4_bx)
+ .v4_bx         0x00000000        0x0 linker stubs
+
+.fini
+ *(.fini)
+                0x0000a078                PROVIDE (__etext, .)
+                0x0000a078                PROVIDE (_etext, .)
+                0x0000a078                PROVIDE (etext, .)
+
+.rodata         0x0000a078      0x6a4
+ *(.rodata .rodata.* .gnu.linkonce.r.*)
+ .rodata        0x0000a078       0xa0 ./Junio2016.o
+ .rodata        0x0000a118      0x5f4 D:\PSyD\labs\BSP\Debug\libBSP.a(system.o)
+ .rodata        0x0000a70c       0x10 D:\PSyD\labs\BSP\Debug\libBSP.a(segs.o)
+
+.rodata1
+ *(.rodata1)
+
+.ARM.extab
+ *(.ARM.extab* .gnu.linkonce.armextab.*)
+                0x0000a71c                PROVIDE (__exidx_start, .)
+
+.ARM.exidx
+ *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+                0x0000a71c                PROVIDE (__exidx_end, .)
+
+.eh_frame_hdr
+ *(.eh_frame_hdr)
+
+.eh_frame
+ *(.eh_frame)
+
+.gcc_except_table
+ *(.gcc_except_table .gcc_except_table.*)
+                0x0001271c                . = (ALIGN (0x8000) + (. & 0x7fff))
+
+.eh_frame
+ *(.eh_frame)
+
+.gcc_except_table
+ *(.gcc_except_table .gcc_except_table.*)
+
+.tdata
+ *(.tdata .tdata.* .gnu.linkonce.td.*)
+
+.tbss
+ *(.tbss .tbss.* .gnu.linkonce.tb.*)
+ *(.tcommon)
+
+.preinit_array  0x0001271c        0x0
+                0x0001271c                PROVIDE (__preinit_array_start, .)
+ *(.preinit_array)
+                0x0001271c                PROVIDE (__preinit_array_end, .)
+
+.init_array     0x0001271c        0x0
+                0x0001271c                PROVIDE (__init_array_start, .)
+ *(SORT(.init_array.*))
+ *(.init_array)
+                0x0001271c                PROVIDE (__init_array_end, .)
+
+.fini_array     0x0001271c        0x0
+                0x0001271c                PROVIDE (__fini_array_start, .)
+ *(SORT(.fini_array.*))
+ *(.fini_array)
+                0x0001271c                PROVIDE (__fini_array_end, .)
+
+.ctors
+ *crtbegin.o(.ctors)
+ *crtbegin?.o(.ctors)
+ *(EXCLUDE_FILE(*crtend?.o *crtend.o) .ctors)
+ *(SORT(.ctors.*))
+ *(.ctors)
+
+.dtors
+ *crtbegin.o(.dtors)
+ *crtbegin?.o(.dtors)
+ *(EXCLUDE_FILE(*crtend?.o *crtend.o) .dtors)
+ *(SORT(.dtors.*))
+ *(.dtors)
+
+.jcr
+ *(.jcr)
+
+.data.rel.ro
+ *(.data.rel.ro.local* .gnu.linkonce.d.rel.ro.local.*)
+ *(.data.rel.ro* .gnu.linkonce.d.rel.ro.*)
+
+.dynamic
+ *(.dynamic)
+
+.got
+ *(.got.plt)
+ *(.igot.plt)
+ *(.got)
+ *(.igot)
+
+.data           0x0001271c        0x0
+                0x0001271c                __data_start = .
+ *(.data .data.* .gnu.linkonce.d.*)
+ .data          0x0001271c        0x0 ./Junio2016.o
+ .data          0x0001271c        0x0 D:\PSyD\labs\BSP\Debug\libBSP.a(rtc.o)
+ .data          0x0001271c        0x0 D:\PSyD\labs\BSP\Debug\libBSP.a(system.o)
+ .data          0x0001271c        0x0 D:\PSyD\labs\BSP\Debug\libBSP.a(uart.o)
+ .data          0x0001271c        0x0 D:\PSyD\labs\BSP\Debug\libBSP.a(segs.o)
+
+.data1
+ *(.data1)
+                0x0001271c                _edata = .
+                0x0001271c                PROVIDE (edata, .)
+                0x0001271c                __bss_start = .
+                0x0001271c                __bss_start__ = .
+
+.bss            0x0001271c        0x4
+ *(.dynbss)
+ *(.bss .bss.* .gnu.linkonce.b.*)
+ .bss           0x0001271c        0x2 ./Junio2016.o
+ .bss           0x0001271e        0x0 D:\PSyD\labs\BSP\Debug\libBSP.a(rtc.o)
+ .bss           0x0001271e        0x0 D:\PSyD\labs\BSP\Debug\libBSP.a(system.o)
+ .bss           0x0001271e        0x0 D:\PSyD\labs\BSP\Debug\libBSP.a(uart.o)
+ .bss           0x0001271e        0x1 D:\PSyD\labs\BSP\Debug\libBSP.a(segs.o)
+ *(COMMON)
+ COMMON         0x0001271f        0x1 ./Junio2016.o
+                0x0001271f                flag
+                0x00012720                . = ALIGN ((. != 0x0)?0x4:0x1)
+                0x00012720                _bss_end__ = .
+                0x00012720                __bss_end__ = .
+                0x00012720                . = ALIGN (0x4)
+                0x00012720                . = ALIGN (0x4)
+                0x00012720                __end__ = .
+                0x00012720                _end = .
+                0x00012720                PROVIDE (end, .)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment        0x00000000       0x2a
+ *(.comment)
+ .comment       0x00000000       0x2a ./Junio2016.o
+                                 0x2b (size before relaxing)
+ .comment       0x00000000       0x2b D:\PSyD\labs\BSP\Debug\libBSP.a(rtc.o)
+ .comment       0x00000000       0x2b D:\PSyD\labs\BSP\Debug\libBSP.a(system.o)
+ .comment       0x00000000       0x2b D:\PSyD\labs\BSP\Debug\libBSP.a(uart.o)
+ .comment       0x00000000       0x2b D:\PSyD\labs\BSP\Debug\libBSP.a(segs.o)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000       0xa0
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000       0x20 ./Junio2016.o
+ .debug_aranges
+                0x00000020       0x20 D:\PSyD\labs\BSP\Debug\libBSP.a(rtc.o)
+ .debug_aranges
+                0x00000040       0x20 D:\PSyD\labs\BSP\Debug\libBSP.a(system.o)
+ .debug_aranges
+                0x00000060       0x20 D:\PSyD\labs\BSP\Debug\libBSP.a(uart.o)
+ .debug_aranges
+                0x00000080       0x20 D:\PSyD\labs\BSP\Debug\libBSP.a(segs.o)
+
+.debug_pubnames
+                0x00000000      0x430
+ *(.debug_pubnames)
+ .debug_pubnames
+                0x00000000       0x44 ./Junio2016.o
+ .debug_pubnames
+                0x00000044       0x5a D:\PSyD\labs\BSP\Debug\libBSP.a(rtc.o)
+ .debug_pubnames
+                0x0000009e      0x29d D:\PSyD\labs\BSP\Debug\libBSP.a(system.o)
+ .debug_pubnames
+                0x0000033b       0xa7 D:\PSyD\labs\BSP\Debug\libBSP.a(uart.o)
+ .debug_pubnames
+                0x000003e2       0x4e D:\PSyD\labs\BSP\Debug\libBSP.a(segs.o)
+
+.debug_info     0x00000000      0xac9
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x00000000      0x134 ./Junio2016.o
+ .debug_info    0x00000134      0x1ac D:\PSyD\labs\BSP\Debug\libBSP.a(rtc.o)
+ .debug_info    0x000002e0      0x424 D:\PSyD\labs\BSP\Debug\libBSP.a(system.o)
+ .debug_info    0x00000704      0x2b8 D:\PSyD\labs\BSP\Debug\libBSP.a(uart.o)
+ .debug_info    0x000009bc      0x10d D:\PSyD\labs\BSP\Debug\libBSP.a(segs.o)
+
+.debug_abbrev   0x00000000      0x40b
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000       0xbb ./Junio2016.o
+ .debug_abbrev  0x000000bb       0xbe D:\PSyD\labs\BSP\Debug\libBSP.a(rtc.o)
+ .debug_abbrev  0x00000179       0xeb D:\PSyD\labs\BSP\Debug\libBSP.a(system.o)
+ .debug_abbrev  0x00000264       0xf4 D:\PSyD\labs\BSP\Debug\libBSP.a(uart.o)
+ .debug_abbrev  0x00000358       0xb3 D:\PSyD\labs\BSP\Debug\libBSP.a(segs.o)
+
+.debug_line     0x00000000      0x5b9
+ *(.debug_line)
+ .debug_line    0x00000000       0xe3 ./Junio2016.o
+ .debug_line    0x000000e3       0xec D:\PSyD\labs\BSP\Debug\libBSP.a(rtc.o)
+ .debug_line    0x000001cf      0x230 D:\PSyD\labs\BSP\Debug\libBSP.a(system.o)
+ .debug_line    0x000003ff      0x127 D:\PSyD\labs\BSP\Debug\libBSP.a(uart.o)
+ .debug_line    0x00000526       0x93 D:\PSyD\labs\BSP\Debug\libBSP.a(segs.o)
+
+.debug_frame    0x00000000      0x938
+ *(.debug_frame)
+ .debug_frame   0x00000000       0x78 ./Junio2016.o
+ .debug_frame   0x00000078       0xb0 D:\PSyD\labs\BSP\Debug\libBSP.a(rtc.o)
+ .debug_frame   0x00000128      0x650 D:\PSyD\labs\BSP\Debug\libBSP.a(system.o)
+ .debug_frame   0x00000778      0x130 D:\PSyD\labs\BSP\Debug\libBSP.a(uart.o)
+ .debug_frame   0x000008a8       0x90 D:\PSyD\labs\BSP\Debug\libBSP.a(segs.o)
+
+.debug_str      0x00000000      0x4b5
+ *(.debug_str)
+ .debug_str     0x00000000       0xe1 ./Junio2016.o
+                                 0xfa (size before relaxing)
+ .debug_str     0x000000e1       0x8b D:\PSyD\labs\BSP\Debug\libBSP.a(rtc.o)
+                                0x10d (size before relaxing)
+ .debug_str     0x0000016c      0x26a D:\PSyD\labs\BSP\Debug\libBSP.a(system.o)
+                                0x303 (size before relaxing)
+ .debug_str     0x000003d6       0x96 D:\PSyD\labs\BSP\Debug\libBSP.a(uart.o)
+                                0x142 (size before relaxing)
+ .debug_str     0x0000046c       0x49 D:\PSyD\labs\BSP\Debug\libBSP.a(segs.o)
+                                 0xdb (size before relaxing)
+
+.debug_loc      0x00000000      0xa24
+ *(.debug_loc)
+ .debug_loc     0x00000000       0x84 ./Junio2016.o
+ .debug_loc     0x00000084       0xdc D:\PSyD\labs\BSP\Debug\libBSP.a(rtc.o)
+ .debug_loc     0x00000160      0x688 D:\PSyD\labs\BSP\Debug\libBSP.a(system.o)
+ .debug_loc     0x000007e8      0x18c D:\PSyD\labs\BSP\Debug\libBSP.a(uart.o)
+ .debug_loc     0x00000974       0xb0 D:\PSyD\labs\BSP\Debug\libBSP.a(segs.o)
+
+.debug_macinfo  0x00000000    0x17a85
+ *(.debug_macinfo)
+ .debug_macinfo
+                0x00000000     0x4821 ./Junio2016.o
+ .debug_macinfo
+                0x00004821     0x4cee D:\PSyD\labs\BSP\Debug\libBSP.a(rtc.o)
+ .debug_macinfo
+                0x0000950f     0x5568 D:\PSyD\labs\BSP\Debug\libBSP.a(system.o)
+ .debug_macinfo
+                0x0000ea77     0x430d D:\PSyD\labs\BSP\Debug\libBSP.a(uart.o)
+ .debug_macinfo
+                0x00012d84     0x4d01 D:\PSyD\labs\BSP\Debug\libBSP.a(segs.o)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+
+.debug_pubtypes
+                0x00000000       0xf4
+ *(.debug_pubtypes)
+ .debug_pubtypes
+                0x00000000       0x3e ./Junio2016.o
+ .debug_pubtypes
+                0x0000003e       0x36 D:\PSyD\labs\BSP\Debug\libBSP.a(rtc.o)
+ .debug_pubtypes
+                0x00000074       0x27 D:\PSyD\labs\BSP\Debug\libBSP.a(system.o)
+ .debug_pubtypes
+                0x0000009b       0x3d D:\PSyD\labs\BSP\Debug\libBSP.a(uart.o)
+ .debug_pubtypes
+                0x000000d8       0x1c D:\PSyD\labs\BSP\Debug\libBSP.a(segs.o)
+
+.debug_ranges
+ *(.debug_ranges)
+
+.stack          0x00080000        0x0
+                0x00080000                _stack = .
+ *(.stack)
+
+.ARM.attributes
+                0x00000000       0x32
+ *(.ARM.attributes)
+ .ARM.attributes
+                0x00000000       0x32 ./Junio2016.o
+ .ARM.attributes
+                0x00000032       0x32 D:\PSyD\labs\BSP\Debug\libBSP.a(rtc.o)
+ .ARM.attributes
+                0x00000064       0x32 D:\PSyD\labs\BSP\Debug\libBSP.a(system.o)
+ .ARM.attributes
+                0x00000096       0x32 D:\PSyD\labs\BSP\Debug\libBSP.a(uart.o)
+ .ARM.attributes
+                0x000000c8       0x32 D:\PSyD\labs\BSP\Debug\libBSP.a(segs.o)
+ *(.gnu.attributes)
+
+.note.gnu.arm.ident
+ *(.note.gnu.arm.ident)
+
+/DISCARD/
+ *(.note.GNU-stack)
+ *(.gnu_debuglink)
+ *(.gnu.lto_*)
+OUTPUT(Junio2016.elf elf32-littlearm)
