@@ -1,0 +1,448 @@
+   1              		.cpu arm7tdmi
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 6
+  10              		.eabi_attribute 18, 4
+  11              		.file	"uda1341ts.c"
+  21              	.Ltext0:
+  22              		.file 1 "../src/uda1341ts.c"
+ 1097              	volume:
+ 1098 0000 00       		.space	1
+ 1099              	state:
+ 1100 0001 00       		.space	1
+ 1101              		.text
+ 1102              		.align	2
+ 1103              		.global	uda1341ts_init
+ 1105              	uda1341ts_init:
+ 1106              	.LFB0:
+   1:../src/uda1341ts.c **** #include <l3.h>
+   2:../src/uda1341ts.c **** #include <uda1341ts.h>
+   3:../src/uda1341ts.c **** 
+   4:../src/uda1341ts.c **** #define ADDRESS (0x05)
+   5:../src/uda1341ts.c **** 
+   6:../src/uda1341ts.c **** #define DATA0  (0x0)
+   7:../src/uda1341ts.c **** #define DATA1  (0x1)
+   8:../src/uda1341ts.c **** #define STATUS (0x2)
+   9:../src/uda1341ts.c **** 
+  10:../src/uda1341ts.c **** #define EA (0x18 << 3)
+  11:../src/uda1341ts.c **** #define ED (0x7 << 5)
+  12:../src/uda1341ts.c **** 
+  13:../src/uda1341ts.c **** static uint8 volume;
+  14:../src/uda1341ts.c **** static uint8 state;
+  15:../src/uda1341ts.c **** 
+  16:../src/uda1341ts.c **** void uda1341ts_init( void )
+  17:../src/uda1341ts.c **** {
+ 1107              		.loc 1 17 0
+ 1108              		.cfi_startproc
+ 1109              		@ Function supports interworking.
+ 1110              		@ args = 0, pretend = 0, frame = 0
+ 1111              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1112 0000 0DC0A0E1 		mov	ip, sp
+ 1113              	.LCFI0:
+ 1114              		.cfi_def_cfa_register 12
+ 1115 0004 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1116 0008 04B04CE2 		sub	fp, ip, #4
+ 1117              		.cfi_offset 14, -8
+ 1118              		.cfi_offset 13, -12
+ 1119              		.cfi_offset 11, -16
+ 1120              	.LCFI1:
+ 1121              		.cfi_def_cfa 11, 4
+  18:../src/uda1341ts.c ****     L3_init();     
+ 1122              		.loc 1 18 0
+ 1123 000c FEFFFFEB 		bl	L3_init
+  19:../src/uda1341ts.c ****     
+  20:../src/uda1341ts.c ****     L3_putByte( (ADDRESS << 2) | STATUS, L3_ADDR_MODE );
+ 1124              		.loc 1 20 0
+ 1125 0010 1600A0E3 		mov	r0, #22
+ 1126 0014 0010A0E3 		mov	r1, #0
+ 1127 0018 FEFFFFEB 		bl	L3_putByte
+  21:../src/uda1341ts.c ****     L3_putByte( (1 << 6) | (2 << 4), L3_DATA_MODE );
+ 1128              		.loc 1 21 0
+ 1129 001c 6000A0E3 		mov	r0, #96
+ 1130 0020 0110A0E3 		mov	r1, #1
+ 1131 0024 FEFFFFEB 		bl	L3_putByte
+  22:../src/uda1341ts.c ****     L3_putByte( (2 << 4), L3_DATA_MODE );
+ 1132              		.loc 1 22 0
+ 1133 0028 2000A0E3 		mov	r0, #32
+ 1134 002c 0110A0E3 		mov	r1, #1
+ 1135 0030 FEFFFFEB 		bl	L3_putByte
+  23:../src/uda1341ts.c **** 
+  24:../src/uda1341ts.c ****     L3_putByte( (ADDRESS << 2) | DATA0, L3_ADDR_MODE  ); 
+ 1136              		.loc 1 24 0
+ 1137 0034 1400A0E3 		mov	r0, #20
+ 1138 0038 0010A0E3 		mov	r1, #0
+ 1139 003c FEFFFFEB 		bl	L3_putByte
+  25:../src/uda1341ts.c ****     L3_putByte( EA | (2), L3_DATA_MODE ); 
+ 1140              		.loc 1 25 0
+ 1141 0040 C200A0E3 		mov	r0, #194
+ 1142 0044 0110A0E3 		mov	r1, #1
+ 1143 0048 FEFFFFEB 		bl	L3_putByte
+  26:../src/uda1341ts.c ****     L3_putByte( ED | 1, L3_DATA_MODE );
+ 1144              		.loc 1 26 0
+ 1145 004c E100A0E3 		mov	r0, #225
+ 1146 0050 0110A0E3 		mov	r1, #1
+ 1147 0054 FEFFFFEB 		bl	L3_putByte
+  27:../src/uda1341ts.c ****   
+  28:../src/uda1341ts.c ****     uda1341ts_setvol( VOL_MED );
+ 1148              		.loc 1 28 0
+ 1149 0058 2000A0E3 		mov	r0, #32
+ 1150 005c FEFFFFEB 		bl	uda1341ts_setvol
+  29:../src/uda1341ts.c **** 
+  30:../src/uda1341ts.c ****     uda1341ts_on( UDA_DAC );
+ 1151              		.loc 1 30 0
+ 1152 0060 0100A0E3 		mov	r0, #1
+ 1153 0064 FEFFFFEB 		bl	uda1341ts_on
+  31:../src/uda1341ts.c ****     uda1341ts_on( UDA_ADC );
+ 1154              		.loc 1 31 0
+ 1155 0068 0200A0E3 		mov	r0, #2
+ 1156 006c FEFFFFEB 		bl	uda1341ts_on
+  32:../src/uda1341ts.c **** }
+ 1157              		.loc 1 32 0
+ 1158 0070 0CD04BE2 		sub	sp, fp, #12
+ 1159 0074 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1160 0078 1EFF2FE1 		bx	lr
+ 1161              		.cfi_endproc
+ 1162              	.LFE0:
+ 1164              		.align	2
+ 1165              		.global	uda1341ts_mute
+ 1167              	uda1341ts_mute:
+ 1168              	.LFB1:
+  33:../src/uda1341ts.c **** 
+  34:../src/uda1341ts.c **** void uda1341ts_mute( uint8 on )
+  35:../src/uda1341ts.c **** {
+ 1169              		.loc 1 35 0
+ 1170              		.cfi_startproc
+ 1171              		@ Function supports interworking.
+ 1172              		@ args = 0, pretend = 0, frame = 8
+ 1173              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1174 007c 0DC0A0E1 		mov	ip, sp
+ 1175              	.LCFI2:
+ 1176              		.cfi_def_cfa_register 12
+ 1177 0080 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1178 0084 04B04CE2 		sub	fp, ip, #4
+ 1179              		.cfi_offset 14, -8
+ 1180              		.cfi_offset 13, -12
+ 1181              		.cfi_offset 11, -16
+ 1182              	.LCFI3:
+ 1183              		.cfi_def_cfa 11, 4
+ 1184 0088 08D04DE2 		sub	sp, sp, #8
+ 1185 008c 0030A0E1 		mov	r3, r0
+ 1186 0090 0D304BE5 		strb	r3, [fp, #-13]
+  36:../src/uda1341ts.c **** 	L3_putByte( (ADDRESS << 2) | DATA0, L3_ADDR_MODE );
+ 1187              		.loc 1 36 0
+ 1188 0094 1400A0E3 		mov	r0, #20
+ 1189 0098 0010A0E3 		mov	r1, #0
+ 1190 009c FEFFFFEB 		bl	L3_putByte
+  37:../src/uda1341ts.c **** 	L3_putByte( (2 << 6) | (on << 2), L3_DATA_MODE );
+ 1191              		.loc 1 37 0
+ 1192 00a0 0D305BE5 		ldrb	r3, [fp, #-13]	@ zero_extendqisi2
+ 1193 00a4 0331A0E1 		mov	r3, r3, asl #2
+ 1194 00a8 FF3003E2 		and	r3, r3, #255
+ 1195 00ac 833CE0E1 		mvn	r3, r3, asl #25
+ 1196 00b0 A33CE0E1 		mvn	r3, r3, lsr #25
+ 1197 00b4 FF3003E2 		and	r3, r3, #255
+ 1198 00b8 FF3003E2 		and	r3, r3, #255
+ 1199 00bc 0300A0E1 		mov	r0, r3
+ 1200 00c0 0110A0E3 		mov	r1, #1
+ 1201 00c4 FEFFFFEB 		bl	L3_putByte
+  38:../src/uda1341ts.c **** };
+ 1202              		.loc 1 38 0
+ 1203 00c8 0CD04BE2 		sub	sp, fp, #12
+ 1204 00cc 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1205 00d0 1EFF2FE1 		bx	lr
+ 1206              		.cfi_endproc
+ 1207              	.LFE1:
+ 1209              		.align	2
+ 1210              		.global	uda1341ts_on
+ 1212              	uda1341ts_on:
+ 1213              	.LFB2:
+  39:../src/uda1341ts.c **** 
+  40:../src/uda1341ts.c **** void uda1341ts_on( uint8 converter )
+  41:../src/uda1341ts.c **** {
+ 1214              		.loc 1 41 0
+ 1215              		.cfi_startproc
+ 1216              		@ Function supports interworking.
+ 1217              		@ args = 0, pretend = 0, frame = 8
+ 1218              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1219 00d4 0DC0A0E1 		mov	ip, sp
+ 1220              	.LCFI4:
+ 1221              		.cfi_def_cfa_register 12
+ 1222 00d8 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1223 00dc 04B04CE2 		sub	fp, ip, #4
+ 1224              		.cfi_offset 14, -8
+ 1225              		.cfi_offset 13, -12
+ 1226              		.cfi_offset 11, -16
+ 1227              	.LCFI5:
+ 1228              		.cfi_def_cfa 11, 4
+ 1229 00e0 08D04DE2 		sub	sp, sp, #8
+ 1230 00e4 0030A0E1 		mov	r3, r0
+ 1231 00e8 0D304BE5 		strb	r3, [fp, #-13]
+  42:../src/uda1341ts.c **** 	state |= converter;
+ 1232              		.loc 1 42 0
+ 1233 00ec 50309FE5 		ldr	r3, .L4
+ 1234 00f0 0020D3E5 		ldrb	r2, [r3, #0]	@ zero_extendqisi2
+ 1235 00f4 0D305BE5 		ldrb	r3, [fp, #-13]
+ 1236 00f8 033082E1 		orr	r3, r2, r3
+ 1237 00fc FF2003E2 		and	r2, r3, #255
+ 1238 0100 3C309FE5 		ldr	r3, .L4
+ 1239 0104 0020C3E5 		strb	r2, [r3, #0]
+  43:../src/uda1341ts.c **** 	L3_putByte( (ADDRESS << 2) | STATUS, L3_ADDR_MODE );
+ 1240              		.loc 1 43 0
+ 1241 0108 1600A0E3 		mov	r0, #22
+ 1242 010c 0010A0E3 		mov	r1, #0
+ 1243 0110 FEFFFFEB 		bl	L3_putByte
+  44:../src/uda1341ts.c **** 	L3_putByte( (1 << 7) | (1 << 5) | state, L3_DATA_MODE );
+ 1244              		.loc 1 44 0
+ 1245 0114 28309FE5 		ldr	r3, .L4
+ 1246 0118 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 1247 011c 0330E0E1 		mvn	r3, r3
+ 1248 0120 5F3003E2 		and	r3, r3, #95
+ 1249 0124 0330E0E1 		mvn	r3, r3
+ 1250 0128 FF3003E2 		and	r3, r3, #255
+ 1251 012c 0300A0E1 		mov	r0, r3
+ 1252 0130 0110A0E3 		mov	r1, #1
+ 1253 0134 FEFFFFEB 		bl	L3_putByte
+  45:../src/uda1341ts.c **** }
+ 1254              		.loc 1 45 0
+ 1255 0138 0CD04BE2 		sub	sp, fp, #12
+ 1256 013c 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1257 0140 1EFF2FE1 		bx	lr
+ 1258              	.L5:
+ 1259              		.align	2
+ 1260              	.L4:
+ 1261 0144 01000000 		.word	state
+ 1262              		.cfi_endproc
+ 1263              	.LFE2:
+ 1265              		.align	2
+ 1266              		.global	uda1341ts_off
+ 1268              	uda1341ts_off:
+ 1269              	.LFB3:
+  46:../src/uda1341ts.c **** 
+  47:../src/uda1341ts.c **** void uda1341ts_off( uint8 converter )
+  48:../src/uda1341ts.c **** {
+ 1270              		.loc 1 48 0
+ 1271              		.cfi_startproc
+ 1272              		@ Function supports interworking.
+ 1273              		@ args = 0, pretend = 0, frame = 8
+ 1274              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1275 0148 0DC0A0E1 		mov	ip, sp
+ 1276              	.LCFI6:
+ 1277              		.cfi_def_cfa_register 12
+ 1278 014c 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1279 0150 04B04CE2 		sub	fp, ip, #4
+ 1280              		.cfi_offset 14, -8
+ 1281              		.cfi_offset 13, -12
+ 1282              		.cfi_offset 11, -16
+ 1283              	.LCFI7:
+ 1284              		.cfi_def_cfa 11, 4
+ 1285 0154 08D04DE2 		sub	sp, sp, #8
+ 1286 0158 0030A0E1 		mov	r3, r0
+ 1287 015c 0D304BE5 		strb	r3, [fp, #-13]
+  49:../src/uda1341ts.c **** 	state &= ~converter;
+ 1288              		.loc 1 49 0
+ 1289 0160 0D305BE5 		ldrb	r3, [fp, #-13]	@ zero_extendqisi2
+ 1290 0164 0330E0E1 		mvn	r3, r3
+ 1291 0168 FF2003E2 		and	r2, r3, #255
+ 1292 016c 50309FE5 		ldr	r3, .L7
+ 1293 0170 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 1294 0174 FF3003E2 		and	r3, r3, #255
+ 1295 0178 033002E0 		and	r3, r2, r3
+ 1296 017c FF3003E2 		and	r3, r3, #255
+ 1297 0180 FF2003E2 		and	r2, r3, #255
+ 1298 0184 38309FE5 		ldr	r3, .L7
+ 1299 0188 0020C3E5 		strb	r2, [r3, #0]
+  50:../src/uda1341ts.c **** 	L3_putByte( (ADDRESS << 2) | STATUS, L3_ADDR_MODE );
+ 1300              		.loc 1 50 0
+ 1301 018c 1600A0E3 		mov	r0, #22
+ 1302 0190 0010A0E3 		mov	r1, #0
+ 1303 0194 FEFFFFEB 		bl	L3_putByte
+  51:../src/uda1341ts.c **** 	L3_putByte( (1 << 7) | (0 << 5) |state, L3_DATA_MODE );
+ 1304              		.loc 1 51 0
+ 1305 0198 24309FE5 		ldr	r3, .L7
+ 1306 019c 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+ 1307 01a0 833CE0E1 		mvn	r3, r3, asl #25
+ 1308 01a4 A33CE0E1 		mvn	r3, r3, lsr #25
+ 1309 01a8 FF3003E2 		and	r3, r3, #255
+ 1310 01ac 0300A0E1 		mov	r0, r3
+ 1311 01b0 0110A0E3 		mov	r1, #1
+ 1312 01b4 FEFFFFEB 		bl	L3_putByte
+  52:../src/uda1341ts.c **** }
+ 1313              		.loc 1 52 0
+ 1314 01b8 0CD04BE2 		sub	sp, fp, #12
+ 1315 01bc 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1316 01c0 1EFF2FE1 		bx	lr
+ 1317              	.L8:
+ 1318              		.align	2
+ 1319              	.L7:
+ 1320 01c4 01000000 		.word	state
+ 1321              		.cfi_endproc
+ 1322              	.LFE3:
+ 1324              		.align	2
+ 1325              		.global	uda1341ts_status
+ 1327              	uda1341ts_status:
+ 1328              	.LFB4:
+  53:../src/uda1341ts.c **** 
+  54:../src/uda1341ts.c **** uint8 uda1341ts_status( uint8 converter )
+  55:../src/uda1341ts.c **** {
+ 1329              		.loc 1 55 0
+ 1330              		.cfi_startproc
+ 1331              		@ Function supports interworking.
+ 1332              		@ args = 0, pretend = 0, frame = 8
+ 1333              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1334 01c8 0DC0A0E1 		mov	ip, sp
+ 1335              	.LCFI8:
+ 1336              		.cfi_def_cfa_register 12
+ 1337 01cc 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1338 01d0 04B04CE2 		sub	fp, ip, #4
+ 1339              		.cfi_offset 14, -8
+ 1340              		.cfi_offset 13, -12
+ 1341              		.cfi_offset 11, -16
+ 1342              	.LCFI9:
+ 1343              		.cfi_def_cfa 11, 4
+ 1344 01d4 08D04DE2 		sub	sp, sp, #8
+ 1345 01d8 0030A0E1 		mov	r3, r0
+ 1346 01dc 0D304BE5 		strb	r3, [fp, #-13]
+  56:../src/uda1341ts.c ****     return ((state & converter));
+ 1347              		.loc 1 56 0
+ 1348 01e0 1C309FE5 		ldr	r3, .L10
+ 1349 01e4 0020D3E5 		ldrb	r2, [r3, #0]	@ zero_extendqisi2
+ 1350 01e8 0D305BE5 		ldrb	r3, [fp, #-13]
+ 1351 01ec 033002E0 		and	r3, r2, r3
+ 1352 01f0 FF3003E2 		and	r3, r3, #255
+  57:../src/uda1341ts.c **** }
+ 1353              		.loc 1 57 0
+ 1354 01f4 0300A0E1 		mov	r0, r3
+ 1355 01f8 0CD04BE2 		sub	sp, fp, #12
+ 1356 01fc 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1357 0200 1EFF2FE1 		bx	lr
+ 1358              	.L11:
+ 1359              		.align	2
+ 1360              	.L10:
+ 1361 0204 01000000 		.word	state
+ 1362              		.cfi_endproc
+ 1363              	.LFE4:
+ 1365              		.align	2
+ 1366              		.global	uda1341ts_setvol
+ 1368              	uda1341ts_setvol:
+ 1369              	.LFB5:
+  58:../src/uda1341ts.c **** 
+  59:../src/uda1341ts.c **** void uda1341ts_setvol( uint8 vol )
+  60:../src/uda1341ts.c **** {
+ 1370              		.loc 1 60 0
+ 1371              		.cfi_startproc
+ 1372              		@ Function supports interworking.
+ 1373              		@ args = 0, pretend = 0, frame = 8
+ 1374              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1375 0208 0DC0A0E1 		mov	ip, sp
+ 1376              	.LCFI10:
+ 1377              		.cfi_def_cfa_register 12
+ 1378 020c 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1379 0210 04B04CE2 		sub	fp, ip, #4
+ 1380              		.cfi_offset 14, -8
+ 1381              		.cfi_offset 13, -12
+ 1382              		.cfi_offset 11, -16
+ 1383              	.LCFI11:
+ 1384              		.cfi_def_cfa 11, 4
+ 1385 0214 08D04DE2 		sub	sp, sp, #8
+ 1386 0218 0030A0E1 		mov	r3, r0
+ 1387 021c 0D304BE5 		strb	r3, [fp, #-13]
+  61:../src/uda1341ts.c **** 	L3_putByte( (ADDRESS << 2) | DATA0, L3_ADDR_MODE );
+ 1388              		.loc 1 61 0
+ 1389 0220 1400A0E3 		mov	r0, #20
+ 1390 0224 0010A0E3 		mov	r1, #0
+ 1391 0228 FEFFFFEB 		bl	L3_putByte
+  62:../src/uda1341ts.c **** 	L3_putByte( (0 << 6) | (0x3F - vol), L3_DATA_MODE );
+ 1392              		.loc 1 62 0
+ 1393 022c 0D305BE5 		ldrb	r3, [fp, #-13]
+ 1394 0230 3F3063E2 		rsb	r3, r3, #63
+ 1395 0234 FF3003E2 		and	r3, r3, #255
+ 1396 0238 0300A0E1 		mov	r0, r3
+ 1397 023c 0110A0E3 		mov	r1, #1
+ 1398 0240 FEFFFFEB 		bl	L3_putByte
+  63:../src/uda1341ts.c **** 	volume = vol;
+ 1399              		.loc 1 63 0
+ 1400 0244 10309FE5 		ldr	r3, .L13
+ 1401 0248 0D205BE5 		ldrb	r2, [fp, #-13]
+ 1402 024c 0020C3E5 		strb	r2, [r3, #0]
+  64:../src/uda1341ts.c **** };
+ 1403              		.loc 1 64 0
+ 1404 0250 0CD04BE2 		sub	sp, fp, #12
+ 1405 0254 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1406 0258 1EFF2FE1 		bx	lr
+ 1407              	.L14:
+ 1408              		.align	2
+ 1409              	.L13:
+ 1410 025c 00000000 		.word	volume
+ 1411              		.cfi_endproc
+ 1412              	.LFE5:
+ 1414              		.align	2
+ 1415              		.global	uda1341ts_getvol
+ 1417              	uda1341ts_getvol:
+ 1418              	.LFB6:
+  65:../src/uda1341ts.c **** 
+  66:../src/uda1341ts.c **** uint8 uda1341ts_getvol( void )
+  67:../src/uda1341ts.c **** {
+ 1419              		.loc 1 67 0
+ 1420              		.cfi_startproc
+ 1421              		@ Function supports interworking.
+ 1422              		@ args = 0, pretend = 0, frame = 0
+ 1423              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1424 0260 0DC0A0E1 		mov	ip, sp
+ 1425              	.LCFI12:
+ 1426              		.cfi_def_cfa_register 12
+ 1427 0264 00D82DE9 		stmfd	sp!, {fp, ip, lr, pc}
+ 1428 0268 04B04CE2 		sub	fp, ip, #4
+ 1429              		.cfi_offset 14, -8
+ 1430              		.cfi_offset 13, -12
+ 1431              		.cfi_offset 11, -16
+ 1432              	.LCFI13:
+ 1433              		.cfi_def_cfa 11, 4
+  68:../src/uda1341ts.c ****     return volume;
+ 1434              		.loc 1 68 0
+ 1435 026c 10309FE5 		ldr	r3, .L16
+ 1436 0270 0030D3E5 		ldrb	r3, [r3, #0]	@ zero_extendqisi2
+  69:../src/uda1341ts.c **** };
+ 1437              		.loc 1 69 0
+ 1438 0274 0300A0E1 		mov	r0, r3
+ 1439 0278 0CD04BE2 		sub	sp, fp, #12
+ 1440 027c 00689DE8 		ldmfd	sp, {fp, sp, lr}
+ 1441 0280 1EFF2FE1 		bx	lr
+ 1442              	.L17:
+ 1443              		.align	2
+ 1444              	.L16:
+ 1445 0284 00000000 		.word	volume
+ 1446              		.cfi_endproc
+ 1447              	.LFE6:
+ 1449              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 uda1341ts.c
+C:\Users\DOSTATIC\AppData\Local\Temp\ccUOqXFG.s:1097   .bss:00000000 volume
+C:\Users\DOSTATIC\AppData\Local\Temp\ccUOqXFG.s:1098   .bss:00000000 $d
+C:\Users\DOSTATIC\AppData\Local\Temp\ccUOqXFG.s:1099   .bss:00000001 state
+C:\Users\DOSTATIC\AppData\Local\Temp\ccUOqXFG.s:1102   .text:00000000 $a
+C:\Users\DOSTATIC\AppData\Local\Temp\ccUOqXFG.s:1105   .text:00000000 uda1341ts_init
+C:\Users\DOSTATIC\AppData\Local\Temp\ccUOqXFG.s:1368   .text:00000208 uda1341ts_setvol
+C:\Users\DOSTATIC\AppData\Local\Temp\ccUOqXFG.s:1212   .text:000000d4 uda1341ts_on
+C:\Users\DOSTATIC\AppData\Local\Temp\ccUOqXFG.s:1167   .text:0000007c uda1341ts_mute
+C:\Users\DOSTATIC\AppData\Local\Temp\ccUOqXFG.s:1261   .text:00000144 $d
+C:\Users\DOSTATIC\AppData\Local\Temp\ccUOqXFG.s:1265   .text:00000148 $a
+C:\Users\DOSTATIC\AppData\Local\Temp\ccUOqXFG.s:1268   .text:00000148 uda1341ts_off
+C:\Users\DOSTATIC\AppData\Local\Temp\ccUOqXFG.s:1320   .text:000001c4 $d
+C:\Users\DOSTATIC\AppData\Local\Temp\ccUOqXFG.s:1324   .text:000001c8 $a
+C:\Users\DOSTATIC\AppData\Local\Temp\ccUOqXFG.s:1327   .text:000001c8 uda1341ts_status
+C:\Users\DOSTATIC\AppData\Local\Temp\ccUOqXFG.s:1361   .text:00000204 $d
+C:\Users\DOSTATIC\AppData\Local\Temp\ccUOqXFG.s:1365   .text:00000208 $a
+C:\Users\DOSTATIC\AppData\Local\Temp\ccUOqXFG.s:1410   .text:0000025c $d
+C:\Users\DOSTATIC\AppData\Local\Temp\ccUOqXFG.s:1414   .text:00000260 $a
+C:\Users\DOSTATIC\AppData\Local\Temp\ccUOqXFG.s:1417   .text:00000260 uda1341ts_getvol
+C:\Users\DOSTATIC\AppData\Local\Temp\ccUOqXFG.s:1445   .text:00000284 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+L3_init
+L3_putByte
